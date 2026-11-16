@@ -2,7 +2,7 @@
 Usage: run_pairs.py OUT.jsonl SEEDS SEED0 'A|B|label' ['A|B|label' ...]"""
 import json, subprocess, sys, os, time
 out, n, seed0 = sys.argv[1], sys.argv[2], sys.argv[3]
-binp = os.path.join(os.path.dirname(__file__), '..', 'engine', 'target', 'release', 'tssim')
+binp = os.environ.get('TSSIM_BIN') or os.path.join(os.path.dirname(__file__), '..', 'engine', 'target', 'release', 'tssim')
 for spec in sys.argv[4:]:
     a, b, label = spec.split('|')
     csv = os.path.join(os.path.dirname(out), f'{label}.csv')

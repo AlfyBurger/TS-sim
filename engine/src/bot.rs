@@ -6,6 +6,7 @@ use crate::events::can_occur;
 use crate::rng::{Purpose, Streams};
 use crate::state::*;
 use crate::types::*;
+use crate::search::*;
 
 // ------------------------------------------------------------------ weights
 #[derive(Clone, Debug)]
@@ -13,16 +14,20 @@ pub struct Weights {
     pub vp: f64, pub held: f64, pub region_unseen: f64, pub final_: f64, pub bg: f64, pub europe_mult: f64, pub asia_mult: f64,
     pub access: f64, pub milops: f64, pub squeeze: f64, pub trap: f64, pub china: f64, pub bad: f64, pub space_ab: f64,
     pub inf: f64, pub auto_eu: f64, pub trapped: f64, pub h3: f64, pub h6: f64, pub samples: f64, pub noise: f64,
+    pub final_from: f64,
+    // decision rules (Stage 2 run 2): reply-scan margin (<0 off), Scoring timing, sequencing delta (<0 off),
+    // Headline v2 (0 off, 1 both sides, 2 USSR only, 3 US only), set-up values weight, known card played sooner
+    pub la: f64, pub tm: f64, pub sq: f64, pub hl: f64, pub ss: f64, pub km: f64,
 }
 impl Weights {
     pub fn core() -> Self {
         Weights { vp: 1.0, held: 1.0, region_unseen: 0.25, final_: 0.0, bg: 1.0, europe_mult: 1.0, asia_mult: 1.0, access: 3.0,
             milops: 1.0, squeeze: 0.0, trap: 3.0, china: 0.0, bad: 0.3, space_ab: 0.5, inf: 0.05, auto_eu: 15.0, trapped: 3.0, h3: 0.0, h6: 0.0,
-            samples: 6.0, noise: 1e-6 }
+            samples: 6.0, noise: 1e-6, final_from: 0.0, la: -1.0, tm: 0.0, sq: -1.0, hl: 0.0, ss: 0.0, km: 0.0 }
     }
     pub fn zero() -> Self {
         Weights { vp: 0.0, held: 0.0, region_unseen: 0.0, final_: 0.0, bg: 0.0, europe_mult: 1.0, asia_mult: 1.0, access: 0.0, milops: 0.0,
-            squeeze: 0.0, trap: 0.0, china: 0.0, bad: 0.0, space_ab: 0.0, inf: 0.0, auto_eu: 0.0, trapped: 0.0, h3: 0.0, h6: 0.0, samples: 1.0, noise: 1.0 }
+            squeeze: 0.0, trap: 0.0, china: 0.0, bad: 0.0, space_ab: 0.0, inf: 0.0, auto_eu: 0.0, trapped: 0.0, h3: 0.0, h6: 0.0, samples: 1.0, noise: 1.0, final_from: 0.0, la: -1.0, tm: 0.0, sq: -1.0, hl: 0.0, ss: 0.0, km: 0.0 }
     }
     pub fn set(&mut self, k: &str, v: f64) {
         match k {
@@ -30,7 +35,8 @@ impl Weights {
             "bg" => self.bg = v, "europe_mult" => self.europe_mult = v, "asia_mult" => self.asia_mult = v, "access" => self.access = v,
             "milops" => self.milops = v, "squeeze" => self.squeeze = v, "trap" => self.trap = v, "china" => self.china = v,
             "bad" => self.bad = v, "space_ab" => self.space_ab = v, "inf" => self.inf = v, "auto_eu" => self.auto_eu = v, "trapped" => self.trapped = v,
-            "h3" => self.h3 = v, "h6" => self.h6 = v, "samples" => self.samples = v, "noise" => self.noise = v,
+            "h3" => self.h3 = v, "h6" => self.h6 = v, "samples" => self.samples = v, "noise" => self.noise = v, "final_from" => self.final_from = v,
+            "la" => self.la = v, "tm" => self.tm = v, "sq" => self.sq = v, "hl" => self.hl = v, "ss" => self.ss = v, "km" => self.km = v,
             _ => panic!("unknown weight {k}"),
         }
     }
@@ -89,7 +95,7 @@ pub fn eval(w: &Weights, st: &State, me: usize) -> f64 {
         let (u, s) = sea_score(st); let net = sg * (u - s) as f64;
         if st.hands[me].contains(38) { v += w.held * net; } else if card_live(st, 38) { v += w.region_unseen * net; }
     }
-    if w.final_ != 0.0 { v += w.final_ * sg * final_projection(st) as f64 * (0.3 + 0.7 * st.turn as f64 / 10.0); }
+    if w.final_ != 0.0 && st.turn as f64 >= w.final_from { v += w.final_ * sg * final_projection(st) as f64 * (0.3 + 0.7 * st.turn as f64 / 10.0); }
     // battlegrounds
     let h3 = if me == USSR && st.turn <= 3 { 1.0 + w.h3 } else { 1.0 };
     for c in 0..NC {
@@ -200,6 +206,21 @@ impl Brain {
         tot / 36.0
     }
 
+    /// Realignment by `side` at `c`, valued on `me`'s evaluation.
+    pub fn realign_ev_for(&self, st: &State, side: usize, c: usize, me: usize) -> f64 {
+        let o = opp(side);
+        let ma = realign_mod(st, side, c); let mb = realign_mod(st, o, c);
+        let mut tot = 0.0;
+        for a in 1..=6 { for b in 1..=6 {
+            let d = (a + ma) - (b + mb);
+            let mut s = *st;
+            if d > 0 { s.inf[c][o] = (s.inf[c][o] - d as i8).max(0); }
+            if d < 0 { s.inf[c][side] = (s.inf[c][side] + d as i8).max(0); }
+            tot += self.e(&s, me);
+        } }
+        tot / 36.0
+    }
+
     /// Best use of Ops: (expected value, choice).
     pub fn best_ops(&self, st: &State, me: usize, spec: &OpsSpec) -> (f64, OpsChoice) {
         let mut best = (f64::NEG_INFINITY, OpsChoice::None);
@@ -245,7 +266,7 @@ impl Brain {
         best
     }
 
-    fn argmax(&self, vals: &[f64], rng: &mut Streams, me: usize) -> usize {
+    pub fn argmax(&self, vals: &[f64], rng: &mut Streams, me: usize) -> usize {
         let mut bi = 0; let mut bv = f64::NEG_INFINITY;
         for (i, &v) in vals.iter().enumerate() {
             let v = v + self.w.noise * (rng.next(Purpose::Bot, me) % 1000) as f64 / 1000.0;
@@ -350,9 +371,149 @@ impl EvalBot {
     }
 }
 
+impl EvalBot {
+    /// One sampled resulting position of `p` (for the reply scan and set-up values).
+    fn sample_state(&self, base: &State, me: usize, p: Play, rng: &mut Streams) -> State {
+        let mut s = *base;
+        let mut g0 = Greedy { b: self.b.clone() }; let mut g1 = Greedy { b: self.b.clone() };
+        let mut cx = Ctx::new(rng.next(Purpose::Sim, me), &mut g0, &mut g1);
+        cx.sim = true;
+        execute_play(&mut s, &mut cx, me, p);
+        s.rounds_done[me] += 1;
+        s
+    }
+
+    /// Headline v2: each card valued against the opponent's likely Headline (best-of-hand odds over
+    /// the cards I have not seen, resolution order, Defectors), minus its Action Round value lost.
+    fn headline_v2(&self, st: &State, me: usize, shown: Option<u8>, rng: &mut Streams) -> u8 {
+        let o = opp(me);
+        let base = determinize(st, me, rng);
+        let mine: Vec<u8> = st.hands[me].iter().filter(|&k| k != 32).collect();
+        if mine.len() <= 1 { return mine.first().copied().unwrap_or(st.hands[me].c[0]); }
+        // Action Round value of each card (best play now), and the leftover card
+        let mut b1 = base; b1.ar = 1; b1.phasing = me as u8; b1.snapshot_presence();
+        let v0 = self.b.e(&b1, me);
+        let cands = candidates(&b1, me, &self.b.w);
+        let mut arval = vec![f64::NEG_INFINITY; mine.len()];
+        for p in &cands {
+            if let Some(i) = mine.iter().position(|&k| k == p.card) {
+                let v = self.sim_value(&b1, me, *p, rng) - v0;
+                if v > arval[i] { arval[i] = v; }
+            }
+        }
+        let n_ar = rounds_for(st, me) as usize;
+        let leftover = if mine.len() > n_ar + 1 {
+            (0..mine.len()).filter(|&i| !CARDS[mine[i] as usize].scoring).min_by(|&a, &b| arval[a].partial_cmp(&arval[b]).unwrap())
+        } else { None };
+        // the opponent's likely Headlines
+        let mut opts: Vec<(u8, f64)> = vec![];
+        let (pool_cards, h, known_cards): (Vec<u8>, usize, Vec<u8>) = if let Some(k) = shown { (vec![], 0, vec![k]) } else {
+            let known: Vec<u8> = base.hands[o].iter().filter(|&k| st.known_by_opp[o].contains(k)).collect();
+            let unseen: Vec<u8> = base.deck.iter().chain(base.hands[o].iter().filter(|&k| !st.known_by_opp[o].contains(k))).collect();
+            (unseen, base.hands[o].len() - known.len(), known)
+        };
+        let hval = |k: u8, rng: &mut Streams| -> f64 {
+            if k == 32 || k == CHINA || CARDS[k as usize].owner() == Some(me) { return f64::NEG_INFINITY; }
+            let mut t = base; t.phasing = o as u8; t.ar = 0;
+            let mut g0 = Greedy { b: self.b.clone() }; let mut g1 = Greedy { b: self.b.clone() };
+            let mut cx = Ctx::new(rng.next(Purpose::Sim, me), &mut g0, &mut g1); cx.sim = true;
+            play_event(&mut t, &mut cx, o, k, true);
+            self.b.e(&t, o)
+        };
+        let mut pool: Vec<(f64, u8)> = pool_cards.iter().map(|&k| (hval(k, rng), k)).filter(|x| x.0 > f64::NEG_INFINITY).collect();
+        pool.sort_by(|a, b| b.0.partial_cmp(&a.0).unwrap());
+        let kbest = known_cards.iter().map(|&k| (hval(k, rng), k)).filter(|x| x.0 > f64::NEG_INFINITY).max_by(|a, b| a.0.partial_cmp(&b.0).unwrap());
+        let u = pool.len();
+        if h > 0 && u > 0 {
+            let hh = h.min(u); let mut p = hh as f64 / u as f64; let mut mass = 0.0;
+            for i in 0..u {
+                if let Some(kb) = kbest { if pool[i].0 <= kb.0 { break; } }
+                opts.push((pool[i].1, p)); mass += p;
+                if mass > 0.95 || opts.len() >= 8 || u - i <= hh { break; }
+                p *= (u - i - hh) as f64 / (u - i - 1) as f64;
+            }
+            if let Some(kb) = kbest { opts.push((kb.1, (1.0 - mass).max(0.0))); }
+        } else if let Some(kb) = kbest { opts.push((kb.1, 1.0)); }
+        let tot: f64 = opts.iter().map(|x| x.1).sum();
+        if tot <= 0.0 { opts = vec![(0, 1.0)]; } else { for x in opts.iter_mut() { x.1 /= tot; } }
+        // value each of my Headlines
+        let any_non_sc = mine.iter().any(|&k| !CARDS[k as usize].scoring);
+        let mut best = (f64::NEG_INFINITY, mine[0]);
+        for (i, &k) in mine.iter().enumerate() {
+            if CARDS[k as usize].scoring && any_non_sc { continue; }
+            let mut ev = 0.0;
+            for &(ok, p) in &opts {
+                let mut t = base; t.remove_from_hand(me, k); t.ar = 0;
+                if ok != 0 { t.remove_from_hand(o, ok); }
+                let mut g0 = Greedy { b: self.b.clone() }; let mut g1 = Greedy { b: self.b.clone() };
+                let mut cx = Ctx::new(rng.next(Purpose::Sim, me), &mut g0, &mut g1); cx.sim = true;
+                let mut h2 = [0u8; 2]; h2[me] = k; h2[o] = ok;
+                let mut cancelled = [false; 2];
+                if h2[US] == 103 && h2[USSR] != 0 { cancelled[USSR] = true; }
+                let ops = |c: u8| if c == 0 { -1 } else { CARDS[c as usize].ops as i32 };
+                let order = if ops(h2[USSR]) > ops(h2[US]) { [USSR, US] } else { [US, USSR] };
+                for sd in order {
+                    if h2[sd] == 0 || cancelled[sd] || t.winner >= 0 || h2[sd] == 103 { continue; }
+                    t.phasing = sd as u8;
+                    play_event(&mut t, &mut cx, sd, h2[sd], true);
+                }
+                ev += p * self.b.e(&t, me);
+            }
+            let cost = match leftover { Some(l) if l != i && arval[i] > f64::NEG_INFINITY && arval[l] > f64::NEG_INFINITY => (arval[i] - arval[l]).max(0.0), _ => 0.0 };
+            let v = ev - cost;
+            if std::env::var("TSSIM_DEBUG2").is_ok() { eprintln!("HL T{} {} {:28} ev {:.2} cost {:.2}", st.turn, side_name(me), CARDS[k as usize].name, ev - v0, cost); }
+            if v > best.0 { best = (v, k); }
+        }
+        best.1
+    }
+
+    /// Run 2 decision rules on top of the one-move values (see search.rs).
+    pub fn decide(&self, st: &State, base: &State, me: usize, c: &[Play], vals: &[f64], rng: &mut Streams) -> usize {
+        let w = &self.b.w;
+        let g = self.b.argmax(vals, rng, me);
+        // shortlist: best play of each of the top 3 cards, plus Scoring cards when timing is on
+        let mut order: Vec<usize> = (0..c.len()).collect();
+        order.sort_by(|&a, &b| vals[b].partial_cmp(&vals[a]).unwrap());
+        let mut set: Vec<usize> = vec![]; let mut cards: Vec<u8> = vec![];
+        for &i in &order { if vals[i] < -500.0 { continue; } if !cards.contains(&c[i].card) { cards.push(c[i].card); set.push(i); if set.len() == 3 { break; } } }
+        if !set.contains(&g) { set.insert(0, g); }
+        let is_sc = |i: usize| CARDS[c[i].card as usize].scoring;
+        if w.tm > 0.0 { for i in 0..c.len() { if is_sc(i) && !set.contains(&i) && vals[i] > -500.0 { set.push(i); } } }
+        if set.len() < 2 && w.ss <= 0.0 { return g; }
+        let v0 = self.b.e(base, me);
+        let best_other = (0..c.len()).filter(|&i| !is_sc(i)).map(|i| vals[i]).fold(f64::NEG_INFINITY, f64::max);
+        let scan_on = w.la >= 0.0 || w.tm > 0.0 || w.sq >= 0.0;
+        let o = opp(me);
+        let mut r = vec![0.0; c.len()]; let mut seq = vec![f64::NEG_INFINITY; c.len()];
+        for &i in &set {
+            let s = self.sample_state(base, me, c[i], rng);
+            let credit = if w.tm > 0.0 && is_sc(i) && best_other > f64::NEG_INFINITY { (best_other - v0).max(0.0) } else { 0.0 };
+            let su = setup_credit(&self.b, &s, me, rng);
+            let (tn, tl) = if scan_on { let sc = reply_scan(&self.b, &s, me, rng); (sc.threat_now(), sc.threat_later()) } else { (0.0, 0.0) };
+            r[i] = vals[i] + su + credit - tn;
+            let d = if w.km > 0.0 && c[i].card != CHINA && st.card_known(me, c[i].card) && rounds_for(st, o) as i32 - st.rounds_done[o] as i32 > 0 { 0.0 } else { w.sq };
+            seq[i] = (1.0 - d) * (vals[i] + su + credit - v0) - tn + d * tl;
+            if std::env::var("TSSIM_DEBUG2").is_ok() { eprintln!("T{} AR{} {} {:28} {:?} val {:+.2} setup {:.2} credit {:.2} threat now {:.2} later {:.2} -> r {:.2} seq {:.2}", st.turn, st.ar, side_name(me), CARDS[c[i].card as usize].name, c[i].how, vals[i]-v0, su, credit, tn, tl, r[i]-v0, seq[i]); }
+        }
+        if w.sq >= 0.0 { return *set.iter().max_by(|&&a, &&b| seq[a].partial_cmp(&seq[b]).unwrap()).unwrap(); }
+        let mut pick = g;
+        if w.la >= 0.0 || w.ss > 0.0 {
+            let alt = *set.iter().max_by(|&&a, &&b| r[a].partial_cmp(&r[b]).unwrap()).unwrap();
+            let m = if w.la >= 0.0 { w.la } else { 0.0 };
+            if r[alt] > r[pick] + m { pick = alt; }
+        }
+        if w.tm > 0.0 && !is_sc(pick) {
+            if let Some(&sc) = set.iter().filter(|&&i| is_sc(i)).max_by(|&&a, &&b| r[a].partial_cmp(&r[b]).unwrap()) { if r[sc] > r[pick] { pick = sc; } }
+        }
+        pick
+    }
+}
+
 impl Agent for EvalBot {
     fn name(&self) -> String { self.label.clone() }
-    fn headline(&mut self, st: &State, me: usize, _shown: Option<u8>, rng: &mut Streams) -> u8 {
+    fn headline(&mut self, st: &State, me: usize, shown: Option<u8>, rng: &mut Streams) -> u8 {
+        let hl = self.b.w.hl as i32;
+        if hl == 1 || (hl == 2 && me == USSR) || (hl == 3 && me == US) { return self.headline_v2(st, me, shown, rng); }
         let base = determinize(st, me, rng);
         let cards: Vec<u8> = st.hands[me].iter().filter(|&k| k != 32).collect();
         if cards.is_empty() { return st.hands[me].c[0]; }
@@ -379,6 +540,10 @@ impl Agent for EvalBot {
         if c.len() == 1 { return c[0]; }
         let base = determinize(st, me, rng);
         let vals: Vec<f64> = c.iter().map(|&p| self.sim_value(&base, me, p, rng)).collect();
+        let w = &self.b.w;
+        if w.la >= 0.0 || w.tm > 0.0 || w.sq >= 0.0 || w.ss > 0.0 {
+            return c[self.decide(st, &base, me, &c, &vals, rng)];
+        }
         if std::env::var("TSSIM_DEBUG").is_ok() {
             eprintln!("T{} AR{} {} hand {:?}", st.turn, st.ar, side_name(me), st.hands[me].iter().map(|k| CARDS[k as usize].name).collect::<Vec<_>>());
             for (p, v) in c.iter().zip(&vals) { eprintln!("   {:8.2} {} {:?} ef={} uni={}", v, CARDS[p.card as usize].name, p.how, p.event_first, p.uni_with); }

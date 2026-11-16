@@ -16,8 +16,12 @@ pub struct Stats {
     pub milops_penalty: [i32; 2],
     pub defcon_loss_card: u8,
     pub vp_by_turn: Vec<i32>,
+    pub ops_by_ar: [[(u32, u32); 9]; 2],            // per side, per Action Round: (Ops played, plays)
+    pub exits: [[u32; 6]; 2],                       // opponent cards leaving my hand: space, fired, void, headline, UN, trap discard
+    pub damage: Vec<(u8, u8, u8, f64)>,             // (turn, side who triggered, card, eval change for that side)
+    pub defcon_loss: Option<(u8, u8, u8, u8, u8)>,  // (turn, AR, loser, card, how: 0 Ops/coup, 1 Event, 2 Headline, 3 opponent Event)
 }
-impl Stats { pub fn new() -> Self { Stats { scoring_plays: vec![], china_plays: vec![], space_attempts: vec![], opp_events: vec![], coups: [0; 2], realigns: [0; 2], events_played: [0; 2], milops_penalty: [0; 2], defcon_loss_card: 0, vp_by_turn: vec![] } } }
+impl Stats { pub fn new() -> Self { Stats { scoring_plays: vec![], china_plays: vec![], space_attempts: vec![], opp_events: vec![], coups: [0; 2], realigns: [0; 2], events_played: [0; 2], milops_penalty: [0; 2], defcon_loss_card: 0, vp_by_turn: vec![], ops_by_ar: [[(0, 0); 9]; 2], exits: [[0; 6]; 2], damage: vec![], defcon_loss: None } } }
 
 pub struct Ctx<'a> {
     pub rng: Streams,
@@ -414,6 +418,12 @@ pub fn execute_play(st: &mut State, cx: &mut Ctx, side: usize, p: Play) {
         st.discard.push(32); st.discard.push(p.uni_with);
         return;
     }
+    if !cx.sim && card != CHINA && CARDS[card as usize].owner() == Some(opp(side)) {
+        let opp_ev = crate::events::can_occur(st, card, opp(side));
+        let k = match p.how { Use::Space => 0, Use::Ops if opp_ev => 1, _ => 2 };
+        cx.stats.exits[side][k] += 1;
+    }
+    if !cx.sim && st.ar >= 1 && (st.ar as usize) < 9 && p.how != Use::Pass { let e = &mut cx.stats.ops_by_ar[side][st.ar as usize]; e.0 += st.card_ops(side, card).max(0) as u32; e.1 += 1; }
     match p.how {
         Use::Space => { space_attempt(st, cx, side, card); if card != CHINA { st.discard.push(card); } }
         Use::Event => { flower_power(st, side, card); play_event(st, cx, side, card, false); }
@@ -424,14 +434,18 @@ pub fn execute_play(st: &mut State, cx: &mut Ctx, side: usize, p: Play) {
             let base = st.card_ops(side, card);
             if opp_event && !cx.sim { cx.stats.opp_events.push((st.turn, side as u8, card)); }
             if opp_event && p.event_first {
+                let pre = if cx.sim { 0.0 } else { crate::bot::eval(&crate::bot::Weights::core(), st, side) };
                 let occurred = crate::events::event(st, cx, card, opp(side), side, false);
+                if !cx.sim { let post = crate::bot::eval(&crate::bot::Weights::core(), st, side); cx.stats.damage.push((st.turn, side as u8, card, post - pre)); }
                 crate::events::after_event(st, card, occurred);
                 conduct_ops(st, cx, side, ops_spec(st, side, card, base));
                 if card != 49 && card != 73 { dispose(st, card, occurred); }
             } else {
                 conduct_ops(st, cx, side, ops_spec(st, side, card, base));
                 if opp_event && st.winner < 0 {
+                    let pre = if cx.sim { 0.0 } else { crate::bot::eval(&crate::bot::Weights::core(), st, side) };
                     let occurred = crate::events::event(st, cx, card, opp(side), side, false);
+                    if !cx.sim { let post = crate::bot::eval(&crate::bot::Weights::core(), st, side); cx.stats.damage.push((st.turn, side as u8, card, post - pre)); }
                     crate::events::after_event(st, card, occurred);
                     if card != 49 && card != 73 { dispose(st, card, occurred); }
                 } else if card == 103 && side == USSR {
@@ -493,7 +507,14 @@ pub fn action_round(st: &mut State, cx: &mut Ctx, side: usize) {
             st.ev.wwby_pending = false;
             if p.uni_with == 0 { st.add_vp(USSR, 3); }
         }
-        if st.winner < 0 { execute_play(st, cx, side, p); }
+        if st.winner < 0 {
+            execute_play(st, cx, side, p);
+            if !cx.sim && st.winner >= 0 && st.end_reason == END_DEFCON && cx.stats.defcon_loss.is_none() {
+                let own = CARDS[p.card as usize].owner();
+                let how = match p.how { Use::Event => 1, Use::Ops if own == Some(opp(side)) => 3, _ => 0 };
+                cx.stats.defcon_loss = Some((st.turn, st.ar, opp(st.winner as usize) as u8, p.card, how));
+            }
+        }
     }
     // NORAD
     if st.winner < 0 && st.ev.norad && st.ev.defcon_hit_2_this_ar && st.controls(US, CANADA) {
@@ -531,6 +552,8 @@ pub fn headline(st: &mut State, cx: &mut Ctx) {
         if h[s] == 103 && s == US { st.discard.push(103); continue; }
         if h[s] == 103 && s == USSR { st.discard.push(103); continue; }
         play_event(st, cx, s, h[s], true);
+        if !cx.sim && st.winner >= 0 && st.end_reason == END_DEFCON && cx.stats.defcon_loss.is_none() { cx.stats.defcon_loss = Some((st.turn, 0, opp(st.winner as usize) as u8, h[s], 2)); }
+        if !cx.sim && h[s] != CHINA && CARDS[h[s] as usize].owner() == Some(opp(s)) { cx.stats.exits[s][3] += 1; }
     }
 }
 

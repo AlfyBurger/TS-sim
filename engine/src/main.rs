@@ -4,6 +4,7 @@ mod data;
 mod engine;
 mod events;
 mod rng;
+mod search;
 mod state;
 mod tests;
 mod types;
@@ -119,8 +120,8 @@ fn main() {
             let mut out = String::from("[");
             for i in 0..n {
                 let (st, s, _) = play_one(seed0 + i, &spec, &spec, 2, false);
-                out += &format!("{}{{\"seed\":{},\"winner\":{},\"vp\":{},\"end\":\"{}\",\"turn\":{},\"scoring\":{:?},\"china\":{:?},\"space\":{:?},\"opp_events\":{:?},\"coups\":{:?},\"realigns\":{:?},\"milops_pen\":{:?},\"vp_by_turn\":{:?},\"defcon_card\":{}}}",
-                    if i > 0 { "," } else { "" }, seed0 + i, st.winner, st.vp, END_NAMES[st.end_reason as usize], st.turn, s.scoring_plays, s.china_plays, s.space_attempts, s.opp_events, s.coups, s.realigns, s.milops_penalty, s.vp_by_turn, s.defcon_loss_card);
+                out += &format!("{}{{\"seed\":{},\"winner\":{},\"vp\":{},\"end\":\"{}\",\"turn\":{},\"scoring\":{:?},\"china\":{:?},\"space\":{:?},\"opp_events\":{:?},\"coups\":{:?},\"realigns\":{:?},\"milops_pen\":{:?},\"vp_by_turn\":{:?},\"defcon_card\":{},\"ops_by_ar\":{:?},\"exits\":{:?},\"damage\":{:?},\"defcon_loss\":{}}}",
+                    if i > 0 { "," } else { "" }, seed0 + i, st.winner, st.vp, END_NAMES[st.end_reason as usize], st.turn, s.scoring_plays, s.china_plays, s.space_attempts, s.opp_events, s.coups, s.realigns, s.milops_penalty, s.vp_by_turn, s.defcon_loss_card, s.ops_by_ar, s.exits, s.damage, s.defcon_loss.map_or("null".to_string(), |d| format!("{:?}", d)));
             }
             out += "]"; println!("{out}");
         }
