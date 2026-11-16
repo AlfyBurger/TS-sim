@@ -1,0 +1,7 @@
+{"a": "core:la=2", "b": "core", "n": 1000, "score": 0.5415, "margin": 0.0188, "a_as_us": 0.5395, "a_as_ussr": 0.5435, "ends": [0, 825, 0, 153, 21, 862, 139, 0], "label": "F_reply_scan_m2", "secs": 862.7, "seed0": 100000}
+{"a": "core:tm=1", "b": "core", "n": 1000, "score": 0.5312, "margin": 0.02, "a_as_us": 0.4945, "a_as_ussr": 0.568, "ends": [0, 764, 0, 200, 19, 834, 183, 0], "label": "F_scoring_timing", "secs": 861.0, "seed0": 100000}
+{"a": "core:sq=0.5", "b": "core", "n": 1000, "score": 0.5685, "margin": 0.0193, "a_as_us": 0.5595, "a_as_ussr": 0.5775, "ends": [0, 770, 0, 172, 12, 882, 164, 0], "label": "F_sequencing_d05", "secs": 823.4, "seed0": 100000}
+{"a": "core:ss=0.4", "b": "core", "n": 1000, "score": 0.5105, "margin": 0.0187, "a_as_us": 0.4895, "a_as_ussr": 0.5315, "ends": [0, 817, 0, 155, 20, 830, 178, 0], "label": "F_setup_values_04", "secs": 566.3, "seed0": 100000}
+{"a": "core:hl=1", "b": "core", "n": 1000, "score": 0.507, "margin": 0.0191, "a_as_us": 0.4835, "a_as_ussr": 0.5305, "ends": [0, 830, 0, 207, 21, 806, 136, 0], "label": "F_headline_v2", "secs": 697.8, "seed0": 100000}
+{"a": "core:sq=0.5,km=1", "b": "core:sq=0.5", "n": 1000, "score": 0.4918, "margin": 0.0148, "a_as_us": 0.457, "a_as_ussr": 0.5265, "ends": [0, 739, 0, 189, 11, 913, 148, 0], "label": "F_known_sooner", "secs": 1145.1, "seed0": 100000}
+{"a": "core", "b": "core", "n": 1000, "score": 0.5, "margin": 0.0, "a_as_us": 0.464, "a_as_ussr": 0.536, "ends": [0, 820, 0, 144, 8, 878, 150, 0], "label": "REF_self_play", "secs": 690.4, "seed0": 100000}
