@@ -1,3 +1,4 @@
 A2_milops_off          score  37.1 ± 3.1  as US  38.0  as USSR  36.1  (759.8s)
 A2_trap_off            score  44.7 ± 3.2  as US  48.2  as USSR  41.1  (480.6s)
 A2_access_off          score  51.3 ± 3.0  as US  54.2  as USSR  48.4  (532.0s)
+A2_region_unseen_off   score  35.8 ± 3.1  as US  37.1  as USSR  34.5  (448.4s)

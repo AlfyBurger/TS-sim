@@ -34,3 +34,12 @@ Full results: `reports/stage2_run1_report.pdf`, raw data in `results/run1/`. 800
 | H9, H10 | — | — | Not built yet (next run) |
 
 Change adopted: the Final Scoring projection term (`final`) is now 0 — removing it scored 55.9 ± 3.1 and 56.8 ± 3.1 on fresh deals; half weight was no better than off (49.1 ± 2.9).
+
+## Run 2 (night of 16–17 Nov 2026)
+
+| # | Hypothesis | Tested as | Result | Verdict |
+|---|---|---|---|---|
+| H13 (Alfy, 16 Nov) | Final Scoring should count towards the end of the game: switch the projection on 2–3 turns before the end | Projection on from turn 8, 9 or 10, against the bot without it (1,000 deals) | t8 46.4 ± 1.1; t9 49.3 ± 0.9; t10 50.3 ± 0.7 (US +1.7 ± 1.4, USSR −1.1 ± 1.3). On the run 2 bot, t10: 49.5 ± 0.8 | From turn 8: harmful. From turn 9–10: neutral. Not adopted |
+| H7 | Hold the China Card | Holding value 1.5, on the run 2 bot | 52.2 ± 2.1; fresh deals 53.1 ± 2.1 (run 1: 52.8 ± 3.2) | **Confirmed, adopted** |
+| H9 | Preparation pays | Set-up values 0.4 for cards that reward preparation | 51.0 ± 1.9 | Neutral (as in Red Sea, +0.85 there); not adopted |
+| H10 | Play order depends on the hand | Card sequencing δ 0.5 (Red Sea rule) | 56.9 ± 1.9; δ 0.3 / 0.7 no better | **Confirmed, adopted** |
