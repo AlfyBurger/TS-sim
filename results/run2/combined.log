@@ -1,1 +1,6 @@
 C_combined_fresh       score  57.6 ± 1.9  as US  54.6  as USSR  60.5  (1081.9s)
+C_timing_on_top_of_seq score  48.8 ± 2.0  as US  47.2  as USSR  50.4  (1249.7s)
+C_delta_0.3_vs_0.5     score  49.8 ± 1.8  as US  48.4  as USSR  51.0  (1338.1s)
+C_delta_0.7_vs_0.5     score  48.1 ± 1.9  as US  48.2  as USSR  48.0  (1389.1s)
+D_china_hold_1.5       score  52.2 ± 2.1  as US  50.3  as USSR  54.0  (1385.7s)
+D_H13_t10_on_combined  score  49.5 ± 0.8  as US  49.7  as USSR  49.2  (1398.4s)

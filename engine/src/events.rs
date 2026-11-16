@@ -106,6 +106,7 @@ fn reveal_hand(st: &mut State, side: usize) { let h = st.hands[side]; for k in h
 fn random_discard(st: &mut State, cx: &mut Ctx, victim: usize) -> Option<u8> {
     let n = st.hands[victim].len();
     if n == 0 { return None; }
+    cx.random_used += 1;
     let i = cx.rng.below(Purpose::Random, victim, n);
     let k = st.hands[victim].c[i];
     st.remove_from_hand(victim, k);
@@ -463,6 +464,7 @@ fn missile_envy(st: &mut State, cx: &mut Ctx, s: usize) {
 fn grain_sales(st: &mut State, cx: &mut Ctx) {
     let n = st.hands[USSR].len();
     if n > 0 {
+        cx.random_used += 1;
         let i = cx.rng.below(Purpose::Random, USSR, n);
         let k = st.hands[USSR].c[i];
         // US plays it as an Event if it is a US Event that can occur; otherwise returns it.

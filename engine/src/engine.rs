@@ -30,12 +30,13 @@ pub struct Ctx<'a> {
     pub log: Option<Vec<String>>,
     pub stats: Stats,
     pub dice_used: u32,
+    pub random_used: u32,
     pub current_card: u8,
 }
 
 impl<'a> Ctx<'a> {
     pub fn new(seed: u64, a0: &'a mut dyn Agent, a1: &'a mut dyn Agent) -> Self {
-        Ctx { rng: Streams::new(seed), ag: [a0, a1], sim: false, log: None, stats: Stats::new(), dice_used: 0, current_card: 0 }
+        Ctx { rng: Streams::new(seed), ag: [a0, a1], sim: false, log: None, stats: Stats::new(), dice_used: 0, random_used: 0, current_card: 0 }
     }
     pub fn die(&mut self, p: Purpose, side: usize) -> i32 { self.dice_used += 1; self.rng.die(p, side) }
     pub fn note(&mut self, f: impl FnOnce() -> String) { if let Some(l) = &mut self.log { l.push(f()); } }

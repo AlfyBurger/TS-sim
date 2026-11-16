@@ -1,0 +1,3 @@
+{"a": "core:sq=0.5,tm=1,milops=0", "b": "core:sq=0.5,tm=1", "n": 400, "score": 0.3706, "margin": 0.0312, "a_as_us": 0.38, "a_as_ussr": 0.3613, "ends": [0, 264, 0, 70, 0, 410, 56, 0], "label": "A2_milops_off", "secs": 759.8, "seed0": 30000}
+{"a": "core:sq=0.5,tm=1,trap=0", "b": "core:sq=0.5,tm=1", "n": 400, "score": 0.4469, "margin": 0.0316, "a_as_us": 0.4825, "a_as_ussr": 0.4113, "ends": [0, 201, 0, 230, 0, 300, 69, 0], "label": "A2_trap_off", "secs": 480.6, "seed0": 30000}
+{"a": "core:sq=0.5,tm=1,access=0", "b": "core:sq=0.5,tm=1", "n": 400, "score": 0.5131, "margin": 0.0303, "a_as_us": 0.5425, "a_as_ussr": 0.4838, "ends": [0, 229, 0, 108, 0, 403, 60, 0], "label": "A2_access_off", "secs": 532.0, "seed0": 30000}
