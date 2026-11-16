@@ -16,3 +16,21 @@ Alfy's answers to the "what wins" quiz, 16 Nov 2026. Alfy knows the fundamentals
 | H10 | The order of play within a turn depends on the hand (no fixed rule). | Red Sea's tested sequencing rule (trust half a kept card's value) is retested here | Sequencing on vs. greedy. |
 | H11 | Signs the opponent holds a Scoring card: heavy spending in a Region, breaking my Battlegrounds there. | **Stage 3** reading signals | Calibration of the read before any win-rate test. |
 | H12 | Europe: keep investing or accept a stalemate depends on side and era. | **Stage 3** plans (era/side profiles) | Plan tests after Stage 2. |
+
+## Verdicts after Stage 2 run 1 (16 Nov 2026)
+
+Full results: `reports/stage2_run1_report.pdf`, raw data in `results/run1/`. 800 games per test (400 deals × both sides); margins are 95%.
+
+| # | Tested as | Score vs old bot | Verdict |
+|---|---|---|---|
+| H1 | Region standing weight 0.25 → 0.5 | 47.8 ± 3.2 | Neutral (leans worse) |
+| H2 | Europe/Asia Battleground weight ×1.5 | 49.1 ± 2.9 | Neutral |
+| H3 | USSR Battleground weight ×1.5, turns 1–3 (rough) | 52.2 ± 3.0 | Neutral; real side/era rule in Stage 3 |
+| H4 | DEFCON squeeze term on | 51.2 ± 3.2 | Neutral; trap avoidance confirmed by ablation (46.6 ± 2.8 without it) |
+| H5 | Diagnostics + access ablation | — | Partly: Scoring at a loss 33–36%, ~30 opponent Events/game; access term neutral |
+| H6 | Space Race only with opponent cards | 51.9 ± 2.9 | Neutral: bot already does it 95–98% of the time |
+| H7 | China Card holding value 1.5 | 52.8 ± 3.2 | Neutral (leans better); re-test with more deals |
+| H8 | Both sides on same deals | — | Applied |
+| H9, H10 | — | — | Not built yet (next run) |
+
+Change adopted: the Final Scoring projection term (`final`) is now 0 — removing it scored 55.9 ± 3.1 and 56.8 ± 3.1 on fresh deals; half weight was no better than off (49.1 ± 2.9).

@@ -1,0 +1,6 @@
+{"a": "core:region_unseen=0.5", "b": "core", "n": 400, "score": 0.4781, "margin": 0.0323, "a_as_us": 0.5112, "a_as_ussr": 0.445, "ends": [0, 360, 0, 62, 6, 335, 37, 0], "label": "H1_region_0.5", "secs": 355.0, "seed0": 30000}
+{"a": "core:europe_mult=1.5,asia_mult=1.5", "b": "core", "n": 400, "score": 0.4913, "margin": 0.0289, "a_as_us": 0.5613, "a_as_ussr": 0.4213, "ends": [0, 326, 0, 57, 11, 368, 38, 0], "label": "H2_eu_asia_1.5", "secs": 343.8, "seed0": 30000}
+{"a": "core:h3=0.5", "b": "core", "n": 400, "score": 0.5219, "margin": 0.0296, "a_as_us": 0.585, "a_as_ussr": 0.4587, "ends": [0, 336, 0, 70, 5, 350, 39, 0], "label": "H3_ussr_early_0.5", "secs": 345.0, "seed0": 30000}
+{"a": "core:squeeze=1", "b": "core", "n": 400, "score": 0.5125, "margin": 0.0321, "a_as_us": 0.5513, "a_as_ussr": 0.4738, "ends": [0, 329, 0, 76, 6, 357, 32, 0], "label": "H4_squeeze_1", "secs": 352.9, "seed0": 30000}
+{"a": "core:h6=1", "b": "core", "n": 400, "score": 0.5194, "margin": 0.0295, "a_as_us": 0.575, "a_as_ussr": 0.4637, "ends": [0, 326, 0, 68, 5, 362, 39, 0], "label": "H6_space_dispose", "secs": 366.8, "seed0": 30000}
+{"a": "core:china=1.5", "b": "core", "n": 400, "score": 0.5275, "margin": 0.0318, "a_as_us": 0.6125, "a_as_ussr": 0.4425, "ends": [0, 335, 0, 78, 4, 340, 43, 0], "label": "H7_china_hold_1.5", "secs": 336.4, "seed0": 30000}

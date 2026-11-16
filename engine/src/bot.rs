@@ -16,7 +16,7 @@ pub struct Weights {
 }
 impl Weights {
     pub fn core() -> Self {
-        Weights { vp: 1.0, held: 1.0, region_unseen: 0.25, final_: 1.0, bg: 1.0, europe_mult: 1.0, asia_mult: 1.0, access: 3.0,
+        Weights { vp: 1.0, held: 1.0, region_unseen: 0.25, final_: 0.0, bg: 1.0, europe_mult: 1.0, asia_mult: 1.0, access: 3.0,
             milops: 1.0, squeeze: 0.0, trap: 3.0, china: 0.0, bad: 0.3, space_ab: 0.5, inf: 0.05, auto_eu: 15.0, trapped: 3.0, h3: 0.0, h6: 0.0,
             samples: 6.0, noise: 1e-6 }
     }

@@ -1,0 +1,2 @@
+{"a": "core:final=0", "b": "core", "n": 400, "score": 0.5675, "margin": 0.0308, "a_as_us": 0.6, "a_as_ussr": 0.535, "ends": [0, 367, 0, 69, 9, 316, 39, 0], "label": "C_final_off_fresh", "secs": 260.8, "seed0": 50000}
+{"a": "core:final=0.3", "b": "core:final=0", "n": 400, "score": 0.4906, "margin": 0.0295, "a_as_us": 0.5025, "a_as_ussr": 0.4788, "ends": [0, 334, 0, 66, 3, 345, 52, 0], "label": "C_final_0.3_vs_0", "secs": 255.2, "seed0": 60000}

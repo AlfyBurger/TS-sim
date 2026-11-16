@@ -1,0 +1,6 @@
+H1_region_0.5          score  47.8 ± 3.2  as US  51.1  as USSR  44.5  (355.0s)
+H2_eu_asia_1.5         score  49.1 ± 2.9  as US  56.1  as USSR  42.1  (343.8s)
+H3_ussr_early_0.5      score  52.2 ± 3.0  as US  58.5  as USSR  45.9  (345.0s)
+H4_squeeze_1           score  51.2 ± 3.2  as US  55.1  as USSR  47.4  (352.9s)
+H6_space_dispose       score  51.9 ± 2.9  as US  57.5  as USSR  46.4  (366.8s)
+H7_china_hold_1.5      score  52.8 ± 3.2  as US  61.3  as USSR  44.2  (336.4s)
