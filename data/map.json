@@ -1,0 +1,1318 @@
+{
+ "countries": {
+  "Canada": {
+   "region": "Europe",
+   "sub": [
+    "Western Europe"
+   ],
+   "stab": 4,
+   "bg": false,
+   "adj": [
+    "U.K.",
+    "U.S.A."
+   ],
+   "xy": [
+    991,
+    803
+   ]
+  },
+  "U.K.": {
+   "region": "Europe",
+   "sub": [
+    "Western Europe"
+   ],
+   "stab": 5,
+   "bg": false,
+   "adj": [
+    "Benelux",
+    "Canada",
+    "France",
+    "Norway"
+   ],
+   "xy": [
+    1839,
+    623
+   ]
+  },
+  "Norway": {
+   "region": "Europe",
+   "sub": [
+    "Western Europe"
+   ],
+   "stab": 4,
+   "bg": false,
+   "adj": [
+    "Sweden",
+    "U.K."
+   ],
+   "xy": [
+    2082,
+    329
+   ]
+  },
+  "Sweden": {
+   "region": "Europe",
+   "sub": [
+    "Western Europe"
+   ],
+   "stab": 4,
+   "bg": false,
+   "adj": [
+    "Denmark",
+    "Finland",
+    "Norway"
+   ],
+   "xy": [
+    2383,
+    460
+   ]
+  },
+  "Finland": {
+   "region": "Europe",
+   "sub": [
+    "Eastern Europe",
+    "Western Europe"
+   ],
+   "stab": 4,
+   "bg": false,
+   "adj": [
+    "Sweden",
+    "U.S.S.R."
+   ],
+   "xy": [
+    2673,
+    338
+   ]
+  },
+  "Denmark": {
+   "region": "Europe",
+   "sub": [
+    "Western Europe"
+   ],
+   "stab": 3,
+   "bg": false,
+   "adj": [
+    "Sweden",
+    "W. Germany"
+   ],
+   "xy": [
+    2131,
+    482
+   ]
+  },
+  "Benelux": {
+   "region": "Europe",
+   "sub": [
+    "Western Europe"
+   ],
+   "stab": 3,
+   "bg": false,
+   "adj": [
+    "U.K.",
+    "W. Germany"
+   ],
+   "xy": [
+    2008,
+    778
+   ]
+  },
+  "France": {
+   "region": "Europe",
+   "sub": [
+    "Western Europe"
+   ],
+   "stab": 3,
+   "bg": true,
+   "adj": [
+    "Algeria",
+    "Italy",
+    "Spain/Portugal",
+    "U.K.",
+    "W. Germany"
+   ],
+   "xy": [
+    1970,
+    957
+   ]
+  },
+  "Spain/Portugal": {
+   "region": "Europe",
+   "sub": [
+    "Western Europe"
+   ],
+   "stab": 2,
+   "bg": false,
+   "adj": [
+    "France",
+    "Italy",
+    "Morocco"
+   ],
+   "xy": [
+    1810,
+    1169
+   ]
+  },
+  "Italy": {
+   "region": "Europe",
+   "sub": [
+    "Western Europe"
+   ],
+   "stab": 2,
+   "bg": true,
+   "adj": [
+    "Austria",
+    "France",
+    "Greece",
+    "Spain/Portugal",
+    "Yugoslavia"
+   ],
+   "xy": [
+    2264,
+    1087
+   ]
+  },
+  "Austria": {
+   "region": "Europe",
+   "sub": [
+    "Eastern Europe",
+    "Western Europe"
+   ],
+   "stab": 4,
+   "bg": false,
+   "adj": [
+    "E. Germany",
+    "Hungary",
+    "Italy",
+    "W. Germany"
+   ],
+   "xy": [
+    2322,
+    931
+   ]
+  },
+  "W. Germany": {
+   "region": "Europe",
+   "sub": [
+    "Western Europe"
+   ],
+   "stab": 4,
+   "bg": true,
+   "adj": [
+    "Austria",
+    "Benelux",
+    "Denmark",
+    "E. Germany",
+    "France"
+   ],
+   "xy": [
+    2227,
+    777
+   ]
+  },
+  "E. Germany": {
+   "region": "Europe",
+   "sub": [
+    "Eastern Europe"
+   ],
+   "stab": 3,
+   "bg": true,
+   "adj": [
+    "Austria",
+    "Czechoslovakia",
+    "Poland",
+    "W. Germany"
+   ],
+   "xy": [
+    2306,
+    630
+   ]
+  },
+  "Poland": {
+   "region": "Europe",
+   "sub": [
+    "Eastern Europe"
+   ],
+   "stab": 3,
+   "bg": true,
+   "adj": [
+    "Czechoslovakia",
+    "E. Germany",
+    "U.S.S.R."
+   ],
+   "xy": [
+    2535,
+    630
+   ]
+  },
+  "Czechoslovakia": {
+   "region": "Europe",
+   "sub": [
+    "Eastern Europe"
+   ],
+   "stab": 3,
+   "bg": false,
+   "adj": [
+    "E. Germany",
+    "Hungary",
+    "Poland"
+   ],
+   "xy": [
+    2495,
+    778
+   ]
+  },
+  "Hungary": {
+   "region": "Europe",
+   "sub": [
+    "Eastern Europe"
+   ],
+   "stab": 3,
+   "bg": false,
+   "adj": [
+    "Austria",
+    "Czechoslovakia",
+    "Romania",
+    "Yugoslavia"
+   ],
+   "xy": [
+    2543,
+    931
+   ]
+  },
+  "Romania": {
+   "region": "Europe",
+   "sub": [
+    "Eastern Europe"
+   ],
+   "stab": 3,
+   "bg": false,
+   "adj": [
+    "Hungary",
+    "Turkey",
+    "U.S.S.R.",
+    "Yugoslavia"
+   ],
+   "xy": [
+    2763,
+    932
+   ]
+  },
+  "Yugoslavia": {
+   "region": "Europe",
+   "sub": [
+    "Eastern Europe"
+   ],
+   "stab": 3,
+   "bg": false,
+   "adj": [
+    "Greece",
+    "Hungary",
+    "Italy",
+    "Romania"
+   ],
+   "xy": [
+    2492,
+    1088
+   ]
+  },
+  "Greece": {
+   "region": "Europe",
+   "sub": [
+    "Western Europe"
+   ],
+   "stab": 2,
+   "bg": false,
+   "adj": [
+    "Bulgaria",
+    "Italy",
+    "Turkey",
+    "Yugoslavia"
+   ],
+   "xy": [
+    2543,
+    1249
+   ]
+  },
+  "Bulgaria": {
+   "region": "Europe",
+   "sub": [
+    "Eastern Europe"
+   ],
+   "stab": 3,
+   "bg": false,
+   "adj": [
+    "Greece",
+    "Turkey"
+   ],
+   "xy": [
+    2720,
+    1088
+   ]
+  },
+  "Turkey": {
+   "region": "Europe",
+   "sub": [
+    "Western Europe"
+   ],
+   "stab": 2,
+   "bg": false,
+   "adj": [
+    "Bulgaria",
+    "Greece",
+    "Romania",
+    "Syria"
+   ],
+   "xy": [
+    2938,
+    1107
+   ]
+  },
+  "Lebanon": {
+   "region": "Middle East",
+   "sub": [],
+   "stab": 1,
+   "bg": false,
+   "adj": [
+    "Israel",
+    "Jordan",
+    "Syria"
+   ],
+   "xy": [
+    2811,
+    1258
+   ]
+  },
+  "Syria": {
+   "region": "Middle East",
+   "sub": [],
+   "stab": 2,
+   "bg": false,
+   "adj": [
+    "Israel",
+    "Lebanon",
+    "Turkey"
+   ],
+   "xy": [
+    3027,
+    1253
+   ]
+  },
+  "Israel": {
+   "region": "Middle East",
+   "sub": [],
+   "stab": 4,
+   "bg": true,
+   "adj": [
+    "Egypt",
+    "Jordan",
+    "Lebanon",
+    "Syria"
+   ],
+   "xy": [
+    2774,
+    1406
+   ]
+  },
+  "Iraq": {
+   "region": "Middle East",
+   "sub": [],
+   "stab": 3,
+   "bg": true,
+   "adj": [
+    "Gulf States",
+    "Iran",
+    "Jordan",
+    "Saudi Arabia"
+   ],
+   "xy": [
+    3025,
+    1406
+   ]
+  },
+  "Iran": {
+   "region": "Middle East",
+   "sub": [],
+   "stab": 2,
+   "bg": true,
+   "adj": [
+    "Afghanistan",
+    "Iraq",
+    "Pakistan"
+   ],
+   "xy": [
+    3241,
+    1408
+   ]
+  },
+  "Libya": {
+   "region": "Middle East",
+   "sub": [],
+   "stab": 2,
+   "bg": true,
+   "adj": [
+    "Egypt",
+    "Tunisia"
+   ],
+   "xy": [
+    2443,
+    1540
+   ]
+  },
+  "Egypt": {
+   "region": "Middle East",
+   "sub": [],
+   "stab": 2,
+   "bg": true,
+   "adj": [
+    "Israel",
+    "Libya",
+    "Sudan"
+   ],
+   "xy": [
+    2669,
+    1561
+   ]
+  },
+  "Jordan": {
+   "region": "Middle East",
+   "sub": [],
+   "stab": 2,
+   "bg": false,
+   "adj": [
+    "Iraq",
+    "Israel",
+    "Lebanon",
+    "Saudi Arabia"
+   ],
+   "xy": [
+    2916,
+    1559
+   ]
+  },
+  "Gulf States": {
+   "region": "Middle East",
+   "sub": [],
+   "stab": 3,
+   "bg": false,
+   "adj": [
+    "Iraq",
+    "Saudi Arabia"
+   ],
+   "xy": [
+    3164,
+    1555
+   ]
+  },
+  "Saudi Arabia": {
+   "region": "Middle East",
+   "sub": [],
+   "stab": 3,
+   "bg": true,
+   "adj": [
+    "Gulf States",
+    "Iraq",
+    "Jordan"
+   ],
+   "xy": [
+    3103,
+    1705
+   ]
+  },
+  "Tunisia": {
+   "region": "Africa",
+   "sub": [],
+   "stab": 2,
+   "bg": false,
+   "adj": [
+    "Algeria",
+    "Libya"
+   ],
+   "xy": [
+    2316,
+    1365
+   ]
+  },
+  "Algeria": {
+   "region": "Africa",
+   "sub": [],
+   "stab": 2,
+   "bg": true,
+   "adj": [
+    "France",
+    "Morocco",
+    "Saharan States",
+    "Tunisia"
+   ],
+   "xy": [
+    2089,
+    1384
+   ]
+  },
+  "Morocco": {
+   "region": "Africa",
+   "sub": [],
+   "stab": 3,
+   "bg": false,
+   "adj": [
+    "Algeria",
+    "Spain/Portugal",
+    "West African States"
+   ],
+   "xy": [
+    1868,
+    1451
+   ]
+  },
+  "West African States": {
+   "region": "Africa",
+   "sub": [],
+   "stab": 2,
+   "bg": false,
+   "adj": [
+    "Ivory Coast",
+    "Morocco"
+   ],
+   "xy": [
+    1847,
+    1647
+   ]
+  },
+  "Saharan States": {
+   "region": "Africa",
+   "sub": [],
+   "stab": 1,
+   "bg": false,
+   "adj": [
+    "Algeria",
+    "Nigeria"
+   ],
+   "xy": [
+    2179,
+    1701
+   ]
+  },
+  "Sudan": {
+   "region": "Africa",
+   "sub": [],
+   "stab": 1,
+   "bg": false,
+   "adj": [
+    "Egypt",
+    "Ethiopia"
+   ],
+   "xy": [
+    2707,
+    1741
+   ]
+  },
+  "Nigeria": {
+   "region": "Africa",
+   "sub": [],
+   "stab": 1,
+   "bg": true,
+   "adj": [
+    "Cameroon",
+    "Ivory Coast",
+    "Saharan States"
+   ],
+   "xy": [
+    2263,
+    1913
+   ]
+  },
+  "Ethiopia": {
+   "region": "Africa",
+   "sub": [],
+   "stab": 1,
+   "bg": false,
+   "adj": [
+    "Somalia",
+    "Sudan"
+   ],
+   "xy": [
+    2864,
+    1898
+   ]
+  },
+  "Ivory Coast": {
+   "region": "Africa",
+   "sub": [],
+   "stab": 2,
+   "bg": false,
+   "adj": [
+    "Nigeria",
+    "West African States"
+   ],
+   "xy": [
+    1989,
+    1937
+   ]
+  },
+  "Somalia": {
+   "region": "Africa",
+   "sub": [],
+   "stab": 2,
+   "bg": false,
+   "adj": [
+    "Ethiopia",
+    "Kenya"
+   ],
+   "xy": [
+    3107,
+    1964
+   ]
+  },
+  "Cameroon": {
+   "region": "Africa",
+   "sub": [],
+   "stab": 1,
+   "bg": false,
+   "adj": [
+    "Nigeria",
+    "Zaire"
+   ],
+   "xy": [
+    2364,
+    2087
+   ]
+  },
+  "Kenya": {
+   "region": "Africa",
+   "sub": [],
+   "stab": 2,
+   "bg": false,
+   "adj": [
+    "SE African States",
+    "Somalia"
+   ],
+   "xy": [
+    2888,
+    2097
+   ]
+  },
+  "Zaire": {
+   "region": "Africa",
+   "sub": [],
+   "stab": 1,
+   "bg": true,
+   "adj": [
+    "Angola",
+    "Cameroon",
+    "Zimbabwe"
+   ],
+   "xy": [
+    2625,
+    2161
+   ]
+  },
+  "SE African States": {
+   "region": "Africa",
+   "sub": [],
+   "stab": 1,
+   "bg": false,
+   "adj": [
+    "Kenya",
+    "Zimbabwe"
+   ],
+   "xy": [
+    2918,
+    2302
+   ]
+  },
+  "Angola": {
+   "region": "Africa",
+   "sub": [],
+   "stab": 1,
+   "bg": true,
+   "adj": [
+    "Botswana",
+    "South Africa",
+    "Zaire"
+   ],
+   "xy": [
+    2432,
+    2341
+   ]
+  },
+  "Zimbabwe": {
+   "region": "Africa",
+   "sub": [],
+   "stab": 1,
+   "bg": false,
+   "adj": [
+    "Botswana",
+    "SE African States",
+    "Zaire"
+   ],
+   "xy": [
+    2700,
+    2416
+   ]
+  },
+  "Botswana": {
+   "region": "Africa",
+   "sub": [],
+   "stab": 2,
+   "bg": false,
+   "adj": [
+    "Angola",
+    "South Africa",
+    "Zimbabwe"
+   ],
+   "xy": [
+    2629,
+    2574
+   ]
+  },
+  "South Africa": {
+   "region": "Africa",
+   "sub": [],
+   "stab": 3,
+   "bg": true,
+   "adj": [
+    "Angola",
+    "Botswana"
+   ],
+   "xy": [
+    2524,
+    2741
+   ]
+  },
+  "Mexico": {
+   "region": "Central America",
+   "sub": [],
+   "stab": 2,
+   "bg": true,
+   "adj": [
+    "Guatemala",
+    "U.S.A."
+   ],
+   "xy": [
+    327,
+    1422
+   ]
+  },
+  "Cuba": {
+   "region": "Central America",
+   "sub": [],
+   "stab": 3,
+   "bg": true,
+   "adj": [
+    "Haiti",
+    "Nicaragua",
+    "U.S.A."
+   ],
+   "xy": [
+    904,
+    1533
+   ]
+  },
+  "Guatemala": {
+   "region": "Central America",
+   "sub": [],
+   "stab": 1,
+   "bg": false,
+   "adj": [
+    "El Salvador",
+    "Honduras",
+    "Mexico"
+   ],
+   "xy": [
+    518,
+    1579
+   ]
+  },
+  "Haiti": {
+   "region": "Central America",
+   "sub": [],
+   "stab": 1,
+   "bg": false,
+   "adj": [
+    "Cuba",
+    "Dominican Rep"
+   ],
+   "xy": [
+    1120,
+    1672
+   ]
+  },
+  "Dominican Rep": {
+   "region": "Central America",
+   "sub": [],
+   "stab": 1,
+   "bg": false,
+   "adj": [
+    "Haiti"
+   ],
+   "xy": [
+    1336,
+    1670
+   ]
+  },
+  "Nicaragua": {
+   "region": "Central America",
+   "sub": [],
+   "stab": 1,
+   "bg": false,
+   "adj": [
+    "Costa Rica",
+    "Cuba",
+    "Honduras"
+   ],
+   "xy": [
+    890,
+    1730
+   ]
+  },
+  "Honduras": {
+   "region": "Central America",
+   "sub": [],
+   "stab": 2,
+   "bg": false,
+   "adj": [
+    "Costa Rica",
+    "El Salvador",
+    "Guatemala",
+    "Nicaragua"
+   ],
+   "xy": [
+    670,
+    1729
+   ]
+  },
+  "El Salvador": {
+   "region": "Central America",
+   "sub": [],
+   "stab": 1,
+   "bg": false,
+   "adj": [
+    "Guatemala",
+    "Honduras"
+   ],
+   "xy": [
+    447,
+    1741
+   ]
+  },
+  "Costa Rica": {
+   "region": "Central America",
+   "sub": [],
+   "stab": 3,
+   "bg": false,
+   "adj": [
+    "Honduras",
+    "Nicaragua",
+    "Panama"
+   ],
+   "xy": [
+    648,
+    1883
+   ]
+  },
+  "Panama": {
+   "region": "Central America",
+   "sub": [],
+   "stab": 2,
+   "bg": true,
+   "adj": [
+    "Colombia",
+    "Costa Rica"
+   ],
+   "xy": [
+    894,
+    1880
+   ]
+  },
+  "Venezuela": {
+   "region": "South America",
+   "sub": [],
+   "stab": 2,
+   "bg": true,
+   "adj": [
+    "Brazil",
+    "Colombia"
+   ],
+   "xy": [
+    1157,
+    1901
+   ]
+  },
+  "Colombia": {
+   "region": "South America",
+   "sub": [],
+   "stab": 1,
+   "bg": false,
+   "adj": [
+    "Ecuador",
+    "Panama",
+    "Venezuela"
+   ],
+   "xy": [
+    1035,
+    2062
+   ]
+  },
+  "Ecuador": {
+   "region": "South America",
+   "sub": [],
+   "stab": 2,
+   "bg": false,
+   "adj": [
+    "Colombia",
+    "Peru"
+   ],
+   "xy": [
+    804,
+    2130
+   ]
+  },
+  "Peru": {
+   "region": "South America",
+   "sub": [],
+   "stab": 2,
+   "bg": false,
+   "adj": [
+    "Bolivia",
+    "Chile",
+    "Ecuador"
+   ],
+   "xy": [
+    929,
+    2298
+   ]
+  },
+  "Brazil": {
+   "region": "South America",
+   "sub": [],
+   "stab": 2,
+   "bg": true,
+   "adj": [
+    "Uruguay",
+    "Venezuela"
+   ],
+   "xy": [
+    1540,
+    2284
+   ]
+  },
+  "Bolivia": {
+   "region": "South America",
+   "sub": [],
+   "stab": 2,
+   "bg": false,
+   "adj": [
+    "Paraguay",
+    "Peru"
+   ],
+   "xy": [
+    1159,
+    2438
+   ]
+  },
+  "Paraguay": {
+   "region": "South America",
+   "sub": [],
+   "stab": 2,
+   "bg": false,
+   "adj": [
+    "Argentina",
+    "Bolivia",
+    "Uruguay"
+   ],
+   "xy": [
+    1286,
+    2602
+   ]
+  },
+  "Uruguay": {
+   "region": "South America",
+   "sub": [],
+   "stab": 2,
+   "bg": false,
+   "adj": [
+    "Argentina",
+    "Brazil",
+    "Paraguay"
+   ],
+   "xy": [
+    1356,
+    2791
+   ]
+  },
+  "Chile": {
+   "region": "South America",
+   "sub": [],
+   "stab": 3,
+   "bg": true,
+   "adj": [
+    "Argentina",
+    "Peru"
+   ],
+   "xy": [
+    1037,
+    2620
+   ]
+  },
+  "Argentina": {
+   "region": "South America",
+   "sub": [],
+   "stab": 2,
+   "bg": true,
+   "adj": [
+    "Chile",
+    "Paraguay",
+    "Uruguay"
+   ],
+   "xy": [
+    1112,
+    2912
+   ]
+  },
+  "Afghanistan": {
+   "region": "Asia",
+   "sub": [],
+   "stab": 2,
+   "bg": false,
+   "adj": [
+    "Iran",
+    "Pakistan",
+    "U.S.S.R."
+   ],
+   "xy": [
+    3497,
+    1307
+   ]
+  },
+  "Pakistan": {
+   "region": "Asia",
+   "sub": [],
+   "stab": 2,
+   "bg": true,
+   "adj": [
+    "Afghanistan",
+    "India",
+    "Iran"
+   ],
+   "xy": [
+    3502,
+    1502
+   ]
+  },
+  "India": {
+   "region": "Asia",
+   "sub": [],
+   "stab": 3,
+   "bg": true,
+   "adj": [
+    "Burma",
+    "Pakistan"
+   ],
+   "xy": [
+    3743,
+    1605
+   ]
+  },
+  "Burma": {
+   "region": "Asia",
+   "sub": [
+    "Southeast Asia"
+   ],
+   "stab": 2,
+   "bg": false,
+   "adj": [
+    "India",
+    "Laos/Cambodia"
+   ],
+   "xy": [
+    4012,
+    1634
+   ]
+  },
+  "Laos/Cambodia": {
+   "region": "Asia",
+   "sub": [
+    "Southeast Asia"
+   ],
+   "stab": 1,
+   "bg": false,
+   "adj": [
+    "Burma",
+    "Thailand",
+    "Vietnam"
+   ],
+   "xy": [
+    4227,
+    1656
+   ]
+  },
+  "Thailand": {
+   "region": "Asia",
+   "sub": [
+    "Southeast Asia"
+   ],
+   "stab": 2,
+   "bg": true,
+   "adj": [
+    "Laos/Cambodia",
+    "Malaysia",
+    "Vietnam"
+   ],
+   "xy": [
+    4136,
+    1812
+   ]
+  },
+  "Vietnam": {
+   "region": "Asia",
+   "sub": [
+    "Southeast Asia"
+   ],
+   "stab": 1,
+   "bg": false,
+   "adj": [
+    "Laos/Cambodia",
+    "Thailand"
+   ],
+   "xy": [
+    4357,
+    1813
+   ]
+  },
+  "Malaysia": {
+   "region": "Asia",
+   "sub": [
+    "Southeast Asia"
+   ],
+   "stab": 2,
+   "bg": false,
+   "adj": [
+    "Australia",
+    "Indonesia",
+    "Thailand"
+   ],
+   "xy": [
+    4238,
+    2045
+   ]
+  },
+  "Australia": {
+   "region": "Asia",
+   "sub": [],
+   "stab": 4,
+   "bg": false,
+   "adj": [
+    "Malaysia"
+   ],
+   "xy": [
+    4604,
+    2494
+   ]
+  },
+  "Indonesia": {
+   "region": "Asia",
+   "sub": [
+    "Southeast Asia"
+   ],
+   "stab": 1,
+   "bg": false,
+   "adj": [
+    "Malaysia",
+    "Philippines"
+   ],
+   "xy": [
+    4600,
+    2229
+   ]
+  },
+  "Philippines": {
+   "region": "Asia",
+   "sub": [
+    "Southeast Asia"
+   ],
+   "stab": 2,
+   "bg": false,
+   "adj": [
+    "Indonesia",
+    "Japan"
+   ],
+   "xy": [
+    4682,
+    1807
+   ]
+  },
+  "Taiwan": {
+   "region": "Asia",
+   "sub": [],
+   "stab": 3,
+   "bg": false,
+   "adj": [
+    "Japan",
+    "S. Korea"
+   ],
+   "xy": [
+    4587,
+    1577
+   ]
+  },
+  "Japan": {
+   "region": "Asia",
+   "sub": [],
+   "stab": 4,
+   "bg": true,
+   "adj": [
+    "Philippines",
+    "S. Korea",
+    "Taiwan",
+    "U.S.A."
+   ],
+   "xy": [
+    4857,
+    1399
+   ]
+  },
+  "S. Korea": {
+   "region": "Asia",
+   "sub": [],
+   "stab": 3,
+   "bg": true,
+   "adj": [
+    "Japan",
+    "N. Korea",
+    "Taiwan"
+   ],
+   "xy": [
+    4682,
+    1255
+   ]
+  },
+  "N. Korea": {
+   "region": "Asia",
+   "sub": [],
+   "stab": 3,
+   "bg": true,
+   "adj": [
+    "S. Korea",
+    "U.S.S.R."
+   ],
+   "xy": [
+    4637,
+    1104
+   ]
+  }
+ },
+ "superpowers": {
+  "U.S.A.": [
+   "Canada",
+   "Cuba",
+   "Japan",
+   "Mexico"
+  ],
+  "U.S.S.R.": [
+   "Afghanistan",
+   "Finland",
+   "N. Korea",
+   "Poland",
+   "Romania"
+  ]
+ }
+}

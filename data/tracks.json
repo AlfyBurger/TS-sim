@@ -1,0 +1,219 @@
+{
+ "source": "HoF 20th Anniversary rulebook 2026 (6.4, 8.1, 8.2, 10.2, 3.x); Space Race read from the track graphic p.12",
+ "space_race": [
+  {
+   "box": 1,
+   "name": "Earth Satellite",
+   "ops": 2,
+   "roll_max": 3,
+   "vp": [
+    2,
+    1
+   ],
+   "ability": null
+  },
+  {
+   "box": 2,
+   "name": "Animal in Space",
+   "ops": 2,
+   "roll_max": 4,
+   "vp": [
+    0,
+    0
+   ],
+   "ability": "may play 2 Space Race cards per turn"
+  },
+  {
+   "box": 3,
+   "name": "Man in Space",
+   "ops": 2,
+   "roll_max": 3,
+   "vp": [
+    2,
+    0
+   ],
+   "ability": null
+  },
+  {
+   "box": 4,
+   "name": "Man in Earth Orbit",
+   "ops": 2,
+   "roll_max": 4,
+   "vp": [
+    0,
+    0
+   ],
+   "ability": "opponent chooses and reveals Headline first"
+  },
+  {
+   "box": 5,
+   "name": "Lunar Orbit",
+   "ops": 3,
+   "roll_max": 3,
+   "vp": [
+    3,
+    1
+   ],
+   "ability": null
+  },
+  {
+   "box": 6,
+   "name": "Eagle/Bear has Landed",
+   "ops": 3,
+   "roll_max": 4,
+   "vp": [
+    0,
+    0
+   ],
+   "ability": "may discard 1 held card at end of turn"
+  },
+  {
+   "box": 7,
+   "name": "Space Shuttle",
+   "ops": 3,
+   "roll_max": 3,
+   "vp": [
+    4,
+    2
+   ],
+   "ability": null
+  },
+  {
+   "box": 8,
+   "name": "Space Station",
+   "ops": 4,
+   "roll_max": 2,
+   "vp": [
+    2,
+    0
+   ],
+   "ability": "may take 8 Action Rounds per turn"
+  }
+ ],
+ "defcon": {
+  "start": 5,
+  "max": 5,
+  "no_coup_realign": {
+   "4": [
+    "Europe"
+   ],
+   "3": [
+    "Europe",
+    "Asia"
+   ],
+   "2": [
+    "Europe",
+    "Asia",
+    "Middle East"
+   ]
+  },
+  "1": "phasing player loses"
+ },
+ "milops": {
+  "required": "= DEFCON",
+  "penalty": "1 VP to opponent per missing point (net)",
+  "max": 5
+ },
+ "vp": {
+  "auto_win": 20
+ },
+ "turns": {
+  "count": 10,
+  "hand": {
+   "1-3": 8,
+   "4-10": 9
+  },
+  "action_rounds": {
+   "1-3": 6,
+   "4-10": 7
+  },
+  "mid_war_added": "end of turn 3",
+  "late_war_added": "end of turn 7"
+ },
+ "scoring": {
+  "Europe": {
+   "presence": 3,
+   "domination": 7,
+   "control": "automatic victory",
+   "adj_superpower_bonus": true
+  },
+  "Asia": {
+   "presence": 3,
+   "domination": 7,
+   "control": 9,
+   "adj_superpower_bonus": true
+  },
+  "Middle East": {
+   "presence": 3,
+   "domination": 5,
+   "control": 7,
+   "adj_superpower_bonus": false
+  },
+  "Central America": {
+   "presence": 1,
+   "domination": 3,
+   "control": 5,
+   "adj_superpower_bonus": true
+  },
+  "South America": {
+   "presence": 2,
+   "domination": 5,
+   "control": 6,
+   "adj_superpower_bonus": false
+  },
+  "Africa": {
+   "presence": 1,
+   "domination": 4,
+   "control": 6,
+   "adj_superpower_bonus": false
+  },
+  "Southeast Asia": {
+   "per_country": 1,
+   "Thailand": 2,
+   "countries": [
+    "Burma",
+    "Laos/Cambodia",
+    "Vietnam",
+    "Malaysia",
+    "Indonesia",
+    "Philippines",
+    "Thailand"
+   ],
+   "note": "card #38, removed after play; at Final Scoring it is not scored separately (part of Asia)"
+  }
+ },
+ "setup": {
+  "china_card": "USSR, face up",
+  "USSR": {
+   "fixed": {
+    "Syria": 1,
+    "Iraq": 1,
+    "N. Korea": 3,
+    "E. Germany": 3,
+    "Finland": 1
+   },
+   "free": {
+    "Eastern Europe": 6
+   }
+  },
+  "US": {
+   "fixed": {
+    "Canada": 2,
+    "Iran": 1,
+    "Israel": 1,
+    "Japan": 1,
+    "Australia": 4,
+    "Philippines": 1,
+    "S. Korea": 1,
+    "Panama": 1,
+    "South Africa": 1,
+    "U.K.": 5
+   },
+   "free": {
+    "Western Europe": 7
+   }
+  },
+  "order": "deal 8 Early War cards each (USSR first); players see their cards; USSR places first, then US",
+  "bidding_optional_13_4": "extra Influence only in countries with own Influence after setup, max 2 above what Control needs"
+ }
+}
