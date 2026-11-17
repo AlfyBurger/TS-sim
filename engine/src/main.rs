@@ -125,6 +125,29 @@ fn main() {
             }
             out += "]"; println!("{out}");
         }
+        "queue" => {
+            // tssim queue JOBS OUTDIR [threads]: run every job line (label TAB A TAB B TAB seed TAB deals) whose CSV is missing.
+            // Used on Alfy's PC: runs unattended; results OUTDIR/<label>__<seed>.csv, identical to the cloud's.
+            let jobs = arg(2, "jobs.txt"); let outdir = arg(3, "out");
+            let threads: usize = arg(4, "0").parse().unwrap_or(0);
+            let threads = if threads == 0 { std::thread::available_parallelism().map(|n| n.get()).unwrap_or(4) } else { threads };
+            std::fs::create_dir_all(&outdir).unwrap();
+            let text = std::fs::read_to_string(&jobs).expect("job list");
+            let lines: Vec<&str> = text.lines().filter(|l| !l.trim().is_empty()).collect();
+            let t0 = std::time::Instant::now();
+            for (i, l) in lines.iter().enumerate() {
+                let f: Vec<&str> = l.split('\t').collect();
+                if f.len() < 5 { continue; }
+                let out = std::path::Path::new(&outdir).join(format!("{}__{}.csv", f[0], f[3]));
+                if out.exists() { continue; }
+                let tmp = out.with_extension("part");
+                let t = std::time::Instant::now();
+                run_pairs(f[1], f[2], f[4].parse().unwrap(), f[3].parse().unwrap(), threads, 2, tmp.to_str().unwrap());
+                std::fs::rename(&tmp, &out).unwrap();
+                println!("[{}/{}] {} seed {}: {:.0}s (total {:.0} min)", i + 1, lines.len(), f[0], f[3], t.elapsed().as_secs_f64(), t0.elapsed().as_secs_f64() / 60.0);
+            }
+            println!("all jobs done in {:.0} min", t0.elapsed().as_secs_f64() / 60.0);
+        }
         "precheck" => {
             // tssim precheck A B N seed: how often B would choose differently from A, in A-vs-A games
             let a = arg(2, "core"); let b = arg(3, "core"); let n: u64 = arg(4, "30").parse().unwrap(); let seed0: u64 = arg(5, "600000").parse().unwrap();
