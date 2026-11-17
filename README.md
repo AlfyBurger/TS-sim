@@ -17,3 +17,4 @@ Card texts and publisher files (rulebooks, card images) are not stored here.
 - Test runs: `scripts/run_pairs.py` (paired head-to-head, both sides), `scripts/side_effects.py` (per-side effects), `scripts/diag_summary.py`; results in `results/run1`, `results/run2`; reports in `reports/` (`stage2_run1_report.pdf`, `stage2_run2_report.pdf`). Hypotheses and verdicts: `docs/hypotheses.md`.
 
 - Run 4 onwards: tests are cut into 50-deal blocks shared by the cloud and Alfy's Mac (`scripts/blocks.py`, `scripts/cloud_loop.sh`); the Mac runs the same Rust engine in its Linux VM and gives identical results. Move-change pre-check: `tssim precheck A B N seed`. Cost log of opponent Events: `TSSIM_COSTLOG=1 tssim diag ...`.
+- Reports: every run report (`reports/*.pdf`) is also copied to Alfy's Mac folder `/Users/Alfy/Desktop/TS` (Alfy, 17 Nov 2026).
