@@ -19,5 +19,7 @@ Full write-up, including the rule-by-rule comparison with Red Sea: Gaming projec
 ## Strategy sources (Stage 2)
 - Official: HoF Background Book (DEFCON traps, example of play, designer notes); Jason Matthews' short strategy video.
 - Twilight Strategy (twilightstrategy.com; free Leanpub book, CC BY-NC-SA, 2014): general strategy, regions, one article per card, annotated games. Beginner-level, partly dated.
+  - Stage 1 used the card list (cross-check of Ops and asterisks) and the general and region articles.
+  - **17 Nov 2026 (Alfy): all 120 card articles plus their 1,344 reader comments downloaded** (local copy `ts/src/twistrat_cards/`, text in `ts/work/twistrat_cards.json`). The DEFCON article and card articles are the basis of `docs/defcon_boundaries.md` (hard limits). The card articles are still to be mined for per-card play advice (Event or Ops, when to Headline, who benefits) for the game skill's card notes and Stage 3.
 - Current top play: "The collected musings of Sankt" (not reachable from the workspace); Legendary Tactics card videos; Action Round Zero; r/twilightstruggle.
 - Competitive convention: optional cards in; USSR reckoned to win ~60% without handicap, hence +2 US Influence or bidding.

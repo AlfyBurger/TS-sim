@@ -167,3 +167,85 @@ pub fn setup_credit(b: &Brain, s: &State, me: usize, rng: &mut Streams) -> f64 {
     }
     w * decay * guard * tot.min(6.0)
 }
+
+// ------------------------------------------------------------------ DEFCON boundaries
+// Hard limits from Twilight Strategy (twilightstrategy.com): general DEFCON article and card articles.
+// Applied before any evaluation; a forbidden play is only made when nothing else is legal.
+
+/// Could the opponent, given Ops on my round, coup a Battleground where I have Influence (DEFCON 1 on my round)?
+pub fn opp_can_bg_coup(st: &State, me: usize, europe_free: bool) -> bool {
+    let o = opp(me);
+    if st.ev.cmc == Some(me as u8) { return false; }            // their coup would lose them the game
+    if o == US && st.ev.nuclear_subs { return false; }         // US Battleground coups do not degrade DEFCON
+    (0..NC).any(|c| COUNTRIES[c].bg && st.inf[c][me] > 0
+        && (can_coup(st, o, c, false) || (europe_free && COUNTRIES[c].region == EUROPE && can_coup(st, o, c, true))))
+}
+
+fn out_of_play_for(st: &State, me: usize, k: u8) -> bool {
+    st.removed.contains(k) || st.discard.contains(k) || st.hands[me].contains(k)
+}
+
+/// Action Round limits at DEFCON 2.
+pub fn defcon_forbidden_ar(st: &State, me: usize, p: &Play) -> bool {
+    if st.defcon > 2 { return false; }
+    let k = p.card;
+    if k == CHINA { return false; }
+    let o = opp(me);
+    let fires = match p.how {
+        Use::Event => true,
+        Use::Ops => CARDS[k as usize].owner() == Some(o) && can_occur(st, k, o),
+        _ => false,
+    };
+    if !fires { return false; }
+    match k {
+        4 | 50 | 89 => true,                                   // unconditional DEFCON degraders
+        26 | 62 | 67 => opp_can_bg_coup(st, me, false),        // opponent conducts Ops on my round
+        96 => opp_can_bg_coup(st, me, true),                   // Tear Down This Wall: Europe coup allowed
+        91 => me == US && st.inf[CUBA][US] > 0 && st.ev.cmc != Some(US as u8), // Ortega: free coup next to Nicaragua (Cuba)
+        20 | 45 | 49 => p.how == Use::Event,                   // Olympic Games, Summit, Missile Envy
+        5 => if me == US { !(out_of_play_for(st, me, 4) && out_of_play_for(st, me, 89)) }
+             else { st.hands[me].iter().any(|h| h != 5 && (h == 4 || h == 89 || (matches!(h, 26 | 67 | 96) && opp_can_bg_coup(st, me, h == 96)))) },
+        _ => false,
+    }
+}
+
+/// Headline limits: at DEFCON 3, a DEFCON-sensitive Headline loses if the other Headline lowers DEFCON first.
+pub fn defcon_forbidden_headline(st: &State, me: usize, k: u8) -> bool {
+    if st.defcon < 3 || k == CHINA { return false; }
+    if !matches!(k, 4 | 50 | 89 | 26 | 62 | 67 | 96 | 20 | 45 | 49 | 5 | 91) { return false; }
+    let o = opp(me);
+    let ops = |c: u8| if CARDS[c as usize].scoring { 0 } else { CARDS[c as usize].ops as i32 };
+    let mine = ops(k);
+    // at DEFCON 3 any degrader first is enough; above that only cards that set DEFCON to 2 (Cuban Missile Crisis, How I Learned...)
+    // either side's unconditional degraders count: a player may Headline the opponent's card to drop DEFCON (e.g. US Headlines We Will Bury You)
+    let degraders: &[u8] = if st.defcon >= 4 { &[46, 40] } else if o == US { &[4, 89, 50, 46, 40, 47, 26] } else { &[50, 4, 89, 46, 40, 47, 62] };
+    degraders.iter().any(|&u| {
+        let live = !out_of_play_for(st, me, u) && (CARDS[u as usize].era == 0 || (CARDS[u as usize].era == 1 && st.turn >= 4) || (CARDS[u as usize].era == 2 && st.turn >= 8));
+        live && (ops(u) > mine || (ops(u) == mine && o == US))
+    })
+}
+
+/// A card I cannot safely play at DEFCON 2 (Ops would trigger a losing Event) and cannot send to space.
+pub fn is_suicide_card(st: &State, me: usize, k: u8) -> bool {
+    if k == CHINA || CARDS[k as usize].scoring { return false; }
+    let mut s2 = *st; s2.defcon = 2;
+    let ops = Play { card: k, how: Use::Ops, event_first: false, uni_with: 0 };
+    let ev = Play { card: k, how: Use::Event, event_first: false, uni_with: 0 };
+    let own_ok = CARDS[k as usize].owner() != Some(opp(me)) && !defcon_forbidden_ar(&s2, me, &ev);
+    defcon_forbidden_ar(&s2, me, &ops) && !own_ok && !can_space(st, me, k)
+}
+
+/// Twilight Strategy: get rid of DEFCON suicide cards while DEFCON is still 3 or more,
+/// when the rounds left would otherwise force one out at DEFCON 2.
+pub fn forced_disposal(st: &State, me: usize, c: &[Play]) -> Option<Vec<Play>> {
+    if st.defcon < 3 { return None; }
+    let hand: Vec<u8> = st.hands[me].iter().collect();
+    let sui: Vec<u8> = hand.iter().copied().filter(|&k| is_suicide_card(st, me, k)).collect();
+    if sui.is_empty() { return None; }
+    let base = if st.turn <= 3 { 6 } else { 7 };
+    let rounds = (base - st.rounds_done[me] as i32).max(0);
+    let safe = hand.len() as i32 - sui.len() as i32 + if st.china_playable(me) { 1 } else { 0 };
+    if rounds <= safe { return None; }
+    let out: Vec<Play> = c.iter().copied().filter(|p| sui.contains(&p.card) && p.how != Use::Pass && !defcon_forbidden_ar(st, me, p)).collect();
+    if out.is_empty() { None } else { Some(out) }
+}

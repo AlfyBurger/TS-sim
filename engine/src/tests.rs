@@ -57,4 +57,24 @@ mod t {
         assert_eq!((n(0), n(1), n(2)), (39, 48, 23));
         assert_eq!(COUNTRIES.iter().filter(|c| c.bg).count(), 29);
     }
+    #[test] fn defcon_boundaries_twilight_strategy() {
+        use crate::agent::*; use crate::search::*;
+        let pl = |card: u8, how: Use| Play { card, how, event_first: false, uni_with: 0 };
+        let mut s = s0(); s.defcon = 2;
+        // Olympic Games / Summit: never as Event at DEFCON 2; Ops are fine
+        assert!(defcon_forbidden_ar(&s, US, &pl(20, Use::Event))); assert!(!defcon_forbidden_ar(&s, US, &pl(20, Use::Ops)));
+        assert!(defcon_forbidden_ar(&s, USSR, &pl(45, Use::Event)));
+        // Duck and Cover played by the USSR for Ops: the US Event degrades DEFCON on the USSR round
+        assert!(defcon_forbidden_ar(&s, USSR, &pl(4, Use::Ops))); assert!(!defcon_forbidden_ar(&s, USSR, &pl(4, Use::Space)));
+        // Lone Gunman for Ops by the US: only if the USSR could coup a US Battleground
+        assert!(!defcon_forbidden_ar(&s, US, &pl(62, Use::Ops)));
+        s.inf[ANGOLA] = [1, 0]; assert!(defcon_forbidden_ar(&s, US, &pl(62, Use::Ops)));
+        s.ev.cmc = Some(US as u8); assert!(!defcon_forbidden_ar(&s, US, &pl(62, Use::Ops)));
+        // nothing applies at DEFCON 3 in an Action Round
+        let mut s3 = s0(); s3.defcon = 3; s3.inf[ANGOLA] = [1, 0];
+        assert!(!defcon_forbidden_ar(&s3, US, &pl(62, Use::Ops)));
+        // Headline at DEFCON 3: Olympic Games is unsafe while the opponent may Headline a higher degrader
+        assert!(defcon_forbidden_headline(&s3, USSR, 20));
+        assert!(!defcon_forbidden_headline(&s3, USSR, 7));
+    }
 }

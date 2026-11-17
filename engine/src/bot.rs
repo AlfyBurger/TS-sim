@@ -17,17 +17,17 @@ pub struct Weights {
     pub final_from: f64,
     // decision rules (Stage 2 run 2): reply-scan margin (<0 off), Scoring timing, sequencing delta (<0 off),
     // Headline v2 (0 off, 1 both sides, 2 USSR only, 3 US only), set-up values weight, known card played sooner
-    pub la: f64, pub tm: f64, pub sq: f64, pub hl: f64, pub ss: f64, pub km: f64, pub dfix: f64,
+    pub la: f64, pub tm: f64, pub sq: f64, pub hl: f64, pub ss: f64, pub km: f64, pub dfix: f64, pub tsb: f64,
 }
 impl Weights {
     pub fn core() -> Self {
         Weights { vp: 1.0, held: 1.0, region_unseen: 0.25, final_: 0.0, bg: 1.0, europe_mult: 1.0, asia_mult: 1.0, access: 3.0,
             milops: 1.0, squeeze: 0.0, trap: 3.0, china: 1.5, bad: 0.3, space_ab: 0.5, inf: 0.05, auto_eu: 15.0, trapped: 3.0, h3: 0.0, h6: 0.0,
-            samples: 6.0, noise: 1e-6, final_from: 0.0, la: -1.0, tm: 1.0, sq: 0.5, hl: 0.0, ss: 0.0, km: 0.0, dfix: 1.0 }
+            samples: 6.0, noise: 1e-6, final_from: 0.0, la: -1.0, tm: 1.0, sq: 0.5, hl: 0.0, ss: 0.0, km: 0.0, dfix: 1.0, tsb: 1.0 }
     }
     pub fn zero() -> Self {
         Weights { vp: 0.0, held: 0.0, region_unseen: 0.0, final_: 0.0, bg: 0.0, europe_mult: 1.0, asia_mult: 1.0, access: 0.0, milops: 0.0,
-            squeeze: 0.0, trap: 0.0, china: 0.0, bad: 0.0, space_ab: 0.0, inf: 0.0, auto_eu: 0.0, trapped: 0.0, h3: 0.0, h6: 0.0, samples: 1.0, noise: 1.0, final_from: 0.0, la: -1.0, tm: 0.0, sq: -1.0, hl: 0.0, ss: 0.0, km: 0.0, dfix: 0.0 }
+            squeeze: 0.0, trap: 0.0, china: 0.0, bad: 0.0, space_ab: 0.0, inf: 0.0, auto_eu: 0.0, trapped: 0.0, h3: 0.0, h6: 0.0, samples: 1.0, noise: 1.0, final_from: 0.0, la: -1.0, tm: 0.0, sq: -1.0, hl: 0.0, ss: 0.0, km: 0.0, dfix: 0.0, tsb: 0.0 }
     }
     pub fn set(&mut self, k: &str, v: f64) {
         match k {
@@ -36,7 +36,7 @@ impl Weights {
             "milops" => self.milops = v, "squeeze" => self.squeeze = v, "trap" => self.trap = v, "china" => self.china = v,
             "bad" => self.bad = v, "space_ab" => self.space_ab = v, "inf" => self.inf = v, "auto_eu" => self.auto_eu = v, "trapped" => self.trapped = v,
             "h3" => self.h3 = v, "h6" => self.h6 = v, "samples" => self.samples = v, "noise" => self.noise = v, "final_from" => self.final_from = v,
-            "la" => self.la = v, "tm" => self.tm = v, "sq" => self.sq = v, "hl" => self.hl = v, "ss" => self.ss = v, "km" => self.km = v, "dfix" => self.dfix = v,
+            "la" => self.la = v, "tm" => self.tm = v, "sq" => self.sq = v, "hl" => self.hl = v, "ss" => self.ss = v, "km" => self.km = v, "dfix" => self.dfix = v, "tsb" => self.tsb = v,
             _ => panic!("unknown weight {k}"),
         }
     }
@@ -321,6 +321,9 @@ pub fn candidates(st: &State, me: usize, w: &Weights) -> Vec<Play> {
         }
     }
     if out.is_empty() && st.china_playable(me) && st.hands[me].is_empty() { out.push(Play { card: CHINA, how: Use::Pass, event_first: false, uni_with: 0 }); }
+    // the 8th Action Round (Space Station, North Sea Oil) is optional: "may play 8" (HoF rules, card 86)
+    let base_rounds = if st.turn <= 3 { 6 } else { 7 };
+    if st.rounds_done[me] as i32 >= base_rounds && !st.hands[me].iter().any(|k| CARDS[k as usize].scoring) { out.push(Play { card: st.hands[me].iter().next().unwrap_or(CHINA), how: Use::Pass, event_first: false, uni_with: 0 }); }
     out
 }
 
@@ -391,7 +394,8 @@ impl EvalBot {
     fn headline_v2(&self, st: &State, me: usize, shown: Option<u8>, rng: &mut Streams) -> u8 {
         let o = opp(me);
         let base = determinize(st, me, rng);
-        let mine: Vec<u8> = st.hands[me].iter().filter(|&k| k != 32).collect();
+        let mut mine: Vec<u8> = st.hands[me].iter().filter(|&k| k != 32).collect();
+        if self.b.w.tsb > 0.0 { let safe: Vec<u8> = mine.iter().copied().filter(|&k| !defcon_forbidden_headline(st, me, k)).collect(); if !safe.is_empty() { mine = safe; } }
         if mine.len() <= 1 { return mine.first().copied().unwrap_or(st.hands[me].c[0]); }
         // Action Round value of each card (best play now), and the leftover card
         let mut b1 = base; b1.ar = 1; b1.phasing = me as u8; b1.snapshot_presence();
@@ -519,6 +523,7 @@ impl Agent for EvalBot {
         if hl == 1 || (hl == 2 && me == USSR) || (hl == 3 && me == US) { return self.headline_v2(st, me, shown, rng); }
         let base = determinize(st, me, rng);
         let mut cards: Vec<u8> = st.hands[me].iter().filter(|&k| k != 32).collect();
+        if self.b.w.tsb > 0.0 { let safe: Vec<u8> = cards.iter().copied().filter(|&k| !defcon_forbidden_headline(st, me, k)).collect(); if !safe.is_empty() { cards = safe; } }
         // DEFCON fix: the opponent's Headline may lower DEFCON first, then a boycott or Summit result ends the game
         if self.b.w.dfix > 0.0 && st.defcon <= 3 { let safe: Vec<u8> = cards.iter().copied().filter(|&k| k != 20 && k != 45).collect(); if !safe.is_empty() { cards = safe; } }
         if cards.is_empty() { return st.hands[me].c[0]; }
@@ -541,7 +546,12 @@ impl Agent for EvalBot {
         cards[self.b.argmax(&vals, rng, me)]
     }
     fn action(&mut self, st: &State, me: usize, rng: &mut Streams) -> Play {
-        let c = candidates(st, me, &self.b.w);
+        let mut c = candidates(st, me, &self.b.w);
+        if self.b.w.tsb > 0.0 {
+            let safe: Vec<Play> = c.iter().copied().filter(|p| !defcon_forbidden_ar(st, me, p)).collect();
+            if !safe.is_empty() { c = safe; }
+            if let Some(d) = forced_disposal(st, me, &c) { c = d; }
+        }
         if c.len() == 1 { return c[0]; }
         let base = determinize(st, me, rng);
         let vals: Vec<f64> = c.iter().map(|&p| self.sim_value(&base, me, p, rng)).collect();
