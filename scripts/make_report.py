@@ -35,10 +35,10 @@ def table(rows, widths, head=True):
     return t
 
 def result_rows(recs, verdicts):
-    rows = [["Test", "Change (vs full bot unless stated)", "Score ± margin", "As US", "As USSR", "Verdict"]]
+    rows = [["Test", "Change (vs " + T.get("REF_NAME", "full bot") + " unless stated)", "Score ± margin", "As US", "As USSR", "Verdict"]]
     for r in recs:
         ref = '' if r['b'] == 'core' else ' (vs ' + r['b'].replace('core:', '') + ')'
-        rows.append([r['label'], r['a'].replace('core:', '').replace('core', 'full bot') + ref,
+        rows.append([r['label'], r['a'].replace('core:', '').replace('core', T.get('REF_NAME', 'full bot')) + ref,
                      f"{r['score']*100:.1f} ± {r['margin']*100:.1f}", f"{r['a_as_us']*100:.1f}", f"{r['a_as_ussr']*100:.1f}",
                      verdicts.get(r['label'], '')])
     return rows

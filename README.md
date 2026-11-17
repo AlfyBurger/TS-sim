@@ -9,3 +9,9 @@ Simulator, bots and advisor for full **Twilight Struggle** (2026 Hall of Fame Ed
 - Engine: **Rust** (decided 16 Nov 2026), written as the first step of the first overnight run.
 
 Card texts and publisher files (rulebooks, card images) are not stored here.
+
+## Bot and test runs
+
+- Engine and bots in `engine/` (Rust): `cargo build --release`, then `engine/target/release/tssim` (`random`, `match`, `log`, `diag`).
+- Default bot (`core`) since run 2: one-move evaluation plus card sequencing (δ 0.5) with the opponent's reply scan, Scoring timing, China Card holding value 1.5, DEFCON fixes. Options are set as `core:key=value,...` (see `Weights::set` in `engine/src/bot.rs`).
+- Test runs: `scripts/run_pairs.py` (paired head-to-head, both sides), `scripts/side_effects.py` (per-side effects), `scripts/diag_summary.py`; results in `results/run1`, `results/run2`; reports in `reports/` (`stage2_run1_report.pdf`, `stage2_run2_report.pdf`). Hypotheses and verdicts: `docs/hypotheses.md`.

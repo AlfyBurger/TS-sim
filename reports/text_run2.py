@@ -2,6 +2,7 @@ TITLE = "Twilight Struggle simulator — Stage 2, test run 2"
 SUBTITLE = ("For Alfy · night of 16–17 November 2026 · repository AlfyBurger/TS-sim · 2026 Hall of Fame rules, base game, fixed +2 US handicap · "
             "decision rules ported from the tested Red Sea bot, plus your hypothesis H13")
 FOOTER = "TS-sim · Stage 2 run 2 test report"
+REF_NAME = "run 1 bot"
 
 VERDICTS = {
     "H13_final_from_t8": "<b>Worse</b>",
@@ -25,8 +26,8 @@ VERDICTS = {
     "FINAL_vs_run1_bot": "<b>Final run 2 bot vs run 1 bot</b>, new deals",
     "REF_combined_self_play": "Reference: identical bots",
 }
-for k in ["milops", "trap", "access", "region_unseen", "bg", "trapped", "liabilities", "held_scoring", "influence", "space_abilities"]:
-    VERDICTS.setdefault("A2_" + k + "_off", "")
+for k, t in {'milops': '<b>Needed</b> (−12.9; run 1: −8.1)', 'trap': '<b>Needed</b> (−5.3; run 1: −3.4)', 'access': 'Neutral (as in run 1)', 'region_unseen': '<b>Needed</b> (−14.2; run 1: neutral)', 'bg': '<b>Needed</b> (−11.8; run 1: neutral)', 'trapped': 'Neutral', 'liabilities': 'Neutral', 'held_scoring': '<b>Needed</b> (−6.6; run 1: neutral)', 'influence': '<b>Needed</b> (−4.9; run 1: neutral)', 'space_abilities': 'Neutral'}.items():
+    VERDICTS['A2_' + k + '_off'] = t
 
 SECTIONS = [
     ('h', "1. Summary"),
@@ -79,7 +80,7 @@ SECTIONS = [
           "China Card holding value 1.5 was confirmed on fresh deals and adopted."),
 
     ('h', "6. DEFCON losses: what the diagnostics found"),
-    ('p', "The new diagnostics record every DEFCON 1 loss with its card and phase. On the run 2 bot, 13 of 200 self-play games ended at DEFCON 1 "
+    ('p', "The new diagnostics record every DEFCON 1 loss with its card and phase. On the sequencing + timing bot, 13 of 200 self-play games ended at DEFCON 1 "
           "(22 for the run 1 bot). The causes were concentrated:"),
     ('table', [
         ["Cause", "Losses (run 1 bot / run 2 bot, of 200)", "Why the bot missed it", "Fix"],
@@ -101,7 +102,7 @@ SECTIONS = [
     ('p', "Each term of the evaluation switched off in the run 2 bot (sequencing + timing), 400 deals × both sides, deals 30000–30399. "
           "Compare with run 1 (old bot): Military Ops 41.9, DEFCON traps 46.6."),
     ('results', ['ablation.jsonl'], None),
-    ('p', "ABLATION_TEXT"),
+    ('p', "<b>The evaluation matters much more to the new bot.</b> In run 1 most terms looked neutral because they overlapped: a one-move bot could lose one and the others covered for it. The new decision rules use the evaluation twice, once for my move and again for the opponent's reply, so a missing term now blinds the bot to the spoils and threats it is meant to see. Region standing (the value of each Region while its Scoring card may still be played) went from neutral to the most important term (−14.2), followed by Military Ops (−12.9) and Battlegrounds (−11.8). Access to Regions, the Quagmire/Bear Trap term, the opponent-card liability and the Space Race abilities stay neutral: candidates for simplification later. This ablation used the sequencing + timing bot, before the China Card value and the DEFCON fixes were added."),
 
     ('h', "9. What changed in the bot, and next steps"),
     ('p', "<b>Adopted as the new default:</b> card sequencing δ 0.5, Scoring timing, opponent reply scan (inside sequencing), China Card holding value 1.5, "
