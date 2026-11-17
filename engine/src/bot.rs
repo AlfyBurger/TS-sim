@@ -19,16 +19,56 @@ pub struct Weights {
     // Headline v2 (0 off, 1 both sides, 2 USSR only, 3 US only), set-up values weight, known card played sooner
     pub la: f64, pub tm: f64, pub sq: f64, pub hl: f64, pub ss: f64, pub km: f64, pub dfix: f64, pub tsb: f64,
     pub nc: f64, pub l2: f64, pub l2n: f64,
+    pub evt: f64,
 }
 impl Weights {
     pub fn core() -> Self {
         Weights { vp: 1.0, held: 1.0, region_unseen: 0.25, final_: 0.0, bg: 1.0, europe_mult: 1.0, asia_mult: 1.0, access: 0.0,
             milops: 1.0, squeeze: 0.0, trap: 3.0, china: 1.5, bad: 0.3, space_ab: 0.5, inf: 0.05, auto_eu: 15.0, trapped: 3.0, h3: 0.0, h6: 0.0,
-            samples: 6.0, noise: 1e-6, final_from: 0.0, la: -1.0, tm: 1.0, sq: 0.5, hl: 0.0, ss: 0.0, km: 0.0, dfix: 1.0, tsb: 1.0, nc: 1.0, l2: 0.5, l2n: 4.0 }
+            samples: 6.0, noise: 1e-6, final_from: 0.0, la: -1.0, tm: 1.0, sq: 0.5, hl: 0.0, ss: 0.0, km: 0.0, dfix: 1.0, tsb: 1.0, nc: 1.0, l2: 0.5, l2n: 4.0, evt: 0.0 }
     }
     pub fn zero() -> Self {
         Weights { vp: 0.0, held: 0.0, region_unseen: 0.0, final_: 0.0, bg: 0.0, europe_mult: 1.0, asia_mult: 1.0, access: 0.0, milops: 0.0,
-            squeeze: 0.0, trap: 0.0, china: 0.0, bad: 0.0, space_ab: 0.0, inf: 0.0, auto_eu: 0.0, trapped: 0.0, h3: 0.0, h6: 0.0, samples: 1.0, noise: 1.0, final_from: 0.0, la: -1.0, tm: 0.0, sq: -1.0, hl: 0.0, ss: 0.0, km: 0.0, dfix: 0.0, tsb: 0.0, nc: 0.0, l2: 0.0, l2n: 4.0 }
+            squeeze: 0.0, trap: 0.0, china: 0.0, bad: 0.0, space_ab: 0.0, inf: 0.0, auto_eu: 0.0, trapped: 0.0, h3: 0.0, h6: 0.0, samples: 1.0, noise: 1.0, final_from: 0.0, la: -1.0, tm: 0.0, sq: -1.0, hl: 0.0, ss: 0.0, km: 0.0, dfix: 0.0, tsb: 0.0, nc: 0.0, l2: 0.0, l2n: 4.0, evt: 0.0 }
+    }
+    pub fn get(&self, k: &str) -> f64 {
+        match k {
+            "vp" => self.vp,
+            "held" => self.held,
+            "region_unseen" => self.region_unseen,
+            "final" => self.final_,
+            "bg" => self.bg,
+            "europe_mult" => self.europe_mult,
+            "asia_mult" => self.asia_mult,
+            "access" => self.access,
+            "milops" => self.milops,
+            "squeeze" => self.squeeze,
+            "trap" => self.trap,
+            "china" => self.china,
+            "bad" => self.bad,
+            "space_ab" => self.space_ab,
+            "inf" => self.inf,
+            "auto_eu" => self.auto_eu,
+            "trapped" => self.trapped,
+            "h3" => self.h3,
+            "h6" => self.h6,
+            "samples" => self.samples,
+            "noise" => self.noise,
+            "final_from" => self.final_from,
+            "la" => self.la,
+            "tm" => self.tm,
+            "sq" => self.sq,
+            "hl" => self.hl,
+            "ss" => self.ss,
+            "km" => self.km,
+            "dfix" => self.dfix,
+            "tsb" => self.tsb,
+            "nc" => self.nc,
+            "l2" => self.l2,
+            "l2n" => self.l2n,
+            "evt" => self.evt,
+            _ => panic!("unknown weight {k}"),
+        }
     }
     pub fn set(&mut self, k: &str, v: f64) {
         match k {
@@ -37,7 +77,7 @@ impl Weights {
             "milops" => self.milops = v, "squeeze" => self.squeeze = v, "trap" => self.trap = v, "china" => self.china = v,
             "bad" => self.bad = v, "space_ab" => self.space_ab = v, "inf" => self.inf = v, "auto_eu" => self.auto_eu = v, "trapped" => self.trapped = v,
             "h3" => self.h3 = v, "h6" => self.h6 = v, "samples" => self.samples = v, "noise" => self.noise = v, "final_from" => self.final_from = v,
-            "la" => self.la = v, "tm" => self.tm = v, "sq" => self.sq = v, "hl" => self.hl = v, "ss" => self.ss = v, "km" => self.km = v, "dfix" => self.dfix = v, "tsb" => self.tsb = v, "nc" => self.nc = v, "l2" => self.l2 = v, "l2n" => self.l2n = v,
+            "la" => self.la = v, "tm" => self.tm = v, "sq" => self.sq = v, "hl" => self.hl = v, "ss" => self.ss = v, "km" => self.km = v, "dfix" => self.dfix = v, "tsb" => self.tsb = v, "nc" => self.nc = v, "l2" => self.l2 = v, "l2n" => self.l2n = v, "evt" => self.evt = v,
             _ => panic!("unknown weight {k}"),
         }
     }
@@ -541,6 +581,18 @@ impl EvalBot {
         if !set.contains(&g) { set.insert(0, g); }
         let is_sc = |i: usize| CARDS[c[i].card as usize].scoring;
         if w.tm > 0.0 { for i in 0..c.len() { if is_sc(i) && !set.contains(&i) && vals[i] > -500.0 { set.push(i); } } }
+        // run 5 (evt): an opponent card whose Event is free to fire now joins the shortlist and loses part of its keep-for-later credit
+        let o_ = opp(me);
+        let mut free_now: Vec<u8> = vec![];
+        if w.evt > 0.0 && st.defcon >= 2 {
+            for k in st.hands[me].iter() {
+                if k != CHINA && CARDS[k as usize].owner() == Some(o_) && crate::events::can_occur(st, k, o_)
+                    && crate::engine::event_cost_now(st, me, k, 9001 + st.turn as u64 * 13 + st.ar as u64 * 7 + k as u64) >= -0.25 { free_now.push(k); }
+            }
+            for &k in &free_now {
+                if let Some(i) = (0..c.len()).filter(|&i| c[i].card == k && c[i].how == Use::Ops && vals[i] > -500.0).max_by(|&a, &b| vals[a].partial_cmp(&vals[b]).unwrap()) { if !set.contains(&i) { set.push(i); } }
+            }
+        }
         if set.len() < 2 && w.ss <= 0.0 { return g; }
         let v0 = self.b.e(base, me);
         let best_other = (0..c.len()).filter(|&i| !is_sc(i)).map(|i| vals[i]).fold(f64::NEG_INFINITY, f64::max);
@@ -553,7 +605,8 @@ impl EvalBot {
             let su = setup_credit(&self.b, &s, me, rng);
             let (tn, tl) = if scan_on { let sc = reply_scan(&self.b, &s, me, rng); (sc.threat_now(), sc.threat_later()) } else { (0.0, 0.0) };
             r[i] = vals[i] + su + credit - tn;
-            let d = if w.km > 0.0 && c[i].card != CHINA && st.card_known(me, c[i].card) && rounds_for(st, o) as i32 - st.rounds_done[o] as i32 > 0 { 0.0 } else { w.sq };
+            let mut d = if w.km > 0.0 && c[i].card != CHINA && st.card_known(me, c[i].card) && rounds_for(st, o) as i32 - st.rounds_done[o] as i32 > 0 { 0.0 } else { w.sq };
+            if free_now.contains(&c[i].card) && c[i].how == Use::Ops { d *= (1.0 - w.evt).max(0.0); }
             seq[i] = (1.0 - d) * (vals[i] + su + credit - v0) - tn + d * tl;
             if std::env::var("TSSIM_DEBUG2").is_ok() { eprintln!("T{} AR{} {} {:28} {:?} val {:+.2} setup {:.2} credit {:.2} threat now {:.2} later {:.2} -> r {:.2} seq {:.2}", st.turn, st.ar, side_name(me), CARDS[c[i].card as usize].name, c[i].how, vals[i]-v0, su, credit, tn, tl, r[i]-v0, seq[i]); }
         }
@@ -671,10 +724,20 @@ impl Agent for RandomBot {
 /// Build an agent from a spec: "random", "zero", "core", or "core:key=val,key=val".
 pub fn make_agent(spec: &str) -> Box<dyn Agent + Send> {
     if spec == "random" { return Box::new(RandomBot); }
+    Box::new(EvalBot::new(weights_from_spec(spec), spec))
+}
+
+pub fn weights_from_spec(spec: &str) -> Weights {
     let (head, rest) = spec.split_once(':').unwrap_or((spec, ""));
     let mut w = match head { "zero" => Weights::zero(), "core" => Weights::core(), _ => panic!("unknown bot {head}") };
-    for kv in rest.split(',').filter(|x| !x.is_empty()) { let (k, v) = kv.split_once('=').expect("key=val"); w.set(k, v.parse().expect("number")); }
-    Box::new(EvalBot::new(w, spec))
+    let mut items: Vec<String> = vec![];
+    for kv in rest.split(',').filter(|x| !x.is_empty()) {
+        // "@file": read more key=value pairs from a file (e.g. the weights found by tuning)
+        if let Some(path) = kv.strip_prefix('@') { let t = std::fs::read_to_string(path).unwrap_or_default(); items.extend(t.trim().split(',').filter(|x| !x.is_empty()).map(|x| x.trim().to_string())); }
+        else { items.push(kv.to_string()); }
+    }
+    for kv in &items { let (k, v) = kv.split_once('=').expect("key=val"); w.set(k, v.parse().expect("number")); }
+    w
 }
 
 // ------------------------------------------------------------------ decision-change pre-check (run 4)

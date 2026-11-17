@@ -45,6 +45,60 @@ pub fn play_one(seed: u64, us: &str, ussr: &str, handicap: i8, log: bool) -> (St
     (st, cx.stats, l)
 }
 
+
+/// Score of A (win 1, draw 0.5) from a run_pairs CSV.
+fn csv_score(path: &str) -> f64 {
+    let t = std::fs::read_to_string(path).unwrap_or_default();
+    let (mut s, mut n) = (0.0, 0.0);
+    for l in t.lines() {
+        let f: Vec<&str> = l.split(',').collect(); if f.len() < 3 { continue; }
+        let a_side: i64 = if f[1] == "0" { 0 } else { 1 }; let w: i64 = f[2].parse().unwrap_or(-1);
+        s += if w == 2 { 0.5 } else if w == a_side { 1.0 } else { 0.0 }; n += 1.0;
+    }
+    if n > 0.0 { s / n } else { 0.5 }
+}
+
+/// SPSA weight tuning (run 5). Job line: SPSA<label> TAB base-spec TAB comma list of weights TAB seed0 TAB iterations.
+/// Each iteration plays 50 deals (both sides) of theta+ against theta-; progress in OUTDIR/<label>_log.txt (resumable);
+/// the result goes to tuned.txt next to the job list and to the job's marker file.
+fn spsa(label: &str, base: &str, params: &str, seed0: u64, iters: usize, threads: usize, outdir: &str, jobs_path: &str) {
+    let names: Vec<&str> = params.split(',').filter(|x| !x.is_empty()).collect();
+    let bw = bot::weights_from_spec(base);
+    let scale: Vec<f64> = names.iter().map(|k| bw.get(k).abs().max(0.25)).collect();
+    let mut theta: Vec<f64> = names.iter().map(|k| bw.get(k)).collect();
+    let log = std::path::Path::new(outdir).join(format!("{}_log.txt", label));
+    let mut t0 = 0usize;
+    if let Ok(prev) = std::fs::read_to_string(&log) {
+        if let Some(last) = prev.lines().filter(|l| !l.starts_with('#')).last() {
+            let f: Vec<&str> = last.split('\t').collect();
+            if f.len() >= 3 + names.len() { t0 = f[0].parse().unwrap_or(0); for i in 0..names.len() { theta[i] = f[3 + i].parse().unwrap_or(theta[i]); } }
+        }
+    } else { std::fs::write(&log, format!("# iteration\tscore(theta+ vs theta-)\tc\t{}\n", names.join("\t"))).unwrap(); }
+    let spec = |th: &Vec<f64>| { let kv: Vec<String> = names.iter().zip(th).map(|(k, v)| format!("{}={:.4}", k, v)).collect();
+        if base.contains(':') { format!("{},{}", base, kv.join(",")) } else { format!("{}:{}", base, kv.join(",")) } };
+    let (a, c, big_a) = (0.8, 0.15, 10.0);
+    let deals = 50usize;
+    for t in (t0 + 1)..=iters {
+        let ct = c / (t as f64).powf(0.101); let at = a / (t as f64 + big_a).powf(0.602);
+        let mut x: u64 = 0x9E3779B97F4A7C15 ^ (seed0 + t as u64).wrapping_mul(0x2545F4914F6CDD1D);
+        let delta: Vec<f64> = (0..names.len()).map(|_| { x ^= x << 13; x ^= x >> 7; x ^= x << 17; if x & 1 == 0 { 1.0 } else { -1.0 } }).collect();
+        let clampv = |k: &str, v: f64| { let v = v.max(0.0); if k == "nc" { v.min(1.2) } else if k == "sq" { v.min(0.95) } else { v } };
+        let plus: Vec<f64> = (0..names.len()).map(|i| clampv(names[i], theta[i] + ct * delta[i] * scale[i])).collect();
+        let minus: Vec<f64> = (0..names.len()).map(|i| clampv(names[i], theta[i] - ct * delta[i] * scale[i])).collect();
+        let tmp = std::path::Path::new(outdir).join(format!("{}_iter.part", label));
+        run_pairs(&spec(&plus), &spec(&minus), deals, seed0 + (t as u64) * 1000, threads, 2, tmp.to_str().unwrap());
+        let sc = csv_score(tmp.to_str().unwrap()); let _ = std::fs::remove_file(&tmp);
+        for i in 0..names.len() { let g = (sc - 0.5) / (2.0 * ct * delta[i]); theta[i] = clampv(names[i], theta[i] + at * g * scale[i]); }
+        let line = format!("{}\t{:.4}\t{:.4}\t{}\n", t, sc, ct, theta.iter().map(|v| format!("{:.4}", v)).collect::<Vec<_>>().join("\t"));
+        use std::io::Write as _; std::fs::OpenOptions::new().append(true).open(&log).unwrap().write_all(line.as_bytes()).unwrap();
+        println!("SPSA {} iteration {}/{}: score {:.3}; {}", label, t, iters, sc, names.iter().zip(&theta).map(|(k, v)| format!("{}={:.3}", k, v)).collect::<Vec<_>>().join(" "));
+    }
+    let kv: Vec<String> = names.iter().zip(&theta).map(|(k, v)| format!("{}={:.4}", k, v)).collect();
+    let tuned = std::path::Path::new(jobs_path).with_file_name("tuned.txt");
+    std::fs::write(&tuned, kv.join(",")).unwrap();
+    std::fs::write(std::path::Path::new(outdir).join(format!("{}__{}.csv", label, seed0)), kv.join(",")).unwrap();
+}
+
 fn run_pairs(a: &str, b: &str, n: usize, seed0: u64, threads: usize, handicap: i8, out: &str) {
     use std::sync::Mutex;
     let results = Mutex::new(Vec::<(u64, usize, i8, i32, u8, u8)>::new());
@@ -173,8 +227,9 @@ fn main() {
                         idle = false;
                         let tmp = out.with_extension("part");
                         let t = std::time::Instant::now();
-                        run_pairs(&f[1], &f[2], f[4].parse().unwrap(), f[3].parse().unwrap(), threads, 2, tmp.to_str().unwrap());
-                        std::fs::rename(&tmp, &out).unwrap();
+                        if f[0].starts_with("SPSA") { spsa(&f[0], &f[1], &f[2], f[3].parse().unwrap(), f[4].parse().unwrap(), threads, &outdir, &jobs); }
+                        else { run_pairs(&f[1], &f[2], f[4].parse().unwrap(), f[3].parse().unwrap(), threads, 2, tmp.to_str().unwrap());
+                               std::fs::rename(&tmp, &out).unwrap(); }
                         done += 1;
                         println!("done {} seed {} in {:.0}s ({} blocks, {:.0} min so far)", f[0], f[3], t.elapsed().as_secs_f64(), done, t0.elapsed().as_secs_f64() / 60.0);
                     }
