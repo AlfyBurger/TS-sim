@@ -1,0 +1,16 @@
+A4_bg_off	core:nc=1,l2=0.5,bg=0	core:nc=1,l2=0.5	30100	50
+A4_bg_off	core:nc=1,l2=0.5,bg=0	core:nc=1,l2=0.5	30150	50
+A4_bg_off	core:nc=1,l2=0.5,bg=0	core:nc=1,l2=0.5	30200	50
+A4_bg_off	core:nc=1,l2=0.5,bg=0	core:nc=1,l2=0.5	30250	50
+A4_bg_off	core:nc=1,l2=0.5,bg=0	core:nc=1,l2=0.5	30300	50
+A4_bg_off	core:nc=1,l2=0.5,bg=0	core:nc=1,l2=0.5	30350	50
+A4_trapped_off	core:nc=1,l2=0.5,trapped=0	core:nc=1,l2=0.5	30000	50
+A4_trapped_off	core:nc=1,l2=0.5,trapped=0	core:nc=1,l2=0.5	30050	50
+A4_trapped_off	core:nc=1,l2=0.5,trapped=0	core:nc=1,l2=0.5	30100	50
+A4_trapped_off	core:nc=1,l2=0.5,trapped=0	core:nc=1,l2=0.5	30150	50
+A4_trapped_off	core:nc=1,l2=0.5,trapped=0	core:nc=1,l2=0.5	30200	50
+A4_trapped_off	core:nc=1,l2=0.5,trapped=0	core:nc=1,l2=0.5	30250	50
+A4_trapped_off	core:nc=1,l2=0.5,trapped=0	core:nc=1,l2=0.5	30300	50
+A4_trapped_off	core:nc=1,l2=0.5,trapped=0	core:nc=1,l2=0.5	30350	50
+A4_bad_off	core:nc=1,l2=0.5,bad=0	core:nc=1,l2=0.5	30000	50
+A4_bad_off	core:nc=1,l2=0.5,bad=0	core:nc=1,l2=0.5	30050	50

@@ -1,0 +1,234 @@
+Setup done (US handicap +2)
+T1 Headline: US US/Japan Mutual Defense Pact / USSR Captured Nazi Scientist
+Event US/Japan Mutual Defense Pact for US
+Event Captured Nazi Scientist for USSR
+T1 AR1 USSR [DEFCON 5 VP -2]: Marshall Plan as Ops
+USSR Coup in Italy with 4 Ops: roll 4 +0 -> 4 (now 0/2)
+Event Marshall Plan for US
+T1 AR1 US [DEFCON 4 VP -2]: NATO as Ops
+US places Influence (4 Ops)
+T1 AR2 USSR [DEFCON 4 VP -2]: The China Card as Ops
+USSR Realigns N. Korea: 3 vs 1 (now 0/3)
+USSR Realigns S. Korea: 2 vs 7 (now 2/0)
+USSR Realigns S. Korea: 3 vs 5 (now 2/0)
+USSR Realigns S. Korea: 2 vs 6 (now 2/0)
+T1 AR2 US [DEFCON 4 VP -2]: NORAD as Ops
+US Coup in N. Korea with 3 Ops: roll 6 +0 -> 3 (now 0/0)
+T1 AR3 USSR [DEFCON 3 VP -2]: The Cambridge Five as Ops
+USSR places Influence (2 Ops)
+T1 AR3 US [DEFCON 3 VP -2]: De Gaulle Leads France as Ops
+Event De Gaulle Leads France for USSR
+US places Influence (3 Ops)
+T1 AR4 USSR [DEFCON 3 VP -2]: Red Scare/Purge as Ops
+USSR places Influence (4 Ops)
+T1 AR4 US [DEFCON 3 VP -2]: East European Unrest as Ops
+US places Influence (3 Ops)
+T1 AR5 USSR [DEFCON 3 VP -2]: Asia Scoring as Event
+Asia Scoring scores: net +5 (VP now +3)
+T1 AR5 US [DEFCON 3 VP +3]: Special Relationship as Ops
+US places Influence (2 Ops)
+T1 AR6 USSR [DEFCON 3 VP +3]: Indo-Pakistani War as Ops
+USSR places Influence (2 Ops)
+T1 AR6 US [DEFCON 3 VP +3]: Comecon as Ops
+Event Comecon for USSR
+US places Influence (3 Ops)
+T2 Headline: US Nuclear Test Ban / USSR Korean War
+Event Nuclear Test Ban for US
+Event Korean War for USSR
+War on S. Korea: roll 4 -1 -> fails
+T2 AR1 USSR [DEFCON 5 VP +5]: Formosan Resolution as Ops
+Event Formosan Resolution for US
+USSR Coup in Angola with 2 Ops: roll 4 +0 -> 4 (now 0/3)
+T2 AR1 US [DEFCON 4 VP +5]: Suez Crisis as Ops
+Event Suez Crisis for USSR
+US places Influence (3 Ops)
+T2 AR2 USSR [DEFCON 4 VP +5]: Containment as Ops
+USSR places Influence (3 Ops)
+Event Containment for US
+T2 AR2 US [DEFCON 4 VP +5]: Duck and Cover as Ops
+US Realigns Iraq: 6 vs 3 (now 1/1)
+US Realigns Algeria: 1 vs 3 (now 0/1)
+US Realigns Algeria: 4 vs 3 (now 0/0)
+US Realigns Afghanistan: 6 vs 5 (now 0/1)
+T2 AR3 USSR [DEFCON 4 VP +5]: Socialist Governments as Ops
+USSR places Influence (3 Ops)
+T2 AR3 US [DEFCON 4 VP +5]: Middle East Scoring as Event
+Middle East Scoring scores: net +8 (VP now +13)
+T2 AR4 USSR [DEFCON 4 VP +13]: Romanian Abdication as Ops
+USSR places Influence (1 Ops)
+T2 AR4 US [DEFCON 4 VP +13]: Five Year Plan as Ops
+US places Influence (4 Ops)
+T2 AR5 USSR [DEFCON 4 VP +13]: CIA Created as Ops
+Event CIA Created for US
+US Coup in Angola with 2 Ops: roll 5 +0 -> 5 (now 2/0)
+USSR places Influence (1 Ops)
+T2 AR5 US [DEFCON 3 VP +13]: The China Card as Ops
+US places Influence (4 Ops)
+T2 AR6 USSR [DEFCON 3 VP +13]: Defectors as Ops
+Event Defectors for US
+USSR places Influence (2 Ops)
+T2 AR6 US [DEFCON 3 VP +14]: Europe Scoring as Event
+Europe Scoring scores: net -6 (VP now +8)
+Reshuffle: discard pile becomes the draw deck
+T3 Headline: US Nuclear Test Ban / USSR Nasser
+Event Nuclear Test Ban for US
+Event Nasser for USSR
+T3 AR1 USSR [DEFCON 5 VP +9]: Five Year Plan as Ops
+Event Five Year Plan for US
+Five Year Plan discards Independent Reds
+Event Independent Reds for US
+USSR Coup in Mexico with 3 Ops: roll 2 +0 -> 1 (now 0/0)
+T3 AR1 US [DEFCON 4 VP +9]: De-Stalinization as Ops
+Event De-Stalinization for USSR
+US places Influence (3 Ops)
+T3 AR2 USSR [DEFCON 4 VP +9]: NATO as Ops
+Event NATO for US
+USSR Coup in Panama with 4 Ops: roll 5 +0 -> 5 (now 0/4)
+T3 AR2 US [DEFCON 3 VP +9]: Warsaw Pact Formed as Ops
+Event Warsaw Pact Formed for USSR
+US places Influence (3 Ops)
+T3 AR3 USSR [DEFCON 3 VP +9]: Olympic Games as Ops
+USSR Coup in Colombia with 2 Ops: roll 5 +0 -> 5 (now 0/4)
+T3 AR3 US [DEFCON 3 VP +9]: Romanian Abdication as Ops
+Event Romanian Abdication for USSR
+US Coup in Zaire with 1 Ops: roll 6 +0 -> 5 (now 6/0)
+T3 AR4 USSR [DEFCON 2 VP +9]: Vietnam Revolts as Ops
+USSR places Influence (2 Ops)
+T3 AR4 US [DEFCON 2 VP +9]: Blockade as Ops
+Event Blockade for USSR
+US Coup in Colombia with 1 Ops: roll 4 +0 -> 3 (now 0/1)
+T3 AR5 USSR [DEFCON 2 VP +9]: UN Intervention as Ops with Truman Doctrine
+USSR places Influence (1 Ops)
+T3 AR5 US [DEFCON 2 VP +9]: Decolonization as Space
+US Space Race with Decolonization: roll 5 -> fail
+T3 AR6 USSR [DEFCON 2 VP +9]: The China Card as Ops
+USSR places Influence (4 Ops)
+T3 AR6 US [DEFCON 2 VP +9]: Arab-Israeli War as Ops
+Event Arab-Israeli War for USSR
+War on Israel: roll 1 -1 -> fails
+US places Influence (2 Ops)
+T4 Headline: US Special Relationship / USSR Indo-Pakistani War
+Event Special Relationship for US
+Event Indo-Pakistani War for USSR
+War on Pakistan: roll 6 -1 -> victory
+T4 AR1 USSR [DEFCON 3 VP +9]: Brush War as Event
+Event Brush War for USSR
+War on Iran: roll 3 +0 -> victory
+T4 AR1 US [DEFCON 3 VP +8]: Red Scare/Purge as Ops
+US places Influence (4 Ops)
+T4 AR2 USSR [DEFCON 3 VP +8]: South America Scoring as Event
+South America Scoring scores: net -6 (VP now +2)
+T4 AR2 US [DEFCON 3 VP +2]: Flower Power as Ops
+US Coup in Iran with 4 Ops: roll 4 +0 -> 4 (now 0/0)
+Event Flower Power for USSR
+T4 AR3 USSR [DEFCON 2 VP +2]: 'Ask Not What Your Country…' as Ops
+Event 'Ask Not What Your Country…' for US
+USSR places Influence (3 Ops)
+T4 AR3 US [DEFCON 2 VP +2]: Duck and Cover as Ops
+US places Influence (3 Ops)
+T4 AR4 USSR [DEFCON 2 VP +2]: Sadat Expels Soviets as Ops
+Event Sadat Expels Soviets for US
+USSR places Influence (1 Ops)
+T4 AR4 US [DEFCON 2 VP +2]: The China Card as Ops
+US places Influence (4 Ops)
+T4 AR5 USSR [DEFCON 2 VP +2]: Shuttle Diplomacy as Ops
+Event Shuttle Diplomacy for US
+USSR places Influence (3 Ops)
+T4 AR5 US [DEFCON 2 VP +2]: Middle East Scoring as Event
+Middle East Scoring scores: net +7 (VP now +9)
+T4 AR6 USSR [DEFCON 2 VP +9]: East European Unrest as Ops
+Event East European Unrest for US
+USSR places Influence (3 Ops)
+T4 AR6 US [DEFCON 2 VP +9]: Cultural Revolution as Ops
+Event Cultural Revolution for USSR
+US places Influence (3 Ops)
+T4 AR7 USSR [DEFCON 2 VP +8]: U2 Incident as Ops
+USSR places Influence (3 Ops)
+T4 AR7 US [DEFCON 2 VP +8]: Nixon Plays the China Card as Ops
+US places Influence (2 Ops)
+T5 Headline: US How I Learned to Stop Worrying / USSR Quagmire
+Event Quagmire for USSR
+Event How I Learned to Stop Worrying for US
+T5 AR1 USSR [DEFCON 5 VP +8]: Our Man in Tehran as Ops
+Event Our Man in Tehran for US
+USSR places Influence (2 Ops)
+US trapped: discards 'We Will Bury You', rolls 6
+T5 AR2 USSR [DEFCON 5 VP +8]: Europe Scoring as Event
+Europe Scoring scores: net -6 (VP now +2)
+US trapped: discards Muslim Revolution, rolls 4
+T5 AR3 USSR [DEFCON 5 VP +2]: OPEC as Ops
+USSR Coup in Mexico with 3 Ops: roll 4 +0 -> 3 (now 0/2)
+T5 AR3 US [DEFCON 4 VP +2]: NORAD as Ops
+US places Influence (3 Ops)
+T5 AR4 USSR [DEFCON 4 VP +2]: Latin American Death Squads as Ops
+USSR Coup in Angola with 2 Ops: roll 2 +0 -> 2 (now 0/0)
+T5 AR4 US [DEFCON 3 VP +2]: Willy Brandt as Ops
+Event Willy Brandt for USSR
+US Coup in Algeria with 2 Ops: roll 5 +0 -> 3 (now 2/0)
+T5 AR5 USSR [DEFCON 2 VP +1]: SALT Negotiations as Ops
+USSR places Influence (3 Ops)
+T5 AR5 US [DEFCON 2 VP +1]: Panama Canal Returned as Ops
+US places Influence (1 Ops)
+T5 AR6 USSR [DEFCON 2 VP +1]: Alliance for Progress as Ops
+USSR Realigns Brazil: 5 vs 3 (now 1/1)
+USSR Realigns Brazil: 7 vs 5 (now 0/1)
+USSR Realigns Venezuela: 5 vs 6 (now 3/4)
+Event Alliance for Progress for US
+T5 AR6 US [DEFCON 2 VP +1]: Portuguese Empire Crumbles as Space
+US Space Race with Portuguese Empire Crumbles: roll 5 -> fail
+T5 AR7 USSR [DEFCON 2 VP +1]: The China Card as Ops
+USSR places Influence (4 Ops)
+T5 AR7 US [DEFCON 2 VP +1]: John Paul II Elected Pope as Event
+Event John Paul II Elected Pope for US
+T6 Headline: US Puppet Governments / USSR The Cambridge Five
+Event Puppet Governments for US
+Event The Cambridge Five for USSR
+T6 AR1 USSR [DEFCON 3 VP +1]: Arms Race as Ops
+USSR Coup in Angola with 3 Ops: roll 2 +0 -> 3 (now 0/2)
+T6 AR1 US [DEFCON 2 VP +1]: Defectors as Ops
+US places Influence (2 Ops)
+T6 AR2 USSR [DEFCON 2 VP +1]: Bear Trap as Space
+USSR Space Race with Bear Trap: roll 2 -> advance
+T6 AR2 US [DEFCON 2 VP +1]: Missile Envy as Ops
+US Coup in Colombia with 2 Ops: roll 4 +0 -> 4 (now 3/0)
+T6 AR3 USSR [DEFCON 2 VP +1]: Colonial Rear Guards as Space
+USSR Space Race with Colonial Rear Guards: roll 4 -> fail
+T6 AR3 US [DEFCON 2 VP +1]: Cuban Missile Crisis as Ops
+US Realigns Mexico: 7 vs 5 (now 3/1)
+US Realigns Panama: 5 vs 7 (now 0/4)
+US Realigns Panama: 5 vs 2 (now 0/1)
+T6 AR4 USSR [DEFCON 2 VP +1]: Summit as Ops
+USSR places Influence (1 Ops)
+T6 AR4 US [DEFCON 2 VP +1]: Central America Scoring as Event
+Central America Scoring scores: net +3 (VP now +4)
+T6 AR5 USSR [DEFCON 2 VP +4]: Nuclear Subs as Ops
+Event Nuclear Subs for US
+USSR places Influence (2 Ops)
+T6 AR5 US [DEFCON 2 VP +4]: Camp David Accords as Ops
+US Coup in Angola with 2 Ops: roll 6 +0 -> 6 (now 4/0)
+T6 AR6 USSR [DEFCON 2 VP +4]: Ussuri River Skirmish as Ops
+Event Ussuri River Skirmish for US
+USSR places Influence (3 Ops)
+T6 AR6 US [DEFCON 2 VP +4]: The China Card as Ops
+US places Influence (4 Ops)
+T6 AR7 USSR [DEFCON 2 VP +4]: Asia Scoring as Event
+Asia Scoring scores: net +6 (VP now +10)
+T6 AR7 US [DEFCON 2 VP +10]: Grain Sales to Soviets as Ops
+US places Influence (2 Ops)
+Reshuffle: discard pile becomes the draw deck
+T7 Headline: US ABM Treaty / USSR Socialist Governments
+Event ABM Treaty for US
+US places Influence (4 Ops)
+Event Socialist Governments for USSR
+T7 AR1 USSR [DEFCON 4 VP +10]: Duck and Cover as Space
+USSR Space Race with Duck and Cover: roll 4 -> fail
+T7 AR1 US [DEFCON 4 VP +10]: Africa Scoring as Event
+Africa Scoring scores: net +8 (VP now +18)
+T7 AR2 USSR [DEFCON 4 VP +18]: Five Year Plan as Ops
+Event Five Year Plan for US
+Five Year Plan discards NORAD
+Event NORAD for US
+USSR Coup in Nigeria with 3 Ops: roll 1 +0 -> 2 (now 0/1)
+T7 AR2 US [DEFCON 3 VP +18]: Southeast Asia Scoring as Event
+Southeast Asia Scoring scores: net +6 (VP now +24)
+RESULT winner=0 vp=24 end=20 VP turn=7
