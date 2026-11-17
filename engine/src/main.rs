@@ -148,6 +148,43 @@ fn main() {
             }
             println!("all jobs done in {:.0} min", t0.elapsed().as_secs_f64() / 60.0);
         }
+        "worker" => {
+            // tssim worker JOBS OUTDIR [threads]: standing worker for Alfy's PC. Re-reads JOBS before every job, runs the first line
+            // whose CSV is missing, and waits for new lines when none is left; stops when OUTDIR/../STOP exists or the window is closed.
+            let jobs = arg(2, "jobs.txt"); let outdir = arg(3, "out");
+            let threads: usize = arg(4, "0").parse().unwrap_or(0);
+            let threads = if threads == 0 { std::thread::available_parallelism().map(|n| n.get()).unwrap_or(4) } else { threads };
+            std::fs::create_dir_all(&outdir).unwrap();
+            let stop = std::path::Path::new(&jobs).with_file_name("STOP");
+            println!("TS simulator worker: {} threads; jobs from {}; results in {}. Close this window to stop.", threads, jobs, outdir);
+            let t0 = std::time::Instant::now(); let mut idle = false; let mut done = 0;
+            loop {
+                if stop.exists() { println!("STOP file found: worker ends."); break; }
+                let text = std::fs::read_to_string(&jobs).unwrap_or_default();
+                let mut next = None;
+                for l in text.lines() {
+                    let f: Vec<&str> = l.trim_end_matches('\r').split('\t').collect();
+                    if f.len() < 5 { continue; }
+                    let out = std::path::Path::new(&outdir).join(format!("{}__{}.csv", f[0], f[3]));
+                    if !out.exists() { next = Some((f.iter().map(|x| x.to_string()).collect::<Vec<String>>(), out)); break; }
+                }
+                match next {
+                    Some((f, out)) => {
+                        idle = false;
+                        let tmp = out.with_extension("part");
+                        let t = std::time::Instant::now();
+                        run_pairs(&f[1], &f[2], f[4].parse().unwrap(), f[3].parse().unwrap(), threads, 2, tmp.to_str().unwrap());
+                        std::fs::rename(&tmp, &out).unwrap();
+                        done += 1;
+                        println!("done {} seed {} in {:.0}s ({} blocks, {:.0} min so far)", f[0], f[3], t.elapsed().as_secs_f64(), done, t0.elapsed().as_secs_f64() / 60.0);
+                    }
+                    None => {
+                        if !idle { println!("no jobs left: waiting for new ones (checking every 30 s)..."); idle = true; }
+                        std::thread::sleep(std::time::Duration::from_secs(30));
+                    }
+                }
+            }
+        }
         "precheck" => {
             // tssim precheck A B N seed: how often B would choose differently from A, in A-vs-A games
             let a = arg(2, "core"); let b = arg(3, "core"); let n: u64 = arg(4, "30").parse().unwrap(); let seed0: u64 = arg(5, "600000").parse().unwrap();
