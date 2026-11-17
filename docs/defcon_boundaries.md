@@ -30,4 +30,4 @@ A Headline can lose even at DEFCON 3: if the other Headline resolves first (high
 
 ## Effect (run 3)
 
-DEFCON losses in 400 self-play games: 19 without the limits, 1 with them (Lone Gunman forced out late in a lost position).
+DEFCON losses in 400 self-play games: 19 without the limits, 1 with them (Lone Gunman forced out in the last Action Round).
