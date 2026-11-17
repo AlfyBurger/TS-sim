@@ -20,8 +20,10 @@ pub struct Stats {
     pub exits: [[u32; 6]; 2],                       // opponent cards leaving my hand: space, fired, void, headline, UN, trap discard
     pub damage: Vec<(u8, u8, u8, f64)>,             // (turn, side who triggered, card, eval change for that side)
     pub defcon_loss: Option<(u8, u8, u8, u8, u8)>,  // (turn, AR, loser, card, how: 0 Ops/coup, 1 Event, 2 Headline, 3 opponent Event)
+    pub cost_min: Vec<(u8, u8, f64)>,               // cost log (TSSIM_COSTLOG): cheapest moment of each held opponent card (side, card, cost)
+    pub avoidable: Vec<(u8, u8, f64, f64)>,         // fired opponent Events: (side, card, cost when fired, cheapest cost while held)
 }
-impl Stats { pub fn new() -> Self { Stats { scoring_plays: vec![], china_plays: vec![], space_attempts: vec![], opp_events: vec![], coups: [0; 2], realigns: [0; 2], events_played: [0; 2], milops_penalty: [0; 2], defcon_loss_card: 0, vp_by_turn: vec![], ops_by_ar: [[(0, 0); 9]; 2], exits: [[0; 6]; 2], damage: vec![], defcon_loss: None } } }
+impl Stats { pub fn new() -> Self { Stats { scoring_plays: vec![], china_plays: vec![], space_attempts: vec![], opp_events: vec![], coups: [0; 2], realigns: [0; 2], events_played: [0; 2], milops_penalty: [0; 2], defcon_loss_card: 0, vp_by_turn: vec![], ops_by_ar: [[(0, 0); 9]; 2], exits: [[0; 6]; 2], damage: vec![], defcon_loss: None, cost_min: vec![], avoidable: vec![] } } }
 
 pub struct Ctx<'a> {
     pub rng: Streams,
@@ -402,6 +404,34 @@ pub fn play_event(st: &mut State, cx: &mut Ctx, player: usize, card: u8, headlin
     occurred
 }
 
+/// Cost-log helper: change in `side`'s core evaluation if the opponent Event on `card` fired now.
+pub fn event_cost_now(st: &State, side: usize, card: u8, seed: u64) -> f64 {
+    let w = crate::bot::Weights::core();
+    if !crate::events::can_occur(st, card, opp(side)) { return 0.0; }
+    let pre = crate::bot::eval(&w, st, side);
+    let mut g0 = crate::bot::Greedy { b: crate::bot::Brain { w: w.clone() } }; let mut g1 = crate::bot::Greedy { b: crate::bot::Brain { w: w.clone() } };
+    let mut cx = Ctx::new(seed, &mut g0, &mut g1); cx.sim = true;
+    let mut t = *st; t.phasing = side as u8;
+    crate::events::event(&mut t, &mut cx, card, opp(side), side, false);
+    (crate::bot::eval(&w, &t, side) - pre).max(-30.0)
+}
+fn cost_log(st: &State, cx: &mut Ctx, side: usize) {
+    if cx.sim || std::env::var("TSSIM_COSTLOG").is_err() { return; }
+    let cards: Vec<u8> = st.hands[side].iter().filter(|&k| k != CHINA && CARDS[k as usize].owner() == Some(opp(side))).collect();
+    for k in cards {
+        let c = event_cost_now(st, side, k, 77 + st.turn as u64 * 31 + st.ar as u64 * 7 + k as u64);
+        if let Some(e) = cx.stats.cost_min.iter_mut().find(|e| e.0 == side as u8 && e.1 == k) { if c > e.2 { e.2 = c; } }
+        else { cx.stats.cost_min.push((side as u8, k, c)); }
+    }
+}
+fn cost_fired(cx: &mut Ctx, side: usize, card: u8, cost: f64) {
+    if cx.sim || std::env::var("TSSIM_COSTLOG").is_err() { return; }
+    let best = cx.stats.cost_min.iter().position(|e| e.0 == side as u8 && e.1 == card);
+    let cheapest = best.map_or(cost, |i| cx.stats.cost_min[i].2.max(cost));
+    if let Some(i) = best { cx.stats.cost_min.remove(i); }
+    cx.stats.avoidable.push((side as u8, card, cost, cheapest));
+}
+
 /// Execute a full Action Round play.
 pub fn execute_play(st: &mut State, cx: &mut Ctx, side: usize, p: Play) {
     let card = p.card;
@@ -437,7 +467,7 @@ pub fn execute_play(st: &mut State, cx: &mut Ctx, side: usize, p: Play) {
             if opp_event && p.event_first {
                 let pre = if cx.sim { 0.0 } else { crate::bot::eval(&crate::bot::Weights::core(), st, side) };
                 let occurred = crate::events::event(st, cx, card, opp(side), side, false);
-                if !cx.sim { let post = crate::bot::eval(&crate::bot::Weights::core(), st, side); cx.stats.damage.push((st.turn, side as u8, card, post - pre)); }
+                if !cx.sim { let post = crate::bot::eval(&crate::bot::Weights::core(), st, side); cx.stats.damage.push((st.turn, side as u8, card, post - pre)); cost_fired(cx, side, card, (post - pre).max(-30.0)); }
                 crate::events::after_event(st, card, occurred);
                 conduct_ops(st, cx, side, ops_spec(st, side, card, base));
                 if card != 49 && card != 73 { dispose(st, card, occurred); }
@@ -446,7 +476,7 @@ pub fn execute_play(st: &mut State, cx: &mut Ctx, side: usize, p: Play) {
                 if opp_event && st.winner < 0 {
                     let pre = if cx.sim { 0.0 } else { crate::bot::eval(&crate::bot::Weights::core(), st, side) };
                     let occurred = crate::events::event(st, cx, card, opp(side), side, false);
-                    if !cx.sim { let post = crate::bot::eval(&crate::bot::Weights::core(), st, side); cx.stats.damage.push((st.turn, side as u8, card, post - pre)); }
+                    if !cx.sim { let post = crate::bot::eval(&crate::bot::Weights::core(), st, side); cx.stats.damage.push((st.turn, side as u8, card, post - pre)); cost_fired(cx, side, card, (post - pre).max(-30.0)); }
                     crate::events::after_event(st, card, occurred);
                     if card != 49 && card != 73 { dispose(st, card, occurred); }
                 } else if card == 103 && side == USSR {
@@ -502,6 +532,7 @@ pub fn action_round(st: &mut State, cx: &mut Ctx, side: usize) {
             Play { card: 49, how: Use::Ops, event_first: false, uni_with: 0 }
         } else {
             if st.hands[side].is_empty() && !st.china_playable(side) { return; }
+            cost_log(st, cx, side);
             cx.ag[side].action(st, side, &mut cx.rng)
         };
         if side == US && st.ev.wwby_pending {

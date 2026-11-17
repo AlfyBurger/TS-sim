@@ -18,16 +18,17 @@ pub struct Weights {
     // decision rules (Stage 2 run 2): reply-scan margin (<0 off), Scoring timing, sequencing delta (<0 off),
     // Headline v2 (0 off, 1 both sides, 2 USSR only, 3 US only), set-up values weight, known card played sooner
     pub la: f64, pub tm: f64, pub sq: f64, pub hl: f64, pub ss: f64, pub km: f64, pub dfix: f64, pub tsb: f64,
+    pub nc: f64, pub l2: f64, pub l2n: f64,
 }
 impl Weights {
     pub fn core() -> Self {
         Weights { vp: 1.0, held: 1.0, region_unseen: 0.25, final_: 0.0, bg: 1.0, europe_mult: 1.0, asia_mult: 1.0, access: 3.0,
             milops: 1.0, squeeze: 0.0, trap: 3.0, china: 1.5, bad: 0.3, space_ab: 0.5, inf: 0.05, auto_eu: 15.0, trapped: 3.0, h3: 0.0, h6: 0.0,
-            samples: 6.0, noise: 1e-6, final_from: 0.0, la: -1.0, tm: 1.0, sq: 0.5, hl: 0.0, ss: 0.0, km: 0.0, dfix: 1.0, tsb: 1.0 }
+            samples: 6.0, noise: 1e-6, final_from: 0.0, la: -1.0, tm: 1.0, sq: 0.5, hl: 0.0, ss: 0.0, km: 0.0, dfix: 1.0, tsb: 1.0, nc: 0.0, l2: 0.0, l2n: 4.0 }
     }
     pub fn zero() -> Self {
         Weights { vp: 0.0, held: 0.0, region_unseen: 0.0, final_: 0.0, bg: 0.0, europe_mult: 1.0, asia_mult: 1.0, access: 0.0, milops: 0.0,
-            squeeze: 0.0, trap: 0.0, china: 0.0, bad: 0.0, space_ab: 0.0, inf: 0.0, auto_eu: 0.0, trapped: 0.0, h3: 0.0, h6: 0.0, samples: 1.0, noise: 1.0, final_from: 0.0, la: -1.0, tm: 0.0, sq: -1.0, hl: 0.0, ss: 0.0, km: 0.0, dfix: 0.0, tsb: 0.0 }
+            squeeze: 0.0, trap: 0.0, china: 0.0, bad: 0.0, space_ab: 0.0, inf: 0.0, auto_eu: 0.0, trapped: 0.0, h3: 0.0, h6: 0.0, samples: 1.0, noise: 1.0, final_from: 0.0, la: -1.0, tm: 0.0, sq: -1.0, hl: 0.0, ss: 0.0, km: 0.0, dfix: 0.0, tsb: 0.0, nc: 0.0, l2: 0.0, l2n: 4.0 }
     }
     pub fn set(&mut self, k: &str, v: f64) {
         match k {
@@ -36,7 +37,7 @@ impl Weights {
             "milops" => self.milops = v, "squeeze" => self.squeeze = v, "trap" => self.trap = v, "china" => self.china = v,
             "bad" => self.bad = v, "space_ab" => self.space_ab = v, "inf" => self.inf = v, "auto_eu" => self.auto_eu = v, "trapped" => self.trapped = v,
             "h3" => self.h3 = v, "h6" => self.h6 = v, "samples" => self.samples = v, "noise" => self.noise = v, "final_from" => self.final_from = v,
-            "la" => self.la = v, "tm" => self.tm = v, "sq" => self.sq = v, "hl" => self.hl = v, "ss" => self.ss = v, "km" => self.km = v, "dfix" => self.dfix = v, "tsb" => self.tsb = v,
+            "la" => self.la = v, "tm" => self.tm = v, "sq" => self.sq = v, "hl" => self.hl = v, "ss" => self.ss = v, "km" => self.km = v, "dfix" => self.dfix = v, "tsb" => self.tsb = v, "nc" => self.nc = v, "l2" => self.l2 = v, "l2n" => self.l2n = v,
             _ => panic!("unknown weight {k}"),
         }
     }
@@ -102,6 +103,17 @@ pub fn eval(w: &Weights, st: &State, me: usize) -> f64 {
         if !COUNTRIES[c].bg || ctrl[c] < 0 { continue; }
         let m = match COUNTRIES[c].region { EUROPE => w.europe_mult, ASIA => w.asia_mult, _ => 1.0 };
         if ctrl[c] == me as i8 { v += w.bg * m * h3 } else { v -= w.bg * m * h3 }
+    }
+    // near-Control (run 4, Red Sea v6 Egypt lesson): a Battleground one Influence short of Control
+    if w.nc != 0.0 {
+        for c in 0..NC {
+            if !COUNTRIES[c].bg { continue; }
+            let m = match COUNTRIES[c].region { EUROPE => w.europe_mult, ASIA => w.asia_mult, _ => 1.0 };
+            let st_ = st.stab(c) as i32;
+            let short = |a: usize| { let (x, y) = (st.inf[c][a] as i32, st.inf[c][opp(a)] as i32); (st_ - x).max(st_ + y - x) };
+            if ctrl[c] != me as i8 && st.inf[c][me] > 0 && short(me) == 1 { v += w.nc * w.bg * m; }
+            if ctrl[c] != o as i8 && st.inf[c][o] > 0 && short(o) == 1 { v -= w.nc * w.bg * m; }
+        }
     }
     // access
     for r in 0..6u8 {
@@ -474,6 +486,49 @@ impl EvalBot {
         best.1
     }
 
+    /// Best one-ply play for `side` on `st` (one sample per play), DEFCON limits applied: (play, value for side).
+    fn best1(&self, b1: &EvalBot, st: &State, side: usize, rng: &mut Streams) -> Option<(Play, f64)> {
+        let mut s = *st; s.phasing = side as u8; s.snapshot_presence();
+        let mut c = candidates(&s, side, &b1.b.w);
+        if b1.b.w.tsb > 0.0 { let safe: Vec<Play> = c.iter().copied().filter(|p| !defcon_forbidden_ar(&s, side, p)).collect(); if !safe.is_empty() { c = safe; } }
+        let mut best: Option<(Play, f64)> = None;
+        for p in c { let v = b1.sim_value(&s, side, p, rng); if best.map_or(true, |x| v > x.1) { best = Some((p, v)); } }
+        best
+    }
+
+    /// Selective two-move look-ahead (run 4, Red Sea v6): my move, the opponent's best reply on a re-dealt hand,
+    /// then my best next move; averaged over l2n samples. Returns the value relative to v0.
+    fn two_move(&self, base: &State, me: usize, p: Play, v0: f64, rng: &mut Streams) -> f64 {
+        let o = opp(me);
+        let mut w1 = self.b.w.clone(); w1.samples = 1.0; w1.noise = 0.0; let b1 = EvalBot::new(w1, "l2");
+        let n = self.b.w.l2n.max(1.0) as usize;
+        let mut tot = 0.0;
+        for _ in 0..n {
+            let s1 = self.sample_state(base, me, p, rng);
+            if s1.winner >= 0 { tot += self.b.e(&s1, me) - v0; continue; }
+            let mut s2 = s1;
+            let opp_left = rounds_for(&s1, o) as i32 - s1.rounds_done[o] as i32;
+            if opp_left > 0 && (!s1.hands[o].is_empty() || s1.china_playable(o)) {
+                let so = determinize(&s1, me, rng);
+                if let Some((po, _)) = self.best1(&b1, &so, o, rng) {
+                    let mut t = so; t.phasing = o as u8; t.snapshot_presence();
+                    let mut g0 = Greedy { b: b1.b.clone() }; let mut g1 = Greedy { b: b1.b.clone() };
+                    let mut cx = Ctx::new(rng.next(Purpose::Sim, me), &mut g0, &mut g1); cx.sim = true;
+                    execute_play(&mut t, &mut cx, o, po);
+                    t.rounds_done[o] += 1;
+                    s2 = t;
+                }
+            }
+            if s2.winner >= 0 { tot += self.b.e(&s2, me) - v0; continue; }
+            let my_left = rounds_for(&s2, me) as i32 - s2.rounds_done[me] as i32;
+            let v = if my_left > 0 && (!s2.hands[me].is_empty() || s2.china_playable(me)) {
+                self.best1(&b1, &s2, me, rng).map_or(self.b.e(&s2, me), |x| x.1)
+            } else { self.b.e(&s2, me) };
+            tot += v - v0;
+        }
+        tot / n as f64
+    }
+
     /// Run 2 decision rules on top of the one-move values (see search.rs).
     pub fn decide(&self, st: &State, base: &State, me: usize, c: &[Play], vals: &[f64], rng: &mut Streams) -> usize {
         let w = &self.b.w;
@@ -501,6 +556,9 @@ impl EvalBot {
             let d = if w.km > 0.0 && c[i].card != CHINA && st.card_known(me, c[i].card) && rounds_for(st, o) as i32 - st.rounds_done[o] as i32 > 0 { 0.0 } else { w.sq };
             seq[i] = (1.0 - d) * (vals[i] + su + credit - v0) - tn + d * tl;
             if std::env::var("TSSIM_DEBUG2").is_ok() { eprintln!("T{} AR{} {} {:28} {:?} val {:+.2} setup {:.2} credit {:.2} threat now {:.2} later {:.2} -> r {:.2} seq {:.2}", st.turn, st.ar, side_name(me), CARDS[c[i].card as usize].name, c[i].how, vals[i]-v0, su, credit, tn, tl, r[i]-v0, seq[i]); }
+        }
+        if w.sq >= 0.0 && w.l2 > 0.0 {
+            for &i in &set { let t = self.two_move(base, me, c[i], v0, rng); seq[i] = (1.0 - w.l2) * seq[i] + w.l2 * t; }
         }
         if w.sq >= 0.0 { return *set.iter().max_by(|&&a, &&b| seq[a].partial_cmp(&seq[b]).unwrap()).unwrap(); }
         let mut pick = g;
@@ -617,4 +675,31 @@ pub fn make_agent(spec: &str) -> Box<dyn Agent + Send> {
     let mut w = match head { "zero" => Weights::zero(), "core" => Weights::core(), _ => panic!("unknown bot {head}") };
     for kv in rest.split(',').filter(|x| !x.is_empty()) { let (k, v) = kv.split_once('=').expect("key=val"); w.set(k, v.parse().expect("number")); }
     Box::new(EvalBot::new(w, spec))
+}
+
+// ------------------------------------------------------------------ decision-change pre-check (run 4)
+/// Plays as `base`; at every Headline and Action Round also asks `alt` on a copy of the random streams
+/// and counts how often the two would choose differently.
+pub struct PrecheckAgent { pub base: Box<dyn Agent + Send>, pub alt: Box<dyn Agent + Send>, pub counts: std::sync::Arc<std::sync::Mutex<[u64; 4]>> }
+impl Agent for PrecheckAgent {
+    fn name(&self) -> String { format!("precheck({})", self.base.name()) }
+    fn headline(&mut self, st: &State, me: usize, shown: Option<u8>, rng: &mut Streams) -> u8 {
+        let mut r2 = rng.clone();
+        let a = self.base.headline(st, me, shown, rng); let b = self.alt.headline(st, me, shown, &mut r2);
+        let mut c = self.counts.lock().unwrap(); c[0] += 1; if a != b { c[1] += 1; }
+        a
+    }
+    fn action(&mut self, st: &State, me: usize, rng: &mut Streams) -> Play {
+        let mut r2 = rng.clone();
+        let a = self.base.action(st, me, rng); let b = self.alt.action(st, me, &mut r2);
+        let same = a.card == b.card && a.how == b.how && a.uni_with == b.uni_with;
+        let mut c = self.counts.lock().unwrap(); c[2] += 1; if !same { c[3] += 1; }
+        a
+    }
+    fn ops(&mut self, st: &State, me: usize, spec: &OpsSpec, rng: &mut Streams) -> OpsChoice { self.base.ops(st, me, spec, rng) }
+    fn choose(&mut self, st: &State, me: usize, opts: &[State], rng: &mut Streams) -> usize { self.base.choose(st, me, opts, rng) }
+    fn choose_lottery(&mut self, st: &State, me: usize, opts: &[Vec<(f64, State)>], rng: &mut Streams) -> usize { self.base.choose_lottery(st, me, opts, rng) }
+    fn realign_target(&mut self, st: &State, me: usize, t: &[usize], rng: &mut Streams) -> usize { self.base.realign_target(st, me, t, rng) }
+    fn place_target(&mut self, st: &State, me: usize, t: &[usize], rng: &mut Streams) -> usize { self.base.place_target(st, me, t, rng) }
+    fn remove_target(&mut self, st: &State, me: usize, t: &[usize], rng: &mut Streams) -> usize { self.base.remove_target(st, me, t, rng) }
 }

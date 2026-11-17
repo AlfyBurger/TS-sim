@@ -120,10 +120,25 @@ fn main() {
             let mut out = String::from("[");
             for i in 0..n {
                 let (st, s, _) = play_one(seed0 + i, &spec, &spec, 2, false);
-                out += &format!("{}{{\"seed\":{},\"winner\":{},\"vp\":{},\"end\":\"{}\",\"turn\":{},\"scoring\":{:?},\"china\":{:?},\"space\":{:?},\"opp_events\":{:?},\"coups\":{:?},\"realigns\":{:?},\"milops_pen\":{:?},\"vp_by_turn\":{:?},\"defcon_card\":{},\"ops_by_ar\":{:?},\"exits\":{:?},\"damage\":{:?},\"defcon_loss\":{}}}",
-                    if i > 0 { "," } else { "" }, seed0 + i, st.winner, st.vp, END_NAMES[st.end_reason as usize], st.turn, s.scoring_plays, s.china_plays, s.space_attempts, s.opp_events, s.coups, s.realigns, s.milops_penalty, s.vp_by_turn, s.defcon_loss_card, s.ops_by_ar, s.exits, s.damage, s.defcon_loss.map_or("null".to_string(), |d| format!("{:?}", d)));
+                out += &format!("{}{{\"seed\":{},\"winner\":{},\"vp\":{},\"end\":\"{}\",\"turn\":{},\"scoring\":{:?},\"china\":{:?},\"space\":{:?},\"opp_events\":{:?},\"coups\":{:?},\"realigns\":{:?},\"milops_pen\":{:?},\"vp_by_turn\":{:?},\"defcon_card\":{},\"ops_by_ar\":{:?},\"exits\":{:?},\"damage\":{:?},\"defcon_loss\":{},\"avoidable\":{:?}}}",
+                    if i > 0 { "," } else { "" }, seed0 + i, st.winner, st.vp, END_NAMES[st.end_reason as usize], st.turn, s.scoring_plays, s.china_plays, s.space_attempts, s.opp_events, s.coups, s.realigns, s.milops_penalty, s.vp_by_turn, s.defcon_loss_card, s.ops_by_ar, s.exits, s.damage, s.defcon_loss.map_or("null".to_string(), |d| format!("{:?}", d)), s.avoidable);
             }
             out += "]"; println!("{out}");
+        }
+        "precheck" => {
+            // tssim precheck A B N seed: how often B would choose differently from A, in A-vs-A games
+            let a = arg(2, "core"); let b = arg(3, "core"); let n: u64 = arg(4, "30").parse().unwrap(); let seed0: u64 = arg(5, "600000").parse().unwrap();
+            let counts = std::sync::Arc::new(std::sync::Mutex::new([0u64; 4]));
+            for i in 0..n {
+                let mut ag0 = bot::PrecheckAgent { base: bot::make_agent(&a), alt: bot::make_agent(&b), counts: counts.clone() };
+                let mut ag1 = bot::PrecheckAgent { base: bot::make_agent(&a), alt: bot::make_agent(&b), counts: counts.clone() };
+                let mut st = State::new();
+                let mut cx = Ctx::new(seed0 + i, &mut ag0, &mut ag1);
+                play_game(&mut st, &mut cx, 2);
+            }
+            let c = *counts.lock().unwrap();
+            println!("{{\"a\":\"{}\",\"b\":\"{}\",\"games\":{},\"headlines\":{},\"headlines_changed\":{},\"actions\":{},\"actions_changed\":{},\"share_changed\":{:.4}}}",
+                a, b, n, c[0], c[1], c[2], c[3], (c[1] + c[3]) as f64 / (c[0] + c[2]).max(1) as f64);
         }
         _ => eprintln!("usage: tssim random N seed | match A B N seed threads out.csv | log seed US USSR | diag N seed spec"),
     }
