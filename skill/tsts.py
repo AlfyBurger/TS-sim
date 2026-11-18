@@ -253,7 +253,12 @@ SPACE_NAMES = ["Start", "Earth Satellite", "Animal in Space", "Man in Space", "M
 # Evaluation weights: identical to the simulator's default bot after Stage 2 run 5 (Weights::core).
 BASE = dict(vp=1.0, held=0.9196, region_unseen=0.3182, final_=0.0, final_from=0.0, bg=1.1783, europe_mult=1.0, asia_mult=1.0,
             access=0.0, milops=1.0961, squeeze=0.0, trap=3.0, china=1.7139, bad=0.3, space_ab=0.5, inf=0.05, auto_eu=15.0,
-            trapped=3.0, h3=0.0, nc=1.0745)
+            trapped=3.0, h3=0.0, nc=1.0745, ne=0.0, nt=1.0, nv=1.0)
+# Country importance for distance-to-Control (Alfy's table, 18 Nov 2026; same order as COUNTRY_TABLE; from engine/src/importance.rs).
+IMP_ATT = [0.75, 0.45, 0.3, 0.5, 0.6, 0.45, 1.5, 0.5, 1.6, 0.65, 0.3, 1.5, 0.3, 1.7, 0.5, 1.1, 0.3, 0.7, 0.45, 1.6, 0.45, 1.0, 0.3, 0.65, 1.4, 0.4, 1.6, 0.65, 0.8, 1.6, 1.4, 0.55, 1.4, 0.7, 1.7, 0.55, 1.3, 0.7, 1.3, 1.2, 1.2, 0.9, 0.6, 1.2, 1.2, 0.65, 1.62, 1.5, 1.06, 0.75, 0.38, 0.56, 0.38, 1.12, 1.5, 0.38, 0.75, 0.38, 1.5, 0.81, 1.0, 0.38, 1.5, 0.56, 0.9, 1.2, 0.3, 0.3, 0.45, 0.45, 0.3, 1.2, 0.45, 1.0, 1.5, 0.38, 1.5, 1.5, 1.12, 0.38, 0.56, 0.69, 1.12, 1.62]
+IMP_DEF = [0.98, 0.58, 0.39, 0.65, 0.78, 0.58, 1.95, 0.65, 2.08, 0.84, 0.39, 1.95, 0.39, 2.21, 0.65, 1.43, 0.39, 0.91, 0.58, 2.08, 0.58, 1.0, 0.3, 0.65, 1.4, 0.4, 1.6, 0.65, 0.8, 1.6, 1.4, 0.55, 1.4, 0.7, 1.7, 0.55, 1.3, 0.7, 1.3, 1.2, 1.2, 0.9, 0.6, 1.2, 1.2, 0.65, 1.3, 1.2, 0.85, 0.6, 0.3, 0.45, 0.3, 0.9, 1.2, 0.3, 0.6, 0.3, 1.2, 0.65, 0.8, 0.3, 1.2, 0.45, 0.9, 1.2, 0.3, 0.3, 0.45, 0.45, 0.3, 1.2, 0.45, 1.0, 1.2, 0.3, 1.2, 1.2, 0.9, 0.3, 0.45, 0.55, 0.9, 1.3]
+IMP_FLAT = 0.8806
+
 FLAGS = ["marshall", "warsaw", "nato", "de_gaulle", "willy_brandt", "us_japan", "formosan", "camp_david", "jp2", "flower_power",
          "evil_empire", "iron_lady", "north_sea_oil", "reformer", "tear_down", "awacs", "norad", "iranian_hostage", "shuttle",
          "quagmire", "bear_trap", "containment", "brezhnev", "vietnam_revolts", "nuclear_subs", "salt", "yuri", "iran_contra",
@@ -383,6 +388,31 @@ def trap_for(holder, k):
     if o == USSR: return holder == US and k in (50, 62, 91)
     return False
 
+def ops_to_control(st, c, a, ctrl):
+    """Ops side `a` still needs to Control country c (0 if it does): breaking the other side's Control costs extra,
+    +1 with no own Influence there or next door (or next to the own superpower)."""
+    if ctrl[c] == a: return 0
+    stb = C[c]["stab"]; m, o = st.inf[c][a], st.inf[c][opp(a)]
+    need = max(stb - m, stb + o - m, 0)
+    if ctrl[c] >= 0:
+        brk = o - stb - m + 1
+        if brk > 0: need += min(brk, need)
+    if m == 0 and not st.adj_sp(a, c) and not any(st.inf[x][a] > 0 for x in C[c]["adj"]): need += 1
+    return need
+
+def dist_term(w, st, me, ctrl):
+    """Distance to Control: sum of attack importance x d^(Ops I need) - defend importance x 0.5^(Ops they need)."""
+    o = opp(me); table = w["nt"] >= 0.5; t = 0.0
+    for c in range(NC):
+        eu = C[c]["region"] == EUROPE
+        ia, idf = (IMP_ATT[c], IMP_DEF[c]) if table else (IMP_FLAT, IMP_FLAT)
+        da = 0.4 if (table and eu) else 0.5
+        if ctrl[c] != me: t += ia * da ** min(ops_to_control(st, c, me, ctrl), 39)
+        elif w["nv"] >= 1.5: t += ia
+        if ctrl[c] != o: t -= idf * 0.5 ** min(ops_to_control(st, c, o, ctrl), 39)
+        elif w["nv"] >= 1.5: t -= idf
+    return t
+
 def evaluate(w, st, me, parts=None):
     def add(name, x):
         if parts is not None: parts[name] = parts.get(name, 0.0) + x
@@ -419,6 +449,8 @@ def evaluate(w, st, me, parts=None):
             def short(a): x, y = st.inf[c][a], st.inf[c][opp(a)]; return max(stb - x, stb + y - x)
             if ctrl[c] != me and st.inf[c][me] > 0 and short(me) == 1: v += add("near-Control", w["nc"] * w["bg"] * mult(c))
             if ctrl[c] != o and st.inf[c][o] > 0 and short(o) == 1: v += add("near-Control", -w["nc"] * w["bg"] * mult(c))
+    if w.get("ne", 0.0) != 0:
+        v += add("distance to Control", w["ne"] * dist_term(w, st, me, ctrl))
     if w["access"]:
         for r in range(6):
             if r >= AFRICA and st.turn < 3: continue

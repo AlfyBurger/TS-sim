@@ -33,3 +33,12 @@ opponent's Control as good. Fix `nv=2`: Control counts in full (need 0 -> 1.0). 
 V2_05, V2_1 (on top), V2_05R, V2_1R, V2_2R (replacing the one-short credit), V2F_1R (flat), 500 deals each, seeds 840000+;
 CONFIRM_V2: BEST{V2...} vs core, 1000 fresh deals, seeds 850000+. Program tssim6b.exe, job list run6b_jobs.txt, same out6\.
 CONFIRM_NE ran as core vs core (no version passed): it serves as the clean self-play record for the Region-by-side analysis.
+
+## Interim results (18 Nov 2026, 21:15 Amman; 161/240 blocks done)
+- CONFIRM_NE (core self-play, 1000 deals): USSR 56.7%, US 43.3% (with +2 US Influence).
+- HL_USSR: 49.0 ± 2.0 -> fails the rule (not adopted).
+- V2 screening, partial (350 of 500 deals): V2_05 64.1 ± 3.2, V2_1 63.4 ± 3.1 (on top of the one-short credit);
+  replacing it (nc=0) fails: V2_05R 25.9, V2_1R 28.1, V2_2R 24.9; flat V2F_1R 10.0. CONFIRM_V2 decides.
+- Prepared for the wrap-up: `scripts/region_record.py` (Region-by-side record; `--self` for self-play),
+  `scripts/prep_payoff.py` (preparation-card payoffs, bot A vs bot B), and the distance-to-Control port in `skill/tsts.py`
+  (`ops_to_control`, `dist_term`, IMP_ATT/IMP_DEF; off while `ne`=0). Cross-check with a test build (core ne=1, nv=2): 300 positions, 0 differences.
