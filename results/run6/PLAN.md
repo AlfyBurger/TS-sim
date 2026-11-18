@@ -3,7 +3,7 @@
 Order of the job list: everything added today goes BEFORE the last item.
 1. Distance to Control (port of Red Sea v7 `ne`, +16 there): importance x (0.5^Ops I need - 0.5^Ops they need), incl. the cost of
    breaking their Control and +1 when no adjacent Influence. Strengths 1, 2, 3; on top of the current near-Control term and replacing it;
-   importance table for the 84 countries (Battlegrounds high, gateways medium, dead ends low). Best variant confirmed on fresh deals.
+   importance table for the 84 countries (draft: results/run6/importance_draft.csv, sent to Alfy as a Sheet for review, 18 Nov). Best variant confirmed on fresh deals.
 2. Headline v2 for the USSR only (Red Sea adopted it for the USSR; TS run 2 on the old bot: neutral, sides reversed).
 3. (further items agreed today go here)
 LAST. Set-up values for preparation cards (`ss`): weights 0.2 and 0.4 on the current bot, plus the payoff check
