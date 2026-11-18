@@ -18,7 +18,7 @@ Two-player card-driven game of the Cold War, 1945–1989: the US against the USS
 
 **Precedence (Alfy, 16 Nov 2026):** Alfy's rulings > newer official text (2026 HoF rulebook and HoF card faces) > FAQ v5 where the 2026 rules are silent > rulebook examples > older card faces and card lists > fan sources.
 
-**Simulator:** Alfy's private repository `AlfyBurger/TS-sim` (compiled Rust engine, test reports in `reports/`). The helper script in §11 reproduces the simulator's evaluation and Ops choices exactly (cross-checked on 300 random positions, 0 differences).
+**Simulator:** Alfy's private repository `AlfyBurger/TS-sim` (compiled Rust engine, test reports in `reports/`, this skill's sources in `skill/`). The helper script in §11 reproduces the simulator's evaluation and Ops choices exactly (cross-checked on 300 random positions, 0 differences).
 
 Contents: 1 Rules core · 2 Map · 3 Tracks and scoring · 4 Cards · 5 Rulings and open questions · 6 Playing: move-by-move decisions · 7 DEFCON limits · 8 Card notes · 9 Strategy (Stage 3, to come) · 10 Game sessions · 11 Helper script
 
@@ -261,103 +261,103 @@ All of a card's Ops go to **one** of four uses.
 
 ## 4. Cards
 
-Format: **#id Title** · Ops · `*` removed after Event · `[U]` lasting effect. Effects are short summaries in my own words; full rulings in §5. Deck: Early War 38 + The China Card, Mid War 48, Late War 23 (#103–110 included in their eras). Card #6 is The China Card.
+Format: **#id Title** · `*` removed after Event · `[U]` lasting effect · Ops. Effects are short summaries in my own words; full rulings in §5. Deck: Early War 38 + The China Card, Mid War 48, Late War 23 (#103–110 included in their eras). Card #6 is The China Card.
 
 ### US cards
 **Early War**
 - **#4 Duck and Cover** · 3 · Degrade DEFCON by 1, then the US gains (5 − DEFCON) VP.
 - **#5 Five Year Plan** · 3 · The USSR discards a random card. A US Event on it happens (implemented by the US); any other card is just discarded (a Scoring card is not scored).
-- **#19 Truman Doctrine*** · 1 · Remove all USSR Influence from one uncontrolled country in Europe.
-- **#21 NATO*** [U] · 4 · Playable only after Marshall Plan or Warsaw Pact Formed. The USSR may no longer Coup or Realign in US-Controlled European countries, and Brush War cannot target them.
-- **#22 Independent Reds*** · 2 · Add US Influence in one of Yugoslavia, Romania, Bulgaria, Hungary or Czechoslovakia until it equals the USSR Influence there.
-- **#23 Marshall Plan*** [U] · 4 · Add 1 US Influence in each of 7 Western European countries the USSR does not Control. Allows NATO.
-- **#25 Containment*** · 3 · Rest of turn: US cards played for Ops get +1 (max 4).
-- **#26 CIA Created*** · 1 · The USSR shows its hand (once, now). Then the US conducts 1 Op (not the Space Race).
-- **#27 US/Japan Mutual Defense Pact*** [U] · 4 · The US adds enough Influence to Control Japan. The USSR may no longer Coup or Realign in Japan.
+- **#19 Truman Doctrine** \* · 1 · Remove all USSR Influence from one uncontrolled country in Europe.
+- **#21 NATO** \* [U] · 4 · Playable only after Marshall Plan or Warsaw Pact Formed. The USSR may no longer Coup or Realign in US-Controlled European countries, and Brush War cannot target them.
+- **#22 Independent Reds** \* · 2 · Add US Influence in one of Yugoslavia, Romania, Bulgaria, Hungary or Czechoslovakia until it equals the USSR Influence there.
+- **#23 Marshall Plan** \* [U] · 4 · Add 1 US Influence in each of 7 Western European countries the USSR does not Control. Allows NATO.
+- **#25 Containment** \* · 3 · Rest of turn: US cards played for Ops get +1 (max 4).
+- **#26 CIA Created** \* · 1 · The USSR shows its hand (once, now). Then the US conducts 1 Op (not the Space Race).
+- **#27 US/Japan Mutual Defense Pact** \* [U] · 4 · The US adds enough Influence to Control Japan. The USSR may no longer Coup or Realign in Japan.
 - **#29 East European Unrest** · 3 · Remove 1 USSR Influence from each of 3 Eastern European countries (2 each in the Late War).
-- **#35 Formosan Resolution*** [U] · 2 · While in effect, Taiwan counts as a Battleground when the US Controls it, for Asia Scoring and Final Scoring. Cancelled when the US plays The China Card.
+- **#35 Formosan Resolution** \* [U] · 2 · While in effect, Taiwan counts as a Battleground when the US Controls it, for Asia Scoring and Final Scoring. Cancelled when the US plays The China Card.
 - **#103 Defectors** · 2 · Headlined by the US, it cancels the USSR Headline (even a Scoring card, which is discarded). If the USSR plays it in its Action Round (not on the Space Race), the US gains 1 VP.
 - **#105 Special Relationship** · 2 · If the US Controls the U.K.: without NATO, add 1 US Influence in a country adjacent to the U.K.; with NATO, add 2 US Influence in a Western European country and gain 2 VP.
-- **#106 NORAD*** [U] · 3 · While in effect: at the end of any Action Round in which DEFCON dropped to 2, if the US Controls Canada, the US adds 1 Influence in a country with US Influence. Cancelled by Quagmire.
+- **#106 NORAD** \* [U] · 3 · While in effect: at the end of any Action Round in which DEFCON dropped to 2, if the US Controls Canada, the US adds 1 Influence in a country with US Influence. Cancelled by Quagmire.
 
 **Mid War**
-- **#41 Nuclear Subs*** · 2 · Rest of turn: US Coups in Battlegrounds do not lower DEFCON (Cuban Missile Crisis still applies; Events can still move DEFCON).
-- **#44 Bear Trap*** [U] · 3 · Mirror of Quagmire against the USSR: discard a 2+ Ops card and roll 1–4 each Action Round until it succeeds; with no such card, only Scoring cards.
-- **#48 Kitchen Debates*** · 1 · If the US Controls more Battlegrounds than the USSR: US gains 2 VP. If not, the Event does not occur and the card stays in the game.
+- **#41 Nuclear Subs** \* · 2 · Rest of turn: US Coups in Battlegrounds do not lower DEFCON (Cuban Missile Crisis still applies; Events can still move DEFCON).
+- **#44 Bear Trap** \* [U] · 3 · Mirror of Quagmire against the USSR: discard a 2+ Ops card and roll 1–4 each Action Round until it succeeds; with no such card, only Scoring cards.
+- **#48 Kitchen Debates** \* · 1 · If the US Controls more Battlegrounds than the USSR: US gains 2 VP. If not, the Event does not occur and the card stays in the game.
 - **#63 Colonial Rear Guards** · 2 · Add 1 US Influence in each of 4 countries in Africa and/or Southeast Asia.
-- **#64 Panama Canal Returned*** · 1 · Add 1 US Influence in Panama, Costa Rica and Venezuela.
-- **#65 Camp David Accords*** [U] · 2 · US gains 1 VP and adds 1 Influence in Israel, Jordan and Egypt. Arab-Israeli War can no longer be an Event.
-- **#66 Puppet Governments*** · 2 · Add 1 US Influence in each of 3 countries with no Influence from either side.
+- **#64 Panama Canal Returned** \* · 1 · Add 1 US Influence in Panama, Costa Rica and Venezuela.
+- **#65 Camp David Accords** \* [U] · 2 · US gains 1 VP and adds 1 Influence in Israel, Jordan and Egypt. Arab-Israeli War can no longer be an Event.
+- **#66 Puppet Governments** \* · 2 · Add 1 US Influence in each of 3 countries with no Influence from either side.
 - **#67 Grain Sales to Soviets** · 2 · The US takes a random card from the USSR hand and may play it (any use, including the Space Race) or return it and use Grain Sales for Ops.
-- **#68 John Paul II Elected Pope*** [U] · 2 · Remove 2 USSR Influence from Poland and add 1 US Influence there. Allows Solidarity.
-- **#70 OAS Founded*** · 1 · Add 2 US Influence in Central and/or South America.
-- **#71 Nixon Plays the China Card*** · 2 · If the US holds The China Card: US gains 2 VP. Otherwise the US takes it face down (not playable this turn).
-- **#72 Sadat Expels Soviets*** · 1 · Remove all USSR Influence from Egypt and add 1 US Influence there.
+- **#68 John Paul II Elected Pope** \* [U] · 2 · Remove 2 USSR Influence from Poland and add 1 US Influence there. Allows Solidarity.
+- **#70 OAS Founded** \* · 1 · Add 2 US Influence in Central and/or South America.
+- **#71 Nixon Plays the China Card** \* · 2 · If the US holds The China Card: US gains 2 VP. Otherwise the US takes it face down (not playable this turn).
+- **#72 Sadat Expels Soviets** \* · 1 · Remove all USSR Influence from Egypt and add 1 US Influence there.
 - **#73 Shuttle Diplomacy** · 3 · At the next Middle East or Asia Scoring (not Southeast Asia, not Final Scoring), the US picks one USSR-Controlled Battleground there to ignore entirely; then the card is discarded.
 - **#74 The Voice of America** · 2 · Remove 4 USSR Influence from countries outside Europe, at most 2 per country.
-- **#76 Ussuri River Skirmish*** · 3 · If the USSR holds The China Card, the US takes it face up; if the US already holds it, add 4 US Influence in Asia, at most 2 per country.
-- **#77 “Ask Not What Your Country…”*** · 3 · The US discards any number of cards (Scoring cards allowed) and then draws the same number.
-- **#78 Alliance for Progress*** · 3 · US gains 1 VP per US-Controlled Battleground in Central and South America.
-- **#108 Our Man in Tehran*** · 2 · If the US Controls a Middle East country: the US looks at the top 5 cards of the draw pile, discards any of them (shown, no Events), returns the rest and reshuffles the draw pile. If not, the card is discarded and stays in the game.
+- **#76 Ussuri River Skirmish** \* · 3 · If the USSR holds The China Card, the US takes it face up; if the US already holds it, add 4 US Influence in Asia, at most 2 per country.
+- **#77 “Ask Not What Your Country…”** \* · 3 · The US discards any number of cards (Scoring cards allowed) and then draws the same number.
+- **#78 Alliance for Progress** \* · 3 · US gains 1 VP per US-Controlled Battleground in Central and South America.
+- **#108 Our Man in Tehran** \* · 2 · If the US Controls a Middle East country: the US looks at the top 5 cards of the draw pile, discards any of them (shown, no Events), returns the rest and reshuffles the draw pile. If not, the card is discarded and stays in the game.
 
 **Late War**
-- **#83 The Iron Lady*** [U] · 3 · US gains 1 VP; add 1 USSR Influence in Argentina; remove all USSR Influence from the U.K. Socialist Governments can no longer be an Event.
-- **#84 Reagan Bombs Libya*** · 2 · US gains 1 VP for every 2 USSR Influence in Libya.
-- **#85 Star Wars*** · 2 · If the US is ahead on the Space Race: take any non-Scoring card from the discard pile and play its Event now.
-- **#86 North Sea Oil*** [U] · 3 · OPEC can no longer be an Event. The US may take an 8th Action Round this turn.
-- **#89 Soviets Shoot Down KAL-007*** · 4 · DEFCON −1 and the US gains 2 VP. If the US Controls South Korea, it then places Influence or Realigns with 4 Ops.
-- **#94 Chernobyl*** · 3 · The US names a Region: rest of turn the USSR cannot place Influence there with Ops (Events, Coups and Realignments still allowed).
-- **#96 Tear Down this Wall*** [U] · 3 · Cancels or prevents Willy Brandt. Add 3 US Influence in E. Germany, then a free Coup or Realignment rolls (this card's Ops) in Europe, ignoring DEFCON's Europe limit.
-- **#97 “An Evil Empire”*** [U] · 3 · US gains 1 VP. Cancels or prevents Flower Power.
-- **#101 Solidarity*** · 2 · Only while John Paul II Elected Pope is in effect: add 3 US Influence in Poland.
-- **#110 AWACS Sale to Saudis*** [U] · 3 · Add 2 US Influence in Saudi Arabia. Muslim Revolution can no longer be an Event.
+- **#83 The Iron Lady** \* [U] · 3 · US gains 1 VP; add 1 USSR Influence in Argentina; remove all USSR Influence from the U.K. Socialist Governments can no longer be an Event.
+- **#84 Reagan Bombs Libya** \* · 2 · US gains 1 VP for every 2 USSR Influence in Libya.
+- **#85 Star Wars** \* · 2 · If the US is ahead on the Space Race: take any non-Scoring card from the discard pile and play its Event now.
+- **#86 North Sea Oil** \* [U] · 3 · OPEC can no longer be an Event. The US may take an 8th Action Round this turn.
+- **#89 Soviets Shoot Down KAL-007** \* · 4 · DEFCON −1 and the US gains 2 VP. If the US Controls South Korea, it then places Influence or Realigns with 4 Ops.
+- **#94 Chernobyl** \* · 3 · The US names a Region: rest of turn the USSR cannot place Influence there with Ops (Events, Coups and Realignments still allowed).
+- **#96 Tear Down this Wall** \* [U] · 3 · Cancels or prevents Willy Brandt. Add 3 US Influence in E. Germany, then a free Coup or Realignment rolls (this card's Ops) in Europe, ignoring DEFCON's Europe limit.
+- **#97 “An Evil Empire”** \* [U] · 3 · US gains 1 VP. Cancels or prevents Flower Power.
+- **#101 Solidarity** \* · 2 · Only while John Paul II Elected Pope is in effect: add 3 US Influence in Poland.
+- **#110 AWACS Sale to Saudis** \* [U] · 3 · Add 2 US Influence in Saudi Arabia. Muslim Revolution can no longer be an Event.
 
 ### USSR cards
 **Early War**
 - **#7 Socialist Governments** · 3 · Remove 3 US Influence in total from Western Europe, at most 2 per country. Not playable as an Event while The Iron Lady is in effect.
-- **#8 Fidel*** · 2 · Remove all US Influence from Cuba; the USSR adds enough Influence there for Control.
-- **#9 Vietnam Revolts*** · 2 · Add 2 USSR Influence in Vietnam. Rest of turn: a USSR card whose Ops are all spent in Southeast Asia gets +1 Ops.
-- **#10 Blockade*** · 1 · Unless the US at once discards a card worth 3+ Ops, remove all US Influence from W. Germany.
-- **#11 Korean War*** · 2 · War: North Korea attacks South Korea. Roll, −1 per US-Controlled country adjacent to South Korea; 4–6: USSR gains 2 VP and all US Influence in South Korea becomes USSR Influence. USSR +2 Military Ops either way.
-- **#12 Romanian Abdication*** · 1 · Remove all US Influence from Romania; the USSR adds enough for Control.
+- **#8 Fidel** \* · 2 · Remove all US Influence from Cuba; the USSR adds enough Influence there for Control.
+- **#9 Vietnam Revolts** \* · 2 · Add 2 USSR Influence in Vietnam. Rest of turn: a USSR card whose Ops are all spent in Southeast Asia gets +1 Ops.
+- **#10 Blockade** \* · 1 · Unless the US at once discards a card worth 3+ Ops, remove all US Influence from W. Germany.
+- **#11 Korean War** \* · 2 · War: North Korea attacks South Korea. Roll, −1 per US-Controlled country adjacent to South Korea; 4–6: USSR gains 2 VP and all US Influence in South Korea becomes USSR Influence. USSR +2 Military Ops either way.
+- **#12 Romanian Abdication** \* · 1 · Remove all US Influence from Romania; the USSR adds enough for Control.
 - **#13 Arab-Israeli War** · 2 · War: attack on Israel. Roll, −1 if the US Controls Israel and −1 per US-Controlled country adjacent to Israel; 4–6: USSR gains 2 VP and takes over all US Influence in Israel. USSR +2 Military Ops. Not playable as an Event after Camp David Accords.
-- **#14 Comecon*** · 3 · Add 1 USSR Influence in each of 4 Eastern European countries the US does not Control.
-- **#15 Nasser*** · 1 · Add 2 USSR Influence in Egypt and remove half the US Influence there (rounded up).
-- **#16 Warsaw Pact Formed*** [U] · 3 · Either remove all US Influence from 4 Eastern European countries, or add 5 USSR Influence in Eastern Europe (at most 2 per country). Allows NATO.
-- **#17 De Gaulle Leads France*** [U] · 3 · Remove 2 US Influence from France and add 1 USSR Influence there. NATO no longer protects France.
-- **#28 Suez Crisis*** · 3 · Remove 4 US Influence in total from France, the U.K. and Israel, at most 2 per country.
+- **#14 Comecon** \* · 3 · Add 1 USSR Influence in each of 4 Eastern European countries the US does not Control.
+- **#15 Nasser** \* · 1 · Add 2 USSR Influence in Egypt and remove half the US Influence there (rounded up).
+- **#16 Warsaw Pact Formed** \* [U] · 3 · Either remove all US Influence from 4 Eastern European countries, or add 5 USSR Influence in Eastern Europe (at most 2 per country). Allows NATO.
+- **#17 De Gaulle Leads France** \* [U] · 3 · Remove 2 US Influence from France and add 1 USSR Influence there. NATO no longer protects France.
+- **#28 Suez Crisis** \* · 3 · Remove 4 US Influence in total from France, the U.K. and Israel, at most 2 per country.
 - **#30 Decolonization** · 2 · Add 1 USSR Influence in each of 4 countries in Africa and/or Southeast Asia.
-- **#33 De-Stalinization*** · 3 · The USSR moves up to 4 of its Influence from any countries to countries the US does not Control, at most 2 per destination.
+- **#33 De-Stalinization** \* · 3 · The USSR moves up to 4 of its Influence from any countries to countries the US does not Control, at most 2 per destination.
 - **#104 The Cambridge Five** · 2 · The US shows the Scoring cards in its hand; the USSR adds 1 Influence in one Region named on them. Not playable as an Event in the Late War.
 
 **Mid War**
-- **#42 Quagmire*** [U] · 3 · From the US's next Action Round: the US must discard a card worth 2+ Ops and roll 1–4 to end it, every round until it succeeds; with no such card it may play only Scoring cards. Carries over into later turns; does not affect the Headline. Cancels NORAD.
-- **#50 “We Will Bury You”*** · 4 · DEFCON −1. Unless the US plays UN Intervention as an Event in its next round, the USSR gains 3 VP.
-- **#51 Brezhnev Doctrine*** · 3 · Rest of turn: USSR cards played for Ops get +1 (max 4).
-- **#52 Portuguese Empire Crumbles*** · 2 · Add 2 USSR Influence in SE African States and 2 in Angola.
+- **#42 Quagmire** \* [U] · 3 · From the US's next Action Round: the US must discard a card worth 2+ Ops and roll 1–4 to end it, every round until it succeeds; with no such card it may play only Scoring cards. Carries over into later turns; does not affect the Headline. Cancels NORAD.
+- **#50 “We Will Bury You”** \* · 4 · DEFCON −1. Unless the US plays UN Intervention as an Event in its next round, the USSR gains 3 VP.
+- **#51 Brezhnev Doctrine** \* · 3 · Rest of turn: USSR cards played for Ops get +1 (max 4).
+- **#52 Portuguese Empire Crumbles** \* · 2 · Add 2 USSR Influence in SE African States and 2 in Angola.
 - **#53 South African Unrest** · 2 · Add 2 USSR Influence in South Africa, or 1 there and 2 in countries adjacent to South Africa (may be split).
-- **#54 Allende*** · 1 · Add 2 USSR Influence in Chile.
-- **#55 Willy Brandt*** [U] · 2 · USSR gains 1 VP and adds 1 Influence in W. Germany; NATO no longer protects W. Germany. Prevented or cancelled by Tear Down This Wall.
+- **#54 Allende** \* · 1 · Add 2 USSR Influence in Chile.
+- **#55 Willy Brandt** \* [U] · 2 · USSR gains 1 VP and adds 1 Influence in W. Germany; NATO no longer protects W. Germany. Prevented or cancelled by Tear Down This Wall.
 - **#56 Muslim Revolution** · 4 · Remove all US Influence from 2 of: Sudan, Iran, Iraq, Egypt, Libya, Saudi Arabia, Syria, Jordan. Not playable as an Event after AWACS Sale.
-- **#58 Cultural Revolution*** · 3 · If the US holds The China Card, the USSR takes it face up; if the USSR already holds it, the USSR gains 1 VP.
-- **#59 Flower Power*** [U] · 4 · From now on the USSR gains 2 VP each time the US plays a War card (Arab-Israeli, Korean, Brush, Indo-Pakistani, Iran-Iraq), as Event or Ops, but not on the Space Race. Cancelled by An Evil Empire.
-- **#60 U2 Incident*** · 3 · USSR gains 1 VP, and 1 more if UN Intervention is played as an Event later this turn.
+- **#58 Cultural Revolution** \* · 3 · If the US holds The China Card, the USSR takes it face up; if the USSR already holds it, the USSR gains 1 VP.
+- **#59 Flower Power** \* [U] · 4 · From now on the USSR gains 2 VP each time the US plays a War card (Arab-Israeli, Korean, Brush, Indo-Pakistani, Iran-Iraq), as Event or Ops, but not on the Space Race. Cancelled by An Evil Empire.
+- **#60 U2 Incident** \* · 3 · USSR gains 1 VP, and 1 more if UN Intervention is played as an Event later this turn.
 - **#61 OPEC** · 3 · USSR gains 1 VP for each of Egypt, Iran, Libya, Saudi Arabia, Iraq, Gulf States and Venezuela it Controls. Not playable as an Event after North Sea Oil.
-- **#62 “Lone Gunman”*** · 1 · The US shows its hand (once, now). Then the USSR conducts 1 Op (not the Space Race).
+- **#62 “Lone Gunman”** \* · 1 · The US shows its hand (once, now). Then the USSR conducts 1 Op (not the Space Race).
 - **#75 Liberation Theology** · 2 · Add 3 USSR Influence in Central America, at most 2 per country.
 - **#107 Che** · 3 · USSR Coup (this card's Ops) against a non-Battleground in Central America, South America or Africa; if it removed US Influence, a second Coup against another such country.
 
 **Late War**
-- **#82 Iranian Hostage Crisis*** [U] · 3 · Remove all US Influence from Iran and add 2 USSR Influence there. Terrorism played by the USSR makes the US discard 2 cards.
-- **#87 The Reformer*** [U] · 3 · Add 4 USSR Influence in Europe (6 if the USSR leads on VP), at most 2 per country. The USSR may no longer Coup in Europe. Strengthens Glasnost.
-- **#88 Marine Barracks Bombing*** · 2 · Remove all US Influence from Lebanon and 2 more US Influence anywhere in the Middle East.
-- **#90 Glasnost*** · 4 · USSR gains 2 VP and DEFCON improves by 1. With The Reformer in effect, the USSR also places Influence or Realigns with 4 Ops.
-- **#91 Ortega Elected in Nicaragua*** · 2 · Remove all US Influence from Nicaragua; then a free USSR Coup (this card's Ops) in a country adjacent to Nicaragua.
-- **#93 Iran-Contra Scandal*** · 2 · Rest of turn: US Realignment rolls −1.
+- **#82 Iranian Hostage Crisis** \* [U] · 3 · Remove all US Influence from Iran and add 2 USSR Influence there. Terrorism played by the USSR makes the US discard 2 cards.
+- **#87 The Reformer** \* [U] · 3 · Add 4 USSR Influence in Europe (6 if the USSR leads on VP), at most 2 per country. The USSR may no longer Coup in Europe. Strengthens Glasnost.
+- **#88 Marine Barracks Bombing** \* · 2 · Remove all US Influence from Lebanon and 2 more US Influence anywhere in the Middle East.
+- **#90 Glasnost** \* · 4 · USSR gains 2 VP and DEFCON improves by 1. With The Reformer in effect, the USSR also places Influence or Realigns with 4 Ops.
+- **#91 Ortega Elected in Nicaragua** \* · 2 · Remove all US Influence from Nicaragua; then a free USSR Coup (this card's Ops) in a country adjacent to Nicaragua.
+- **#93 Iran-Contra Scandal** \* · 2 · Rest of turn: US Realignment rolls −1.
 - **#95 Latin American Debt Crisis** · 2 · Unless the US at once discards a card worth 3+ Ops, the USSR doubles its Influence in 2 South American countries.
-- **#98 Aldrich Ames Remix*** · 3 · The US plays with its hand face up for the rest of the turn; the USSR discards one card of its choice from it.
-- **#99 Pershing II Deployed*** · 3 · USSR gains 1 VP; remove 1 US Influence from each of up to 3 Western European countries.
-- **#109 Yuri and Samantha*** · 2 · Rest of turn: the USSR gains 1 VP for each US Coup.
+- **#98 Aldrich Ames Remix** \* · 3 · The US plays with its hand face up for the rest of the turn; the USSR discards one card of its choice from it.
+- **#99 Pershing II Deployed** \* · 3 · USSR gains 1 VP; remove 1 US Influence from each of up to 3 Western European countries.
+- **#109 Yuri and Samantha** \* · 2 · Rest of turn: the USSR gains 1 VP for each US Coup.
 
 ### Neutral cards (either side)
 **Early War**
@@ -365,7 +365,7 @@ Format: **#id Title** · Ops · `*` removed after Event · `[U]` lasting effect.
 - **#2 Europe Scoring** · Scoring · Score Europe (Presence 3, Domination 7; Control of Europe wins the game; same bonuses as Asia).
 - **#3 Middle East Scoring** · Scoring · Score the Middle East (Presence 3, Domination 5, Control 7; +1 per Battleground; no superpower bonus).
 - **#6 The China Card** · 4 · The China Card: see §1 China Card.
-- **#18 Captured Nazi Scientist*** · 1 · The player's Space Race marker advances 1 box (not a Space Race attempt).
+- **#18 Captured Nazi Scientist** \* · 1 · The player's Space Race marker advances 1 box (not a Space Race attempt).
 - **#20 Olympic Games** · 2 · The opponent chooses: take part (both roll; the sponsor adds 2; higher roll gains 2 VP; re-roll ties) or boycott (DEFCON −1 and the sponsor conducts 4 Ops). At DEFCON 2 the boycott ends the game against the sponsor.
 - **#24 Indo-Pakistani War** · 2 · War: India or Pakistan attacks the other (player's choice). Roll, −1 per opponent-Controlled country adjacent to the target; 4–6: 2 VP and take over the opponent's Influence in the target. +2 Military Ops.
 - **#31 Red Scare/Purge** · 4 · Rest of turn: the opponent's cards are −1 Ops (min 1), also for cards they discard to Events or the Space Race.
@@ -375,12 +375,12 @@ Format: **#id Title** · Ops · `*` removed after Event · `[U]` lasting effect.
 **Mid War**
 - **#36 Brush War** · 3 · War: attack a country of Stability 1 or 2. Roll, −1 per adjacent enemy-Controlled country (an adjacent enemy superpower counts); 3–6: 1 VP and take over the opponent's Influence there. +3 Military Ops. Not against NATO-protected countries.
 - **#37 Central America Scoring** · Scoring · Score Central America (Presence 1, Domination 3, Control 5; +1 per Battleground; +1 per Controlled country adjacent to the enemy superpower).
-- **#38 Southeast Asia Scoring*** · Scoring · Score Southeast Asia: 1 VP per Controlled country (Burma, Laos/Cambodia, Vietnam, Malaysia, Indonesia, Philippines), 2 for Thailand. The only Scoring card removed after play; not scored separately at Final Scoring.
+- **#38 Southeast Asia Scoring** \* · Scoring · Score Southeast Asia: 1 VP per Controlled country (Burma, Laos/Cambodia, Vietnam, Malaysia, Indonesia, Philippines), 2 for Thailand. The only Scoring card removed after play; not scored separately at Final Scoring.
 - **#39 Arms Race** · 3 · If the Phasing Player has more Military Ops than the opponent: 1 VP, or 3 VP if it has also met its requirement.
-- **#40 Cuban Missile Crisis*** · 3 · DEFCON becomes 2. Rest of turn, any Coup by the opponent loses them the game. The USSR can end it by removing 2 of its Influence from Cuba; the US by removing 2 from W. Germany or Turkey.
-- **#43 SALT Negotiations*** · 3 · DEFCON improves by 2. Rest of turn: all Coups −1. The player may take one non-Scoring card from the discard pile (shown to the opponent).
+- **#40 Cuban Missile Crisis** \* · 3 · DEFCON becomes 2. Rest of turn, any Coup by the opponent loses them the game. The USSR can end it by removing 2 of its Influence from Cuba; the US by removing 2 from W. Germany or Turkey.
+- **#43 SALT Negotiations** \* · 3 · DEFCON improves by 2. Rest of turn: all Coups −1. The player may take one non-Scoring card from the discard pile (shown to the opponent).
 - **#45 Summit** · 1 · Both roll, +1 per Region each Dominates or Controls. The higher roll gains 2 VP and may move DEFCON 1 step either way. Ties: nothing.
-- **#46 How I Learned to Stop Worrying*** · 2 · The player sets DEFCON to any level 1–5 (1 loses for the Phasing Player) and counts 5 Military Ops for this turn.
+- **#46 How I Learned to Stop Worrying** \* · 2 · The player sets DEFCON to any level 1–5 (1 loses for the Phasing Player) and counts 5 Military Ops for this turn.
 - **#47 Junta** · 2 · Add 2 Influence in one Central or South American country, then make a free Coup or Realignment rolls (this card's Ops) in Central or South America.
 - **#49 Missile Envy** · 2 · Swap this card for the opponent's highest-Ops card (they choose among ties). If its Event is yours or neutral it happens now; if it is the opponent's, use its Ops without the Event. The opponent must play Missile Envy for Ops in their next round.
 - **#57 ABM Treaty** · 4 · DEFCON improves by 1, then the player conducts 4 Ops (not the Space Race).
@@ -391,8 +391,8 @@ Format: **#id Title** · Ops · `*` removed after Event · `[U]` lasting effect.
 
 **Late War**
 - **#92 Terrorism** · 2 · The opponent discards a random card (the US discards 2 if the USSR plays it with Iranian Hostage Crisis in effect). Events on discards do not happen.
-- **#100 Wargames*** · 4 · Only at DEFCON 2: the player may end the game at once, after giving the opponent 6 VP (no Final Scoring). Otherwise nothing happens; at DEFCON 3–5 the card stays in the game.
-- **#102 Iran-Iraq War*** · 2 · War: Iran or Iraq attacks the other (player's choice). Roll, −1 per enemy-Controlled country adjacent to the target; 4–6: 2 VP and take over the opponent's Influence there. +2 Military Ops.
+- **#100 Wargames** \* · 4 · Only at DEFCON 2: the player may end the game at once, after giving the opponent 6 VP (no Final Scoring). Otherwise nothing happens; at DEFCON 3–5 the card stays in the game.
+- **#102 Iran-Iraq War** \* · 2 · War: Iran or Iraq attacks the other (player's choice). Roll, −1 per enemy-Controlled country adjacent to the target; 4–6: 2 VP and take over the opponent's Influence there. +2 Military Ops.
 
 ---
 
@@ -610,7 +610,7 @@ Not yet designed: game plans built from the Stage 2 evidence, Alfy's strategic h
 
 Write this to `tsts.py` at the start of a game (Python 3, standard library only). The `effects` names in `game.json`: lasting `marshall, warsaw, nato, de_gaulle, willy_brandt, us_japan, formosan, camp_david, jp2, flower_power, evil_empire, iron_lady, north_sea_oil, reformer, tear_down, awacs, norad, iranian_hostage, shuttle, quagmire, bear_trap`; this turn `containment, brezhnev, vietnam_revolts, nuclear_subs, salt, yuri, iran_contra, nso_turn, u2`, plus `"red_scare": ["USSR"]` (the side whose cards are −1), `"lads": "US"` (who played Latin American Death Squads), `"chernobyl": "Europe"`, `"cmc": "USSR"` (who played Cuban Missile Crisis). Clear the this-turn effects at the end of each turn.
 
-Cross-check: `tssim xcheck 300 1 > xc.jsonl` in the simulator, then `python3 tsts.py xcheck xc.jsonl`: Control, Region and Southeast Asia scores, Scoring-card values, Final projection, rounds per turn, evaluation of both sides and the best Ops choice and value of every card agree on all 300 positions (18 Nov 2026).
+Cross-check: `tssim xcheck 300 1 > xc.jsonl` in the simulator, then `python3 tsts.py xcheck xc.jsonl`: Control, Region and Southeast Asia scores, Scoring-card values, Final projection, rounds per turn, evaluation of both sides and the best Ops choice and value of every card agree on all 300 positions (18 Nov 2026). The same file is in the repo as `skill/tsts.py`.
 
 ```python
 #!/usr/bin/env python3
