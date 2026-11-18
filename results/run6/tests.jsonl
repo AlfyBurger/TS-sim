@@ -1,0 +1,12 @@
+{"label": "NE1", "a": "core:ne=1", "b": "core", "seed0": 800000, "n": 500}
+{"label": "NE2", "a": "core:ne=2", "b": "core", "seed0": 800000, "n": 500}
+{"label": "NE3", "a": "core:ne=3", "b": "core", "seed0": 800000, "n": 500}
+{"label": "NE1R", "a": "core:ne=1,nc=0", "b": "core", "seed0": 800000, "n": 500}
+{"label": "NE2R", "a": "core:ne=2,nc=0", "b": "core", "seed0": 800000, "n": 500}
+{"label": "NE3R", "a": "core:ne=3,nc=0", "b": "core", "seed0": 800000, "n": 500}
+{"label": "FLAT2", "a": "core:ne=2,nt=0", "b": "core", "seed0": 800000, "n": 500}
+{"label": "FLAT2R", "a": "core:ne=2,nt=0,nc=0", "b": "core", "seed0": 800000, "n": 500}
+{"label": "CONFIRM_NE", "a": "BEST{NE1|NE2|NE3|NE1R|NE2R|NE3R|FLAT2|FLAT2R}", "b": "core", "seed0": 810000, "n": 1000}
+{"label": "HL_USSR", "a": "BEST{NE1|NE2|NE3|NE1R|NE2R|NE3R|FLAT2|FLAT2R},hl=2", "b": "BEST{NE1|NE2|NE3|NE1R|NE2R|NE3R|FLAT2|FLAT2R}", "seed0": 820000, "n": 1000}
+{"label": "SS_02", "a": "BEST{NE1|NE2|NE3|NE1R|NE2R|NE3R|FLAT2|FLAT2R},ss=0.2", "b": "BEST{NE1|NE2|NE3|NE1R|NE2R|NE3R|FLAT2|FLAT2R}", "seed0": 830000, "n": 1000}
+{"label": "SS_04", "a": "BEST{NE1|NE2|NE3|NE1R|NE2R|NE3R|FLAT2|FLAT2R},ss=0.4", "b": "BEST{NE1|NE2|NE3|NE1R|NE2R|NE3R|FLAT2|FLAT2R}", "seed0": 830000, "n": 1000}

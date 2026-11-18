@@ -7,6 +7,8 @@ use crate::types::*;
 
 pub struct Stats {
     pub scoring_plays: Vec<(u8, u8, u8, i32)>, // (turn, side, card, net VP for the player)
+    pub region_final: Option<[i32; 6]>,        // Final Scoring net per Region (+ = US), run 6
+    pub prep_paid: Vec<(u8, u8, u8, f64)>,     // (turn, side, card, core-evaluation gain) for own preparation-card Events, run 6
     pub china_plays: Vec<(u8, u8)>,           // (turn, side)
     pub space_attempts: Vec<(u8, u8, u8, bool)>, // (turn, side, card, card was opponent's Event)
     pub opp_events: Vec<(u8, u8, u8)>,        // (turn, side who played, card) opponent Event triggered by Ops play
@@ -23,7 +25,7 @@ pub struct Stats {
     pub cost_min: Vec<(u8, u8, f64)>,               // cost log (TSSIM_COSTLOG): cheapest moment of each held opponent card (side, card, cost)
     pub avoidable: Vec<(u8, u8, f64, f64)>,         // fired opponent Events: (side, card, cost when fired, cheapest cost while held)
 }
-impl Stats { pub fn new() -> Self { Stats { scoring_plays: vec![], china_plays: vec![], space_attempts: vec![], opp_events: vec![], coups: [0; 2], realigns: [0; 2], events_played: [0; 2], milops_penalty: [0; 2], defcon_loss_card: 0, vp_by_turn: vec![], ops_by_ar: [[(0, 0); 9]; 2], exits: [[0; 6]; 2], damage: vec![], defcon_loss: None, cost_min: vec![], avoidable: vec![] } } }
+impl Stats { pub fn new() -> Self { Stats { scoring_plays: vec![], region_final: None, prep_paid: vec![], china_plays: vec![], space_attempts: vec![], opp_events: vec![], coups: [0; 2], realigns: [0; 2], events_played: [0; 2], milops_penalty: [0; 2], defcon_loss_card: 0, vp_by_turn: vec![], ops_by_ar: [[(0, 0); 9]; 2], exits: [[0; 6]; 2], damage: vec![], defcon_loss: None, cost_min: vec![], avoidable: vec![] } } }
 
 pub struct Ctx<'a> {
     pub rng: Streams,
@@ -177,7 +179,9 @@ pub fn play_scoring(st: &mut State, cx: &mut Ctx, side: usize, card: u8) {
 
 pub fn final_scoring(st: &mut State, cx: &mut Ctx) {
     if let Some(w) = europe_controlled_by(st) { st.winner = w as i8; st.end_reason = END_EUROPE; return; }
-    for r in 0..6u8 { let (u, s) = region_score(st, r, None); st.vp += u - s; }
+    let mut rf = [0i32; 6];
+    for r in 0..6u8 { let (u, s) = region_score(st, r, None); st.vp += u - s; rf[r as usize] = u - s; }
+    if !cx.sim { cx.stats.region_final = Some(rf); }
     st.vp += if st.china == US as u8 { 1 } else { -1 };
     st.winner = if st.vp > 0 { US as i8 } else if st.vp < 0 { USSR as i8 } else { 2 };
     st.end_reason = END_FINAL;
@@ -396,7 +400,10 @@ pub fn play_event(st: &mut State, cx: &mut Ctx, player: usize, card: u8, headlin
     if info.scoring { play_scoring(st, cx, player, card); if card == 38 { st.removed.push(38); } else { st.discard.push(card); } return true; }
     let implementer = info.owner().unwrap_or(player);
     let prev = cx.current_card; cx.current_card = card;
+    let prep = !cx.sim && implementer == player && crate::search::is_prep(card);
+    let pre = if prep { crate::bot::eval(&crate::bot::Weights::core(), st, player) } else { 0.0 };
     let occurred = crate::events::event(st, cx, card, implementer, player, headline);
+    if prep && occurred && st.winner < 0 { let post = crate::bot::eval(&crate::bot::Weights::core(), st, player); cx.stats.prep_paid.push((st.turn, player as u8, card, post - pre)); }
     cx.current_card = prev;
     if occurred && !cx.sim { cx.stats.events_played[implementer] += 1; }
     crate::events::after_event(st, card, occurred);

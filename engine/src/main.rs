@@ -1,6 +1,7 @@
 mod agent;
 mod bot;
 mod data;
+mod importance;
 mod engine;
 mod events;
 mod rng;
@@ -100,9 +101,36 @@ fn spsa(label: &str, base: &str, params: &str, seed0: u64, iters: usize, threads
     std::fs::write(std::path::Path::new(outdir).join(format!("{}__{}.csv", label, seed0)), kv.join(",")).unwrap();
 }
 
+/// Run 6: a spec "BEST{L1|L2|...}[,k=v...]" becomes the A spec of the listed test with the highest score over all its
+/// result files in OUTDIR (or "core" if none scores above 0.5), followed by the extra settings.
+fn resolve_best(spec: &str, jobs_text: &str, outdir: &str) -> String {
+    let Some(rest) = spec.strip_prefix("BEST{") else { return spec.to_string() };
+    let (list, tail) = rest.split_once('}').expect("BEST{...}");
+    let mut best = ("core".to_string(), 0.5f64, String::from("none"));
+    for lab in list.split('|') {
+        let (mut s, mut n) = (0.0, 0.0);
+        if let Ok(rd) = std::fs::read_dir(outdir) { for e in rd.flatten() {
+            let name = e.file_name().to_string_lossy().to_string();
+            if name.starts_with(&format!("{}__", lab)) && name.ends_with(".csv") {
+                let t = std::fs::read_to_string(e.path()).unwrap_or_default();
+                for l in t.lines() { let f: Vec<&str> = l.split(',').collect(); if f.len() < 3 { continue; }
+                    let a_side: i64 = if f[1] == "0" { 0 } else { 1 }; let w: i64 = f[2].parse().unwrap_or(-1);
+                    s += if w == 2 { 0.5 } else if w == a_side { 1.0 } else { 0.0 }; n += 1.0; }
+            } } }
+        let sc = if n > 0.0 { s / n } else { 0.0 };
+        let a = jobs_text.lines().map(|l| l.trim_end_matches('\r').split('\t').collect::<Vec<&str>>()).find(|f| f.len() >= 5 && f[0] == lab).map(|f| f[1].to_string());
+        if let Some(a) = a { if sc > best.1 { best = (a, sc, lab.to_string()); } }
+    }
+    let tail = tail.trim_start_matches(',');
+    let out = if tail.is_empty() { best.0.clone() } else if best.0.contains(':') { format!("{},{}", best.0, tail) } else { format!("{}:{}", best.0, tail) };
+    let note = format!("{} -> {} (best: {} at {:.4})\n", spec, out, best.2, best.1);
+    use std::io::Write as _; if let Ok(mut f) = std::fs::OpenOptions::new().create(true).append(true).open(std::path::Path::new(outdir).join("resolved.txt")) { let _ = f.write_all(note.as_bytes()); }
+    out
+}
+
 fn run_pairs(a: &str, b: &str, n: usize, seed0: u64, threads: usize, handicap: i8, out: &str) {
     use std::sync::Mutex;
-    let results = Mutex::new(Vec::<(u64, usize, i8, i32, u8, u8)>::new());
+    let results = Mutex::new(Vec::<(u64, usize, i8, i32, u8, u8, String)>::new());
     let next = std::sync::atomic::AtomicUsize::new(0);
     std::thread::scope(|sc| {
         for _ in 0..threads {
@@ -112,8 +140,12 @@ fn run_pairs(a: &str, b: &str, n: usize, seed0: u64, threads: usize, handicap: i
                 let seed = seed0 + i as u64;
                 for us_is_a in [true, false] {
                     let (us, ussr) = if us_is_a { (a, b) } else { (b, a) };
-                    let (st, _s, _) = play_one(seed, us, ussr, handicap, false);
-                    results.lock().unwrap().push((seed, if us_is_a { 0 } else { 1 }, st.winner, st.vp, st.end_reason, st.turn));
+                    let (st, s, _) = play_one(seed, us, ussr, handicap, false);
+                    // run 6 record: Scoring cards (S turn card net+US), Final Scoring per Region (F r net+US), prep payoffs (P turn side card gain)
+                    let mut rec: Vec<String> = s.scoring_plays.iter().map(|&(t, sd, k, n)| format!("S{}:{}:{}", t, k, if sd == 0 { n } else { -n })).collect();
+                    if let Some(rf) = s.region_final { for (r, n) in rf.iter().enumerate() { rec.push(format!("F{}:{}", r, n)); } }
+                    for &(t, sd, k, g) in &s.prep_paid { rec.push(format!("P{}:{}:{}:{:.2}", t, sd, k, g)); }
+                    results.lock().unwrap().push((seed, if us_is_a { 0 } else { 1 }, st.winner, st.vp, st.end_reason, st.turn, rec.join(";")));
                 }
             });
         }
@@ -121,9 +153,9 @@ fn run_pairs(a: &str, b: &str, n: usize, seed0: u64, threads: usize, handicap: i
     let mut r = results.into_inner().unwrap();
     r.sort();
     let mut f = std::fs::File::create(out).unwrap();
-    for x in &r { writeln!(f, "{},{},{},{},{},{}", x.0, x.1, x.2, x.3, x.4, x.5).unwrap(); }
+    for x in &r { writeln!(f, "{},{},{},{},{},{},{}", x.0, x.1, x.2, x.3, x.4, x.5, x.6).unwrap(); }
     // A's score: win 1, draw 0.5
-    let score = |x: &(u64, usize, i8, i32, u8, u8)| { let a_side = if x.1 == 0 { US as i8 } else { USSR as i8 }; if x.2 == 2 { 0.5 } else if x.2 == a_side { 1.0 } else { 0.0 } };
+    let score = |x: &(u64, usize, i8, i32, u8, u8, String)| { let a_side = if x.1 == 0 { US as i8 } else { USSR as i8 }; if x.2 == 2 { 0.5 } else if x.2 == a_side { 1.0 } else { 0.0 } };
     let mut per_seed: std::collections::BTreeMap<u64, Vec<f64>> = Default::default();
     let (mut us_s, mut us_n, mut su_s, mut su_n) = (0.0, 0, 0.0, 0);
     for x in &r { let v = score(x); per_seed.entry(x.0).or_default().push(v); if x.1 == 0 { us_s += v; us_n += 1 } else { su_s += v; su_n += 1 } }
@@ -233,7 +265,9 @@ fn main() {
                         let tmp = out.with_extension("part");
                         let t = std::time::Instant::now();
                         if f[0].starts_with("SPSA") { spsa(&f[0], &f[1], &f[2], f[3].parse().unwrap(), f[4].parse().unwrap(), threads, &outdir, &jobs); }
-                        else { run_pairs(&f[1], &f[2], f[4].parse().unwrap(), f[3].parse().unwrap(), threads, 2, tmp.to_str().unwrap());
+                        else { let a = resolve_best(&f[1], &text, &outdir); let b = resolve_best(&f[2], &text, &outdir);
+                               if a != f[1] || b != f[2] { println!("{}: A = {}, B = {}", f[0], a, b); }
+                               run_pairs(&a, &b, f[4].parse().unwrap(), f[3].parse().unwrap(), threads, 2, tmp.to_str().unwrap());
                                std::fs::rename(&tmp, &out).unwrap(); }
                         done += 1;
                         println!("done {} seed {} in {:.0}s ({} blocks, {:.0} min so far)", f[0], f[3], t.elapsed().as_secs_f64(), done, t0.elapsed().as_secs_f64() / 60.0);

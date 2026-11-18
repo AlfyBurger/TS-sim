@@ -20,16 +20,17 @@ pub struct Weights {
     pub la: f64, pub tm: f64, pub sq: f64, pub hl: f64, pub ss: f64, pub km: f64, pub dfix: f64, pub tsb: f64,
     pub nc: f64, pub l2: f64, pub l2n: f64,
     pub evt: f64,
+    pub ne: f64, pub nt: f64,
 }
 impl Weights {
     pub fn core() -> Self {
         Weights { vp: 1.0, held: 0.9196, region_unseen: 0.3182, final_: 0.0, bg: 1.1783, europe_mult: 1.0, asia_mult: 1.0, access: 0.0,
             milops: 1.0961, squeeze: 0.0, trap: 3.0, china: 1.7139, bad: 0.3, space_ab: 0.5, inf: 0.05, auto_eu: 15.0, trapped: 3.0, h3: 0.0, h6: 0.0,
-            samples: 6.0, noise: 1e-6, final_from: 0.0, la: -1.0, tm: 1.0, sq: 0.4402, hl: 0.0, ss: 0.0, km: 0.0, dfix: 1.0, tsb: 1.0, nc: 1.0745, l2: 0.5, l2n: 4.0, evt: 0.0 }
+            samples: 6.0, noise: 1e-6, final_from: 0.0, la: -1.0, tm: 1.0, sq: 0.4402, hl: 0.0, ss: 0.0, km: 0.0, dfix: 1.0, tsb: 1.0, nc: 1.0745, l2: 0.5, l2n: 4.0, evt: 0.0, ne: 0.0, nt: 1.0 }
     }
     pub fn zero() -> Self {
         Weights { vp: 0.0, held: 0.0, region_unseen: 0.0, final_: 0.0, bg: 0.0, europe_mult: 1.0, asia_mult: 1.0, access: 0.0, milops: 0.0,
-            squeeze: 0.0, trap: 0.0, china: 0.0, bad: 0.0, space_ab: 0.0, inf: 0.0, auto_eu: 0.0, trapped: 0.0, h3: 0.0, h6: 0.0, samples: 1.0, noise: 1.0, final_from: 0.0, la: -1.0, tm: 0.0, sq: -1.0, hl: 0.0, ss: 0.0, km: 0.0, dfix: 0.0, tsb: 0.0, nc: 0.0, l2: 0.0, l2n: 4.0, evt: 0.0 }
+            squeeze: 0.0, trap: 0.0, china: 0.0, bad: 0.0, space_ab: 0.0, inf: 0.0, auto_eu: 0.0, trapped: 0.0, h3: 0.0, h6: 0.0, samples: 1.0, noise: 1.0, final_from: 0.0, la: -1.0, tm: 0.0, sq: -1.0, hl: 0.0, ss: 0.0, km: 0.0, dfix: 0.0, tsb: 0.0, nc: 0.0, l2: 0.0, l2n: 4.0, evt: 0.0, ne: 0.0, nt: 1.0 }
     }
     pub fn get(&self, k: &str) -> f64 {
         match k {
@@ -67,6 +68,8 @@ impl Weights {
             "l2" => self.l2,
             "l2n" => self.l2n,
             "evt" => self.evt,
+            "ne" => self.ne,
+            "nt" => self.nt,
             _ => panic!("unknown weight {k}"),
         }
     }
@@ -77,7 +80,7 @@ impl Weights {
             "milops" => self.milops = v, "squeeze" => self.squeeze = v, "trap" => self.trap = v, "china" => self.china = v,
             "bad" => self.bad = v, "space_ab" => self.space_ab = v, "inf" => self.inf = v, "auto_eu" => self.auto_eu = v, "trapped" => self.trapped = v,
             "h3" => self.h3 = v, "h6" => self.h6 = v, "samples" => self.samples = v, "noise" => self.noise = v, "final_from" => self.final_from = v,
-            "la" => self.la = v, "tm" => self.tm = v, "sq" => self.sq = v, "hl" => self.hl = v, "ss" => self.ss = v, "km" => self.km = v, "dfix" => self.dfix = v, "tsb" => self.tsb = v, "nc" => self.nc = v, "l2" => self.l2 = v, "l2n" => self.l2n = v, "evt" => self.evt = v,
+            "la" => self.la = v, "tm" => self.tm = v, "sq" => self.sq = v, "hl" => self.hl = v, "ss" => self.ss = v, "km" => self.km = v, "dfix" => self.dfix = v, "tsb" => self.tsb = v, "nc" => self.nc = v, "l2" => self.l2 = v, "l2n" => self.l2n = v, "evt" => self.evt = v, "ne" => self.ne = v, "nt" => self.nt = v,
             _ => panic!("unknown weight {k}"),
         }
     }
@@ -155,6 +158,11 @@ pub fn eval(w: &Weights, st: &State, me: usize) -> f64 {
             if ctrl[c] != o as i8 && st.inf[c][o] > 0 && short(o) == 1 { v -= w.nc * w.bg * m; }
         }
     }
+    // distance to Control (run 6; Red Sea v7 `ne`): importance x (decay^Ops I still need - decay^Ops they need).
+    // Ops needed include the extra Op per marker while the other side still Controls the country, and +1 with no own
+    // Influence there or next door (or next to my superpower). Table (nt=1): Alfy's attack/defend values, Europe attack
+    // decays 0.4 per Op; flat (nt=0): every country the table's mean, decay 0.5.
+    if w.ne != 0.0 { v += w.ne * dist_term(w, st, me, &ctrl); }
     // access
     for r in 0..6u8 {
         if r >= AFRICA && st.turn < 3 { continue; }
@@ -765,4 +773,27 @@ impl Agent for PrecheckAgent {
     fn realign_target(&mut self, st: &State, me: usize, t: &[usize], rng: &mut Streams) -> usize { self.base.realign_target(st, me, t, rng) }
     fn place_target(&mut self, st: &State, me: usize, t: &[usize], rng: &mut Streams) -> usize { self.base.place_target(st, me, t, rng) }
     fn remove_target(&mut self, st: &State, me: usize, t: &[usize], rng: &mut Streams) -> usize { self.base.remove_target(st, me, t, rng) }
+}
+
+/// Ops `a` still needs to Control country `c` (0 if it does).
+pub fn ops_to_control(st: &State, c: usize, a: usize, ctrl: &[i8]) -> i32 {
+    if ctrl[c] == a as i8 { return 0; }
+    let stb = st.stab(c) as i32; let (m, o) = (st.inf[c][a] as i32, st.inf[c][opp(a)] as i32);
+    let mut need = (stb - m).max(stb + o - m).max(0);
+    if ctrl[c] >= 0 { let brk = o - stb - m + 1; if brk > 0 { need += brk.min(need); } }
+    if m == 0 && !st.adj_to_sp(a, c) && !COUNTRIES[c].adj.iter().any(|&x| st.inf[x][a] > 0) { need += 1; }
+    need
+}
+
+pub fn dist_term(w: &Weights, st: &State, me: usize, ctrl: &[i8]) -> f64 {
+    let o = opp(me); let table = w.nt >= 0.5;
+    let mut t = 0.0;
+    for c in 0..NC {
+        let eu = COUNTRIES[c].region == EUROPE;
+        let (ia, id) = if table { (crate::importance::IMP_ATT[c], crate::importance::IMP_DEF[c]) } else { (crate::importance::IMP_FLAT, crate::importance::IMP_FLAT) };
+        let da = if table && eu { 0.4f64 } else { 0.5 };
+        if ctrl[c] != me as i8 { t += ia * da.powi(ops_to_control(st, c, me, ctrl).min(39)); }
+        if ctrl[c] != o as i8 { t -= id * 0.5f64.powi(ops_to_control(st, c, o, ctrl).min(39)); }
+    }
+    t
 }

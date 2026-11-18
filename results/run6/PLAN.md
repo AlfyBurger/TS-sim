@@ -14,3 +14,14 @@ Order of the job list: everything added today goes BEFORE the last item.
 LAST. Set-up values for preparation cards (`ss`): weights 0.2 and 0.4 on the current bot, plus the payoff check
    (realised Event value of preparation cards when played, as in Red Sea v5: +8-14% there).
 Not in run 6: hand plan and shaping (wait for the new Red Sea tests); Stage 3-5 items (later).
+
+## As launched (18 Nov 2026, 12:09 Amman, Alfy's PC, folder Game Dev\TS: tssim6.exe, run6_jobs.txt, out6\, status6.txt, RUN6_COMPLETE.txt)
+160 blocks of 50 deals (both sides), in this order:
+- A (80): NE1, NE2, NE3 (ne on top of the one-short credit), NE1R, NE2R, NE3R (ne replacing it: nc=0), FLAT2, FLAT2R (flat importance, ne=2),
+  each core:<variant> vs core, 500 deals, seeds 800000-800499, blocks interleaved.
+- CONFIRM_NE (20): BEST{all 8} vs core, fresh seeds 810000-810999 (the worker picks the screening variant with the highest score, or core if none > 50%; logged in out6\\resolved.txt).
+- HL_USSR (20): BEST,hl=2 vs BEST, seeds 820000-820999.
+- SS_02, SS_04 (40): BEST,ss=0.2 / 0.4 vs BEST, seeds 830000-830999 (last, as agreed).
+Every game line carries the Region record (Scoring cards and Final Scoring nets per Region) and the preparation-card payoffs.
+Decision rules (set before the data): adopt the confirmed distance-to-Control variant if its fresh-deal score minus margin > 50;
+Headline v2 (USSR) and set-up values likewise (score - margin > 50 against the adopted bot).

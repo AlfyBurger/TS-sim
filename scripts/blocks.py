@@ -68,7 +68,8 @@ def summarise(rundir, label):
         if fn.startswith(label + '__') and fn.endswith('.csv'):
             rows += [r.split(',') for r in _read(os.path.join(outdir, fn))]
     per, side, ends = {}, {0: [], 1: []}, [0] * 8
-    for seed, flag, win, vp, end, turn in rows:
+    for row in rows:
+        seed, flag, win, vp, end, turn = row[:6]
         a_side = 0 if flag == '0' else 1; w = int(win)
         v = 0.5 if w == 2 else (1.0 if w == a_side else 0.0)
         per.setdefault(int(seed), []).append(v); side[a_side].append(v); ends[int(end)] += 1
