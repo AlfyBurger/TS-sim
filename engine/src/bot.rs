@@ -20,17 +20,17 @@ pub struct Weights {
     pub la: f64, pub tm: f64, pub sq: f64, pub hl: f64, pub ss: f64, pub km: f64, pub dfix: f64, pub tsb: f64,
     pub nc: f64, pub l2: f64, pub l2n: f64,
     pub evt: f64,
-    pub ne: f64, pub nt: f64,
+    pub ne: f64, pub nt: f64, pub nv: f64,
 }
 impl Weights {
     pub fn core() -> Self {
         Weights { vp: 1.0, held: 0.9196, region_unseen: 0.3182, final_: 0.0, bg: 1.1783, europe_mult: 1.0, asia_mult: 1.0, access: 0.0,
             milops: 1.0961, squeeze: 0.0, trap: 3.0, china: 1.7139, bad: 0.3, space_ab: 0.5, inf: 0.05, auto_eu: 15.0, trapped: 3.0, h3: 0.0, h6: 0.0,
-            samples: 6.0, noise: 1e-6, final_from: 0.0, la: -1.0, tm: 1.0, sq: 0.4402, hl: 0.0, ss: 0.0, km: 0.0, dfix: 1.0, tsb: 1.0, nc: 1.0745, l2: 0.5, l2n: 4.0, evt: 0.0, ne: 0.0, nt: 1.0 }
+            samples: 6.0, noise: 1e-6, final_from: 0.0, la: -1.0, tm: 1.0, sq: 0.4402, hl: 0.0, ss: 0.0, km: 0.0, dfix: 1.0, tsb: 1.0, nc: 1.0745, l2: 0.5, l2n: 4.0, evt: 0.0, ne: 0.0, nt: 1.0, nv: 1.0 }
     }
     pub fn zero() -> Self {
         Weights { vp: 0.0, held: 0.0, region_unseen: 0.0, final_: 0.0, bg: 0.0, europe_mult: 1.0, asia_mult: 1.0, access: 0.0, milops: 0.0,
-            squeeze: 0.0, trap: 0.0, china: 0.0, bad: 0.0, space_ab: 0.0, inf: 0.0, auto_eu: 0.0, trapped: 0.0, h3: 0.0, h6: 0.0, samples: 1.0, noise: 1.0, final_from: 0.0, la: -1.0, tm: 0.0, sq: -1.0, hl: 0.0, ss: 0.0, km: 0.0, dfix: 0.0, tsb: 0.0, nc: 0.0, l2: 0.0, l2n: 4.0, evt: 0.0, ne: 0.0, nt: 1.0 }
+            squeeze: 0.0, trap: 0.0, china: 0.0, bad: 0.0, space_ab: 0.0, inf: 0.0, auto_eu: 0.0, trapped: 0.0, h3: 0.0, h6: 0.0, samples: 1.0, noise: 1.0, final_from: 0.0, la: -1.0, tm: 0.0, sq: -1.0, hl: 0.0, ss: 0.0, km: 0.0, dfix: 0.0, tsb: 0.0, nc: 0.0, l2: 0.0, l2n: 4.0, evt: 0.0, ne: 0.0, nt: 1.0, nv: 1.0 }
     }
     pub fn get(&self, k: &str) -> f64 {
         match k {
@@ -70,6 +70,7 @@ impl Weights {
             "evt" => self.evt,
             "ne" => self.ne,
             "nt" => self.nt,
+            "nv" => self.nv,
             _ => panic!("unknown weight {k}"),
         }
     }
@@ -80,7 +81,7 @@ impl Weights {
             "milops" => self.milops = v, "squeeze" => self.squeeze = v, "trap" => self.trap = v, "china" => self.china = v,
             "bad" => self.bad = v, "space_ab" => self.space_ab = v, "inf" => self.inf = v, "auto_eu" => self.auto_eu = v, "trapped" => self.trapped = v,
             "h3" => self.h3 = v, "h6" => self.h6 = v, "samples" => self.samples = v, "noise" => self.noise = v, "final_from" => self.final_from = v,
-            "la" => self.la = v, "tm" => self.tm = v, "sq" => self.sq = v, "hl" => self.hl = v, "ss" => self.ss = v, "km" => self.km = v, "dfix" => self.dfix = v, "tsb" => self.tsb = v, "nc" => self.nc = v, "l2" => self.l2 = v, "l2n" => self.l2n = v, "evt" => self.evt = v, "ne" => self.ne = v, "nt" => self.nt = v,
+            "la" => self.la = v, "tm" => self.tm = v, "sq" => self.sq = v, "hl" => self.hl = v, "ss" => self.ss = v, "km" => self.km = v, "dfix" => self.dfix = v, "tsb" => self.tsb = v, "nc" => self.nc = v, "l2" => self.l2 = v, "l2n" => self.l2n = v, "evt" => self.evt = v, "ne" => self.ne = v, "nt" => self.nt = v, "nv" => self.nv = v,
             _ => panic!("unknown weight {k}"),
         }
     }
@@ -792,8 +793,9 @@ pub fn dist_term(w: &Weights, st: &State, me: usize, ctrl: &[i8]) -> f64 {
         let eu = COUNTRIES[c].region == EUROPE;
         let (ia, id) = if table { (crate::importance::IMP_ATT[c], crate::importance::IMP_DEF[c]) } else { (crate::importance::IMP_FLAT, crate::importance::IMP_FLAT) };
         let da = if table && eu { 0.4f64 } else { 0.5 };
-        if ctrl[c] != me as i8 { t += ia * da.powi(ops_to_control(st, c, me, ctrl).min(39)); }
-        if ctrl[c] != o as i8 { t -= id * 0.5f64.powi(ops_to_control(st, c, o, ctrl).min(39)); }
+        // nv=1: Red Sea form (no credit once Controlled); nv=2: Control itself counts in full (need 0 -> 1.0)
+        if ctrl[c] != me as i8 { t += ia * da.powi(ops_to_control(st, c, me, ctrl).min(39)); } else if w.nv >= 1.5 { t += ia; }
+        if ctrl[c] != o as i8 { t -= id * 0.5f64.powi(ops_to_control(st, c, o, ctrl).min(39)); } else if w.nv >= 1.5 { t -= id; }
     }
     t
 }

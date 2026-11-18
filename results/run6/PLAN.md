@@ -25,3 +25,11 @@ Not in run 6: hand plan and shaping (wait for the new Red Sea tests); Stage 3-5 
 Every game line carries the Region record (Scoring cards and Final Scoring nets per Region) and the preparation-card payoffs.
 Decision rules (set before the data): adopt the confirmed distance-to-Control variant if its fresh-deal score minus margin > 50;
 Headline v2 (USSR) and set-up values likewise (score - margin > 50 against the adopted bot).
+
+## Second part ("6b"), 18 Nov 2026 (restarted 18:39 after an idle gap from 16:06)
+First screening: all 8 versions far below 50% (best NE1R 34.6, NE3 0.2). Cause: in the Red Sea form a Controlled country earns no
+credit (Red Sea values Control elsewhere; TS only for Battlegrounds), so the bot preferred staying one short and counted the
+opponent's Control as good. Fix `nv=2`: Control counts in full (need 0 -> 1.0). Inserted before the set-up values tests:
+V2_05, V2_1 (on top), V2_05R, V2_1R, V2_2R (replacing the one-short credit), V2F_1R (flat), 500 deals each, seeds 840000+;
+CONFIRM_V2: BEST{V2...} vs core, 1000 fresh deals, seeds 850000+. Program tssim6b.exe, job list run6b_jobs.txt, same out6\.
+CONFIRM_NE ran as core vs core (no version passed): it serves as the clean self-play record for the Region-by-side analysis.
