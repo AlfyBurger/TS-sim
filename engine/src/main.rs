@@ -8,6 +8,7 @@ mod search;
 mod state;
 mod tests;
 mod types;
+mod xcheck;
 
 use bot::make_agent;
 use data::*;
@@ -168,6 +169,10 @@ fn main() {
             let (st, _s, l) = play_one(seed, &us, &ussr, 2, true);
             for x in l.unwrap() { println!("{x}"); }
             println!("RESULT winner={} vp={} end={} turn={}", st.winner, st.vp, END_NAMES[st.end_reason as usize], st.turn);
+        }
+        "xcheck" => {
+            // tssim xcheck N seed: random positions with engine values, for the game skill helper cross-check.
+            xcheck::run(arg(2, "200").parse().unwrap(), arg(3, "1").parse().unwrap());
         }
         "diag" => {
             let n: u64 = arg(2, "20").parse().unwrap(); let seed0: u64 = arg(3, "5000").parse().unwrap(); let spec = arg(4, "core");
