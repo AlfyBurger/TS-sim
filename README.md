@@ -18,3 +18,8 @@ Card texts and publisher files (rulebooks, card images) are not stored here.
 
 - Run 4 onwards: tests are cut into 50-deal blocks shared by the cloud and Alfy's Mac (`scripts/blocks.py`, `scripts/cloud_loop.sh`); the Mac runs the same Rust engine in its Linux VM and gives identical results. Move-change pre-check: `tssim precheck A B N seed`. Cost log of opponent Events: `TSSIM_COSTLOG=1 tssim diag ...`.
 - Reports: every run report (`reports/*.pdf`) is also copied to Alfy's Mac folder `/Users/Alfy/Desktop/TS` (Alfy, 17 Nov 2026).
+
+## Default bot after run 5 (18 Nov 2026)
+Weights::core uses the SPSA-tuned weights from run 5 (region_unseen 0.3182, bg 1.1783, held 0.9196, milops 1.0961, nc 1.0745,
+china 1.7139, sq 0.4402); the run 4 bot is `core:region_unseen=0.25,bg=1,held=1,milops=1,nc=1,china=1.5,sq=0.5`.
+Report: reports/stage2_run5_report.pdf (chart: scripts/strength_chart.py).

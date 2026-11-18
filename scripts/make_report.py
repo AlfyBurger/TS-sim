@@ -5,7 +5,7 @@ from reportlab.lib.pagesizes import A4
 from reportlab.lib.units import cm
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, KeepTogether
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, KeepTogether, Image
 
 rdir, textfile, out = sys.argv[1:4]
 T = runpy.run_path(textfile)
@@ -55,6 +55,10 @@ for sec in T['SECTIONS']:
         recs = [r for r in recs if r['label'] in sec[2]] if sec[2] else recs
         story.append(table(result_rows(recs, T['VERDICTS']), [w * W for w in (0.2, 0.22, 0.13, 0.08, 0.09, 0.28)]))
         story.append(Spacer(1, 6))
+    elif kind == 'img':
+        from reportlab.lib.utils import ImageReader
+        iw, ih = ImageReader(sec[1]).getSize(); w = W * sec[2]
+        story.append(Image(sec[1], width=w, height=w * ih / iw)); story.append(Spacer(1, 6))
     elif kind == 'ends':
         recs = [r for f in sec[1] for r in load(f) if r['label'] in sec[2]]
         rows = [["Test"] + [e for e in ENDS[1:] if e != 'Cuban Missile Crisis'] + ["games"]]

@@ -23,9 +23,9 @@ pub struct Weights {
 }
 impl Weights {
     pub fn core() -> Self {
-        Weights { vp: 1.0, held: 1.0, region_unseen: 0.25, final_: 0.0, bg: 1.0, europe_mult: 1.0, asia_mult: 1.0, access: 0.0,
-            milops: 1.0, squeeze: 0.0, trap: 3.0, china: 1.5, bad: 0.3, space_ab: 0.5, inf: 0.05, auto_eu: 15.0, trapped: 3.0, h3: 0.0, h6: 0.0,
-            samples: 6.0, noise: 1e-6, final_from: 0.0, la: -1.0, tm: 1.0, sq: 0.5, hl: 0.0, ss: 0.0, km: 0.0, dfix: 1.0, tsb: 1.0, nc: 1.0, l2: 0.5, l2n: 4.0, evt: 0.0 }
+        Weights { vp: 1.0, held: 0.9196, region_unseen: 0.3182, final_: 0.0, bg: 1.1783, europe_mult: 1.0, asia_mult: 1.0, access: 0.0,
+            milops: 1.0961, squeeze: 0.0, trap: 3.0, china: 1.7139, bad: 0.3, space_ab: 0.5, inf: 0.05, auto_eu: 15.0, trapped: 3.0, h3: 0.0, h6: 0.0,
+            samples: 6.0, noise: 1e-6, final_from: 0.0, la: -1.0, tm: 1.0, sq: 0.4402, hl: 0.0, ss: 0.0, km: 0.0, dfix: 1.0, tsb: 1.0, nc: 1.0745, l2: 0.5, l2n: 4.0, evt: 0.0 }
     }
     pub fn zero() -> Self {
         Weights { vp: 0.0, held: 0.0, region_unseen: 0.0, final_: 0.0, bg: 0.0, europe_mult: 1.0, asia_mult: 1.0, access: 0.0, milops: 0.0,
