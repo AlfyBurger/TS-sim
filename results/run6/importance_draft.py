@@ -12,18 +12,18 @@ ADJ = {
  'Algeria': (0.1, 'hardest African Battleground to flip; linked to France'),
  'Greece': (0.2, '2-stability Mediterranean country: decides Europe Domination with the odd Battleground count'),
  'Turkey': (0.2, '2-stability Mediterranean country; US Influence there can cancel the Cuban Missile Crisis'),
- 'Spain/Portugal': (0.2, '2-stability Mediterranean country: decides Europe Domination'),
+ 'Spain/Portugal': (0.3, 'Alfy: protects France from being broken and denies the USSR a cheap path to Europe Domination'),
  'Jordan': (0.15, 'the usual US route into Iraq and Saudi Arabia; blunts Arab-Israeli War'),
  'Lebanon': (0.15, 'cheap US Presence in the Middle East; blunts Arab-Israeli War'),
  'Botswana': (0.25, 'the Realignment hub against Angola and South Africa'),
  'Laos/Cambodia': (0.1, 'blocks access between Southeast Asia and western Asia'),
  'Burma': (0.1, 'blocks access to India; Indo-Pakistani War modifier'),
- 'Malaysia': (0.0, 'stepping stone to Thailand'),
+ 'Malaysia': (0.25, 'Alfy: underrated; the stepping stone to Thailand (Southeast Asia and Asia)'),
  'Colombia': (0.1, 'base for realigning Venezuela'),
- 'Uruguay': (0.1, 'Realignment support against Argentina and Brazil'),
+ 'Uruguay': (0.3, 'Alfy: insurance policy; seals off Argentina; shield against Late War Realignments'),
  'Peru': (0.1, 'Realignment support against Chile'),
- 'Costa Rica': (0.15, 'the US base protecting Panama (stability 3)'),
- 'Morocco': (0.1, 'the only African non-Battleground with real stability (3): a safe country for Domination'),
+ 'Costa Rica': (0.45, 'Alfy: the most critical non-Battleground in Central America; only 3 Ops to Control; links or isolates Panama'),
+ 'Morocco': (0.25, 'Alfy: valued by top players; the only 3-stability non-Battleground in Africa, hard to Coup: an anchor in a volatile Region'),
  'Tunisia': (0.0, 'the other route into Libya'),
  'Taiwan': (0.1, 'Formosan Resolution can make it a Battleground'),
  'Venezuela': (0.1, 'most contested South American country (OPEC, hard to support from Colombia)'),
@@ -47,7 +47,10 @@ for n, c in m.items():
     if n in ADJ and ADJ[n][0]:
         v += ADJ[n][0]; why.append(f'{ADJ[n][1]} (+{ADJ[n][0]})')
     elif n in ADJ and ADJ[n][1]: why.append(ADJ[n][1])
-    rows.append(dict(country=n, region=reg, stab=c['stab'], bg='yes' if c['bg'] else '', imp=round(v, 2), why='; '.join(why)))
+    att, dfn = v, v
+    if reg == 'Europe': dfn = v * 1.3
+    if reg in ('Africa', 'South America'): att = v * 1.25
+    rows.append(dict(country=n, region=reg, stab=c['stab'], bg='yes' if c['bg'] else '', imp=round(v, 2), attack=round(att, 2), defend=round(dfn, 2), why='; '.join(why)))
 order = list(REGW)
 rows.sort(key=lambda r: (order.index(r['region']), -r['imp'], r['country']))
 with open('results/run6/importance_draft.csv', 'w', newline='') as f:

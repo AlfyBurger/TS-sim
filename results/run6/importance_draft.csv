@@ -1,85 +1,85 @@
-country,region,stab,bg,imp,why
-Poland,Europe,3,yes,1.7,"Battleground, Europe (1.5); next to the USSR: +1 VP for the US at each scoring if it Controls it (+0.2)"
-France,Europe,3,yes,1.6,"Battleground, Europe (1.5); decides Europe Domination; gateway to Algeria (+0.1)"
-W. Germany,Europe,4,yes,1.6,"Battleground, Europe (1.5); Blockade target; Willy Brandt; Tear Down This Wall (+0.1)"
-E. Germany,Europe,3,yes,1.5,"Battleground, Europe (1.5)"
-Italy,Europe,2,yes,1.5,"Battleground, Europe (1.5)"
-Spain/Portugal,Europe,2,,1.0,base 0.3 + 0.15 x 2 Battleground neighbours; link to another Region: Morocco (+0.2); 2-stability Mediterranean country: decides Europe Domination (+0.2)
-Austria,Europe,4,,0.75,base 0.3 + 0.15 x 3 Battleground neighbours
-Turkey,Europe,2,,0.7,base 0.3; link to another Region: Syria (+0.2); 2-stability Mediterranean country; US Influence there can cancel the Cuban Missile Crisis (+0.2)
-Greece,Europe,2,,0.65,base 0.3 + 0.15 x 1 Battleground neighbours; 2-stability Mediterranean country: decides Europe Domination with the odd Battleground count (+0.2)
-Czechoslovakia,Europe,3,,0.6,base 0.3 + 0.15 x 2 Battleground neighbours
-Canada,Europe,4,,0.5,base 0.3; next to the USA: +1 VP for the USSR at each scoring if it Controls it (+0.2)
-Finland,Europe,4,,0.5,base 0.3; next to the USSR: +1 VP for the US at each scoring if it Controls it (+0.2)
-Romania,Europe,3,,0.5,base 0.3; next to the USSR: +1 VP for the US at each scoring if it Controls it (+0.2)
-Benelux,Europe,3,,0.45,base 0.3 + 0.15 x 1 Battleground neighbours
-Denmark,Europe,3,,0.45,base 0.3 + 0.15 x 1 Battleground neighbours
-U.K.,Europe,5,,0.45,base 0.3 + 0.15 x 1 Battleground neighbours
-Yugoslavia,Europe,3,,0.45,base 0.3 + 0.15 x 1 Battleground neighbours
-Bulgaria,Europe,3,,0.3,base 0.3
-Hungary,Europe,3,,0.3,base 0.3
-Norway,Europe,4,,0.3,base 0.3
-Sweden,Europe,4,,0.3,base 0.3
-Thailand,Asia,2,yes,1.7,"Battleground, Asia (1.4); decides Southeast Asia Scoring (2 VP) as well as Asia (+0.3)"
-Japan,Asia,4,yes,1.6,"Battleground, Asia (1.4); next to the USA: +1 VP for the USSR at each scoring if it Controls it (+0.2)"
-N. Korea,Asia,3,yes,1.6,"Battleground, Asia (1.4); next to the USSR: +1 VP for the US at each scoring if it Controls it (+0.2)"
-India,Asia,3,yes,1.4,"Battleground, Asia (1.4)"
-Pakistan,Asia,2,yes,1.4,"Battleground, Asia (1.4)"
-S. Korea,Asia,3,yes,1.4,"Battleground, Asia (1.4)"
-Afghanistan,Asia,2,,1.0,base 0.3 + 0.15 x 2 Battleground neighbours; link to another Region: Iran (+0.2); next to the USSR: +1 VP for the US at each scoring if it Controls it (+0.2)
-Taiwan,Asia,3,,0.7,base 0.3 + 0.15 x 2 Battleground neighbours; Formosan Resolution can make it a Battleground (+0.1)
-Burma,Asia,2,,0.65,base 0.3 + 0.15 x 1 Battleground neighbours; Southeast Asia Scoring (+0.1); blocks access to India; Indo-Pakistani War modifier (+0.1)
-Laos/Cambodia,Asia,1,,0.65,base 0.3 + 0.15 x 1 Battleground neighbours; Southeast Asia Scoring (+0.1); blocks access between Southeast Asia and western Asia (+0.1)
-Malaysia,Asia,2,,0.55,base 0.3 + 0.15 x 1 Battleground neighbours; Southeast Asia Scoring (+0.1); stepping stone to Thailand
-Philippines,Asia,2,,0.55,base 0.3 + 0.15 x 1 Battleground neighbours; Southeast Asia Scoring (+0.1)
-Vietnam,Asia,1,,0.55,base 0.3 + 0.15 x 1 Battleground neighbours; Southeast Asia Scoring (+0.1)
-Indonesia,Asia,1,,0.4,base 0.3; Southeast Asia Scoring (+0.1)
-Australia,Asia,4,,0.3,base 0.3
-Egypt,Middle East,2,yes,1.3,"Battleground, Middle East (1.2); only Early War path to Libya; Sadat/Nasser swing it (+0.1)"
-Iran,Middle East,2,yes,1.3,"Battleground, Middle East (1.2); key opening target; links the Middle East to Asia (Afghanistan, Pakistan) (+0.1)"
-Iraq,Middle East,3,yes,1.2,"Battleground, Middle East (1.2)"
-Israel,Middle East,4,yes,1.2,"Battleground, Middle East (1.2)"
-Libya,Middle East,2,yes,1.2,"Battleground, Middle East (1.2)"
-Saudi Arabia,Middle East,3,yes,1.2,"Battleground, Middle East (1.2)"
-Jordan,Middle East,2,,0.9,base 0.3 + 0.15 x 3 Battleground neighbours; the usual US route into Iraq and Saudi Arabia; blunts Arab-Israeli War (+0.15)
-Gulf States,Middle East,3,,0.7,base 0.3 + 0.15 x 2 Battleground neighbours; OPEC (+0.1)
-Syria,Middle East,2,,0.65,base 0.3 + 0.15 x 1 Battleground neighbours; link to another Region: Turkey (+0.2)
-Lebanon,Middle East,1,,0.6,base 0.3 + 0.15 x 1 Battleground neighbours; cheap US Presence in the Middle East; blunts Arab-Israeli War (+0.15)
-Algeria,Africa,2,yes,1.3,"Battleground, Africa (1.2); hardest African Battleground to flip; linked to France (+0.1)"
-Angola,Africa,1,yes,1.2,"Battleground, Africa (1.2)"
-Nigeria,Africa,1,yes,1.2,"Battleground, Africa (1.2)"
-South Africa,Africa,3,yes,1.2,"Battleground, Africa (1.2)"
-Zaire,Africa,1,yes,1.2,"Battleground, Africa (1.2)"
-Botswana,Africa,2,,0.85,base 0.3 + 0.15 x 2 Battleground neighbours; the Realignment hub against Angola and South Africa (+0.25)
-Tunisia,Africa,2,,0.8,base 0.3 + 0.15 x 2 Battleground neighbours; link to another Region: Libya (+0.2); the other route into Libya
-Morocco,Africa,3,,0.75,base 0.3 + 0.15 x 1 Battleground neighbours; link to another Region: Spain/Portugal (+0.2); the only African non-Battleground with real stability (3): a safe country for Domination (+0.1)
-Sudan,Africa,1,,0.65,base 0.3 + 0.15 x 1 Battleground neighbours; link to another Region: Egypt (+0.2)
-Cameroon,Africa,1,,0.6,base 0.3 + 0.15 x 2 Battleground neighbours
-Saharan States,Africa,1,,0.6,base 0.3 + 0.15 x 2 Battleground neighbours
-Ivory Coast,Africa,2,,0.45,base 0.3 + 0.15 x 1 Battleground neighbours
-Zimbabwe,Africa,1,,0.45,base 0.3 + 0.15 x 1 Battleground neighbours
-Ethiopia,Africa,1,,0.3,base 0.3
-Kenya,Africa,2,,0.3,base 0.3
-SE African States,Africa,1,,0.3,base 0.3
-Somalia,Africa,2,,0.3,base 0.3
-West African States,Africa,2,,0.3,base 0.3
-Venezuela,South America,2,yes,1.3,"Battleground, South America (1.2); most contested South American country (OPEC, hard to support from Colombia) (+0.1)"
-Argentina,South America,2,yes,1.2,"Battleground, South America (1.2)"
-Brazil,South America,2,yes,1.2,"Battleground, South America (1.2)"
-Chile,South America,3,yes,1.2,"Battleground, South America (1.2)"
-Colombia,South America,1,,0.9,base 0.3 + 0.15 x 2 Battleground neighbours; link to another Region: Panama (+0.2); base for realigning Venezuela (+0.1)
-Uruguay,South America,2,,0.7,base 0.3 + 0.15 x 2 Battleground neighbours; Realignment support against Argentina and Brazil (+0.1)
-Peru,South America,2,,0.55,base 0.3 + 0.15 x 1 Battleground neighbours; Realignment support against Chile (+0.1)
-Paraguay,South America,2,,0.45,base 0.3 + 0.15 x 1 Battleground neighbours
-Bolivia,South America,2,,0.3,base 0.3
-Ecuador,South America,2,,0.3,base 0.3
-Cuba,Central America,3,yes,1.2,"Battleground, Central America (1.0); next to the USA: +1 VP for the USSR at each scoring if it Controls it (+0.2)"
-Mexico,Central America,2,yes,1.2,"Battleground, Central America (1.0); next to the USA: +1 VP for the USSR at each scoring if it Controls it (+0.2)"
-Panama,Central America,2,yes,1.0,"Battleground, Central America (1.0)"
-Costa Rica,Central America,3,,0.6,base 0.3 + 0.15 x 1 Battleground neighbours; the US base protecting Panama (stability 3) (+0.15)
-Guatemala,Central America,1,,0.45,base 0.3 + 0.15 x 1 Battleground neighbours
-Haiti,Central America,1,,0.45,base 0.3 + 0.15 x 1 Battleground neighbours
-Nicaragua,Central America,1,,0.45,base 0.3 + 0.15 x 1 Battleground neighbours
-Dominican Rep,Central America,1,,0.3,base 0.3
-El Salvador,Central America,1,,0.3,base 0.3
-Honduras,Central America,2,,0.3,base 0.3
+country,region,stab,bg,imp,attack,defend,why
+Poland,Europe,3,yes,1.7,1.7,2.21,"Battleground, Europe (1.5); next to the USSR: +1 VP for the US at each scoring if it Controls it (+0.2)"
+France,Europe,3,yes,1.6,1.6,2.08,"Battleground, Europe (1.5); decides Europe Domination; gateway to Algeria (+0.1)"
+W. Germany,Europe,4,yes,1.6,1.6,2.08,"Battleground, Europe (1.5); Blockade target; Willy Brandt; Tear Down This Wall (+0.1)"
+E. Germany,Europe,3,yes,1.5,1.5,1.95,"Battleground, Europe (1.5)"
+Italy,Europe,2,yes,1.5,1.5,1.95,"Battleground, Europe (1.5)"
+Spain/Portugal,Europe,2,,1.1,1.1,1.43,base 0.3 + 0.15 x 2 Battleground neighbours; link to another Region: Morocco (+0.2); Alfy: protects France from being broken and denies the USSR a cheap path to Europe Domination (+0.3)
+Austria,Europe,4,,0.75,0.75,0.98,base 0.3 + 0.15 x 3 Battleground neighbours
+Turkey,Europe,2,,0.7,0.7,0.91,base 0.3; link to another Region: Syria (+0.2); 2-stability Mediterranean country; US Influence there can cancel the Cuban Missile Crisis (+0.2)
+Greece,Europe,2,,0.65,0.65,0.84,base 0.3 + 0.15 x 1 Battleground neighbours; 2-stability Mediterranean country: decides Europe Domination with the odd Battleground count (+0.2)
+Czechoslovakia,Europe,3,,0.6,0.6,0.78,base 0.3 + 0.15 x 2 Battleground neighbours
+Canada,Europe,4,,0.5,0.5,0.65,base 0.3; next to the USA: +1 VP for the USSR at each scoring if it Controls it (+0.2)
+Finland,Europe,4,,0.5,0.5,0.65,base 0.3; next to the USSR: +1 VP for the US at each scoring if it Controls it (+0.2)
+Romania,Europe,3,,0.5,0.5,0.65,base 0.3; next to the USSR: +1 VP for the US at each scoring if it Controls it (+0.2)
+Benelux,Europe,3,,0.45,0.45,0.58,base 0.3 + 0.15 x 1 Battleground neighbours
+Denmark,Europe,3,,0.45,0.45,0.58,base 0.3 + 0.15 x 1 Battleground neighbours
+U.K.,Europe,5,,0.45,0.45,0.58,base 0.3 + 0.15 x 1 Battleground neighbours
+Yugoslavia,Europe,3,,0.45,0.45,0.58,base 0.3 + 0.15 x 1 Battleground neighbours
+Bulgaria,Europe,3,,0.3,0.3,0.39,base 0.3
+Hungary,Europe,3,,0.3,0.3,0.39,base 0.3
+Norway,Europe,4,,0.3,0.3,0.39,base 0.3
+Sweden,Europe,4,,0.3,0.3,0.39,base 0.3
+Thailand,Asia,2,yes,1.7,1.7,1.7,"Battleground, Asia (1.4); decides Southeast Asia Scoring (2 VP) as well as Asia (+0.3)"
+Japan,Asia,4,yes,1.6,1.6,1.6,"Battleground, Asia (1.4); next to the USA: +1 VP for the USSR at each scoring if it Controls it (+0.2)"
+N. Korea,Asia,3,yes,1.6,1.6,1.6,"Battleground, Asia (1.4); next to the USSR: +1 VP for the US at each scoring if it Controls it (+0.2)"
+India,Asia,3,yes,1.4,1.4,1.4,"Battleground, Asia (1.4)"
+Pakistan,Asia,2,yes,1.4,1.4,1.4,"Battleground, Asia (1.4)"
+S. Korea,Asia,3,yes,1.4,1.4,1.4,"Battleground, Asia (1.4)"
+Afghanistan,Asia,2,,1.0,1.0,1.0,base 0.3 + 0.15 x 2 Battleground neighbours; link to another Region: Iran (+0.2); next to the USSR: +1 VP for the US at each scoring if it Controls it (+0.2)
+Malaysia,Asia,2,,0.8,0.8,0.8,base 0.3 + 0.15 x 1 Battleground neighbours; Southeast Asia Scoring (+0.1); Alfy: underrated; the stepping stone to Thailand (Southeast Asia and Asia) (+0.25)
+Taiwan,Asia,3,,0.7,0.7,0.7,base 0.3 + 0.15 x 2 Battleground neighbours; Formosan Resolution can make it a Battleground (+0.1)
+Burma,Asia,2,,0.65,0.65,0.65,base 0.3 + 0.15 x 1 Battleground neighbours; Southeast Asia Scoring (+0.1); blocks access to India; Indo-Pakistani War modifier (+0.1)
+Laos/Cambodia,Asia,1,,0.65,0.65,0.65,base 0.3 + 0.15 x 1 Battleground neighbours; Southeast Asia Scoring (+0.1); blocks access between Southeast Asia and western Asia (+0.1)
+Philippines,Asia,2,,0.55,0.55,0.55,base 0.3 + 0.15 x 1 Battleground neighbours; Southeast Asia Scoring (+0.1)
+Vietnam,Asia,1,,0.55,0.55,0.55,base 0.3 + 0.15 x 1 Battleground neighbours; Southeast Asia Scoring (+0.1)
+Indonesia,Asia,1,,0.4,0.4,0.4,base 0.3; Southeast Asia Scoring (+0.1)
+Australia,Asia,4,,0.3,0.3,0.3,base 0.3
+Egypt,Middle East,2,yes,1.3,1.3,1.3,"Battleground, Middle East (1.2); only Early War path to Libya; Sadat/Nasser swing it (+0.1)"
+Iran,Middle East,2,yes,1.3,1.3,1.3,"Battleground, Middle East (1.2); key opening target; links the Middle East to Asia (Afghanistan, Pakistan) (+0.1)"
+Iraq,Middle East,3,yes,1.2,1.2,1.2,"Battleground, Middle East (1.2)"
+Israel,Middle East,4,yes,1.2,1.2,1.2,"Battleground, Middle East (1.2)"
+Libya,Middle East,2,yes,1.2,1.2,1.2,"Battleground, Middle East (1.2)"
+Saudi Arabia,Middle East,3,yes,1.2,1.2,1.2,"Battleground, Middle East (1.2)"
+Jordan,Middle East,2,,0.9,0.9,0.9,base 0.3 + 0.15 x 3 Battleground neighbours; the usual US route into Iraq and Saudi Arabia; blunts Arab-Israeli War (+0.15)
+Gulf States,Middle East,3,,0.7,0.7,0.7,base 0.3 + 0.15 x 2 Battleground neighbours; OPEC (+0.1)
+Syria,Middle East,2,,0.65,0.65,0.65,base 0.3 + 0.15 x 1 Battleground neighbours; link to another Region: Turkey (+0.2)
+Lebanon,Middle East,1,,0.6,0.6,0.6,base 0.3 + 0.15 x 1 Battleground neighbours; cheap US Presence in the Middle East; blunts Arab-Israeli War (+0.15)
+Algeria,Africa,2,yes,1.3,1.62,1.3,"Battleground, Africa (1.2); hardest African Battleground to flip; linked to France (+0.1)"
+Angola,Africa,1,yes,1.2,1.5,1.2,"Battleground, Africa (1.2)"
+Nigeria,Africa,1,yes,1.2,1.5,1.2,"Battleground, Africa (1.2)"
+South Africa,Africa,3,yes,1.2,1.5,1.2,"Battleground, Africa (1.2)"
+Zaire,Africa,1,yes,1.2,1.5,1.2,"Battleground, Africa (1.2)"
+Morocco,Africa,3,,0.9,1.12,0.9,"base 0.3 + 0.15 x 1 Battleground neighbours; link to another Region: Spain/Portugal (+0.2); Alfy: valued by top players; the only 3-stability non-Battleground in Africa, hard to Coup: an anchor in a volatile Region (+0.25)"
+Botswana,Africa,2,,0.85,1.06,0.85,base 0.3 + 0.15 x 2 Battleground neighbours; the Realignment hub against Angola and South Africa (+0.25)
+Tunisia,Africa,2,,0.8,1.0,0.8,base 0.3 + 0.15 x 2 Battleground neighbours; link to another Region: Libya (+0.2); the other route into Libya
+Sudan,Africa,1,,0.65,0.81,0.65,base 0.3 + 0.15 x 1 Battleground neighbours; link to another Region: Egypt (+0.2)
+Cameroon,Africa,1,,0.6,0.75,0.6,base 0.3 + 0.15 x 2 Battleground neighbours
+Saharan States,Africa,1,,0.6,0.75,0.6,base 0.3 + 0.15 x 2 Battleground neighbours
+Ivory Coast,Africa,2,,0.45,0.56,0.45,base 0.3 + 0.15 x 1 Battleground neighbours
+Zimbabwe,Africa,1,,0.45,0.56,0.45,base 0.3 + 0.15 x 1 Battleground neighbours
+Ethiopia,Africa,1,,0.3,0.38,0.3,base 0.3
+Kenya,Africa,2,,0.3,0.38,0.3,base 0.3
+SE African States,Africa,1,,0.3,0.38,0.3,base 0.3
+Somalia,Africa,2,,0.3,0.38,0.3,base 0.3
+West African States,Africa,2,,0.3,0.38,0.3,base 0.3
+Venezuela,South America,2,yes,1.3,1.62,1.3,"Battleground, South America (1.2); most contested South American country (OPEC, hard to support from Colombia) (+0.1)"
+Argentina,South America,2,yes,1.2,1.5,1.2,"Battleground, South America (1.2)"
+Brazil,South America,2,yes,1.2,1.5,1.2,"Battleground, South America (1.2)"
+Chile,South America,3,yes,1.2,1.5,1.2,"Battleground, South America (1.2)"
+Colombia,South America,1,,0.9,1.12,0.9,base 0.3 + 0.15 x 2 Battleground neighbours; link to another Region: Panama (+0.2); base for realigning Venezuela (+0.1)
+Uruguay,South America,2,,0.9,1.12,0.9,base 0.3 + 0.15 x 2 Battleground neighbours; Alfy: insurance policy; seals off Argentina; shield against Late War Realignments (+0.3)
+Peru,South America,2,,0.55,0.69,0.55,base 0.3 + 0.15 x 1 Battleground neighbours; Realignment support against Chile (+0.1)
+Paraguay,South America,2,,0.45,0.56,0.45,base 0.3 + 0.15 x 1 Battleground neighbours
+Bolivia,South America,2,,0.3,0.38,0.3,base 0.3
+Ecuador,South America,2,,0.3,0.38,0.3,base 0.3
+Cuba,Central America,3,yes,1.2,1.2,1.2,"Battleground, Central America (1.0); next to the USA: +1 VP for the USSR at each scoring if it Controls it (+0.2)"
+Mexico,Central America,2,yes,1.2,1.2,1.2,"Battleground, Central America (1.0); next to the USA: +1 VP for the USSR at each scoring if it Controls it (+0.2)"
+Panama,Central America,2,yes,1.0,1.0,1.0,"Battleground, Central America (1.0)"
+Costa Rica,Central America,3,,0.9,0.9,0.9,base 0.3 + 0.15 x 1 Battleground neighbours; Alfy: the most critical non-Battleground in Central America; only 3 Ops to Control; links or isolates Panama (+0.45)
+Guatemala,Central America,1,,0.45,0.45,0.45,base 0.3 + 0.15 x 1 Battleground neighbours
+Haiti,Central America,1,,0.45,0.45,0.45,base 0.3 + 0.15 x 1 Battleground neighbours
+Nicaragua,Central America,1,,0.45,0.45,0.45,base 0.3 + 0.15 x 1 Battleground neighbours
+Dominican Rep,Central America,1,,0.3,0.3,0.3,base 0.3
+El Salvador,Central America,1,,0.3,0.3,0.3,base 0.3
+Honduras,Central America,2,,0.3,0.3,0.3,base 0.3
