@@ -7,7 +7,7 @@ description: "Rules, map, all 110 cards, errata, house rulings, the tested move-
 
 Two-player card-driven game of the Cold War, 1945–1989: the US against the USSR on a world map, 10 turns, 110 cards. **Scope (Alfy, 16 Nov 2026):** 2026 Hall of Fame (HoF) rules; base game with all 110 cards (the former optional cards 104–110 are now standard). Out of scope: the Chinese Civil War variant, Turn Zero, the Late War and other scenarios, the alternate Space Race track, promotional cards. Not to be confused with the separate game *Twilight Struggle: Red Sea* (own skill).
 
-**Version:** first version, 18 Nov 2026 (Stage 1 rules + Stage 2 play procedure, tested in 5 simulator runs). Stage 3 (game plans, difficulty levels, advisor) and Stage 4 (session specification) are still to come.
+**Version:** v2, 19 Nov 2026 (Stage 1 rules + Stage 2 play procedure, tested in 6 simulator runs; v2 adds distance to Control). Stage 3 (game plans, difficulty levels, advisor) and Stage 4 (session specification) are still to come.
 
 **Sources:**
 - 2026 HoF Rulebook (24 pp.) and Background Book (48 pp., including a 3-turn example of play, checked with no errors found). Rule numbers in brackets point to the HoF Rulebook.
@@ -440,7 +440,7 @@ Format: **#id Title** · `*` removed after Event · `[U]` lasting effect · Ops.
 
 ## 6. Playing: move-by-move decisions
 
-This is the procedure of the simulator's best bot after Stage 2 run 5 (18 Nov 2026), written so I can apply it at the table. Each rule below was tested in simulation (1,000 deals per side unless stated, margins 95%); the evidence is given where it matters. How the bot grew, run by run: run 1 removed a harmful Final Scoring projection (56.8% vs the first bot); run 2 added card sequencing and Scoring timing (60% vs run 1); run 3 the DEFCON limits (DEFCON losses 19 → 1 in 400 games); run 4 near-Control credit and a two-move look-ahead (95% vs run 3); run 5 tuned the weights (52.5% vs run 4).
+This is the procedure of the simulator's best bot after Stage 2 run 6 (19 Nov 2026), written so I can apply it at the table. Each rule below was tested in simulation (1,000 deals per side unless stated, margins 95%); the evidence is given where it matters. How the bot grew, run by run: run 1 removed a harmful Final Scoring projection (56.8% vs the first bot); run 2 added card sequencing and Scoring timing (60% vs run 1); run 3 the DEFCON limits (DEFCON losses 19 → 1 in 400 games); run 4 near-Control credit and a two-move look-ahead (95% vs run 3); run 5 tuned the weights (52.5% vs run 4); run 6 added distance to Control (59.3% vs run 5).
 
 ### 6.1 Tools
 - At the start of a game, write the helper script from §11 to `tsts.py` and create the state: `python3 tsts.py init game.json <MY SIDE> 2` (the last number is the US handicap). Add the free setup Influence with `add`.
@@ -486,13 +486,14 @@ Do these steps in order every time.
 
 **Step 5: Evaluate.** The bot's evaluation, from my side (`eval` shows the terms):
 
-| Term | Weight (run 5) | What it values |
+| Term | Weight (run 6) | What it values |
 |---|---|---|
 | VP | 1 | current VP |
 | Held Scoring card | 0.92 × its current score | a Scoring card in my hand is worth (almost) exactly what it scores now |
 | Region standing | 0.32 × score | each Region whose Scoring card is still unseen (not removed), at its score if scored now; Southeast Asia while #38 is live |
 | Battlegrounds | 1.18 each | Controlled Battlegrounds (+ mine, − theirs) |
 | Near-Control | 1.07 × 1.18 each | a Battleground where a side has Influence, does not Control, and one more Influence would give Control (+ mine, − theirs) |
+| Distance to Control | 1 × importance × decay^Ops | every country (84): + attack importance × 0.5^(Ops I still need to Control it) (0.4^ in Europe), − defend importance × 0.5^(Ops they need); a Controlled country counts in full (+ mine, − theirs). Ops needed include breaking the other side's Control and +1 with no Influence there or next door. Importance: Alfy's table (§11 `IMP_ATT`, `IMP_DEF`) |
 | Military Ops | 1.10 per missing point | my shortfall (−) and theirs (+), weighted up as the turn goes on |
 | China Card | 1.71 (0.6 of it face down) | holding it |
 | Europe Control | 15 | Control of Europe (an automatic win when scored) |
@@ -502,7 +503,7 @@ Do these steps in order every time.
 | Space Race abilities | 0.5 each | abilities held |
 | Influence | 0.05 per point of difference | total Influence |
 
-Evidence: a projection of Final Scoring was **harmful** (removed in run 1; also harmful from turn 8 in run 2, neutral from turn 9–10). Valuing Region standing, Battlegrounds, near-Control, the held Scoring card and Military Ops are essential (removing any of them collapses the bot). Removing the five small terms together (DEFCON traps, Quagmire, liabilities, Influence, Space abilities) cost 5 points (run 5), so they stay.
+Evidence: a projection of Final Scoring was **harmful** (removed in run 1; also harmful from turn 8 in run 2, neutral from turn 9–10). Valuing Region standing, Battlegrounds, near-Control, the held Scoring card and Military Ops are essential (removing any of them collapses the bot). Removing the five small terms together (DEFCON traps, Quagmire, liabilities, Influence, Space abilities) cost 5 points (run 5), so they stay. Distance to Control (run 6): 59.3 ± 2.0 on 1,000 fresh deals; it works only **on top of** near-Control (replacing it: 25–28%), with Alfy's importance table (flat importance, replacing near-Control: 10%), and only when a Controlled country counts in full (the first form, with no credit once Controlled, made the bot stay one short: 0–35%). Headline v2 for the USSR was neutral (49.0 ± 2.0, run 6).
 
 **Step 6: Look ahead.**
 - **Opponent's reply:** for my 3 best candidates, ask what the opponent's best reply is with a typical 2–3 Ops card and any Events still live (unseen pool in `report`). Drop a candidate that hands them a big Coup, a Battleground swing before a Scoring card, Europe Control or 20 VP.
@@ -610,7 +611,7 @@ Not yet designed: game plans built from the Stage 2 evidence, Alfy's strategic h
 
 Write this to `tsts.py` at the start of a game (Python 3, standard library only). The `effects` names in `game.json`: lasting `marshall, warsaw, nato, de_gaulle, willy_brandt, us_japan, formosan, camp_david, jp2, flower_power, evil_empire, iron_lady, north_sea_oil, reformer, tear_down, awacs, norad, iranian_hostage, shuttle, quagmire, bear_trap`; this turn `containment, brezhnev, vietnam_revolts, nuclear_subs, salt, yuri, iran_contra, nso_turn, u2`, plus `"red_scare": ["USSR"]` (the side whose cards are −1), `"lads": "US"` (who played Latin American Death Squads), `"chernobyl": "Europe"`, `"cmc": "USSR"` (who played Cuban Missile Crisis). Clear the this-turn effects at the end of each turn.
 
-Cross-check: `tssim xcheck 300 1 > xc.jsonl` in the simulator, then `python3 tsts.py xcheck xc.jsonl`: Control, Region and Southeast Asia scores, Scoring-card values, Final projection, rounds per turn, evaluation of both sides and the best Ops choice and value of every card agree on all 300 positions (18 Nov 2026). The same file is in the repo as `skill/tsts.py`.
+Cross-check: `tssim xcheck 300 1 > xc.jsonl` in the simulator, then `python3 tsts.py xcheck xc.jsonl`: Control, Region and Southeast Asia scores, Scoring-card values, Final projection, rounds per turn, evaluation of both sides and the best Ops choice and value of every card agree on all 300 positions (19 Nov 2026, run 6 bot). The same file is in the repo as `skill/tsts.py`.
 
 ```python
 #!/usr/bin/env python3
@@ -865,10 +866,15 @@ REGION_OF_SCORING = {1: ASIA, 2: EUROPE, 3: MIDEAST, 37: CENTAM, 79: AFRICA, 81:
 SPACE = [(0, 0, 0, 0), (2, 3, 2, 1), (2, 4, 0, 0), (2, 3, 2, 0), (2, 4, 0, 0), (3, 3, 3, 1), (3, 4, 0, 0), (3, 3, 4, 2), (4, 2, 2, 0)]
 SPACE_NAMES = ["Start", "Earth Satellite", "Animal in Space", "Man in Space", "Man in Earth Orbit", "Lunar Orbit",
                "Eagle/Bear has Landed", "Space Shuttle", "Space Station"]
-# Evaluation weights: identical to the simulator's default bot after Stage 2 run 5 (Weights::core).
+# Evaluation weights: identical to the simulator's default bot after Stage 2 run 6 (Weights::core; run 6 added distance to Control, ne=1, nv=2).
 BASE = dict(vp=1.0, held=0.9196, region_unseen=0.3182, final_=0.0, final_from=0.0, bg=1.1783, europe_mult=1.0, asia_mult=1.0,
             access=0.0, milops=1.0961, squeeze=0.0, trap=3.0, china=1.7139, bad=0.3, space_ab=0.5, inf=0.05, auto_eu=15.0,
-            trapped=3.0, h3=0.0, nc=1.0745)
+            trapped=3.0, h3=0.0, nc=1.0745, ne=1.0, nt=1.0, nv=2.0)
+# Country importance for distance-to-Control (Alfy's table, 18 Nov 2026; same order as COUNTRY_TABLE; from engine/src/importance.rs).
+IMP_ATT = [0.75, 0.45, 0.3, 0.5, 0.6, 0.45, 1.5, 0.5, 1.6, 0.65, 0.3, 1.5, 0.3, 1.7, 0.5, 1.1, 0.3, 0.7, 0.45, 1.6, 0.45, 1.0, 0.3, 0.65, 1.4, 0.4, 1.6, 0.65, 0.8, 1.6, 1.4, 0.55, 1.4, 0.7, 1.7, 0.55, 1.3, 0.7, 1.3, 1.2, 1.2, 0.9, 0.6, 1.2, 1.2, 0.65, 1.62, 1.5, 1.06, 0.75, 0.38, 0.56, 0.38, 1.12, 1.5, 0.38, 0.75, 0.38, 1.5, 0.81, 1.0, 0.38, 1.5, 0.56, 0.9, 1.2, 0.3, 0.3, 0.45, 0.45, 0.3, 1.2, 0.45, 1.0, 1.5, 0.38, 1.5, 1.5, 1.12, 0.38, 0.56, 0.69, 1.12, 1.62]
+IMP_DEF = [0.98, 0.58, 0.39, 0.65, 0.78, 0.58, 1.95, 0.65, 2.08, 0.84, 0.39, 1.95, 0.39, 2.21, 0.65, 1.43, 0.39, 0.91, 0.58, 2.08, 0.58, 1.0, 0.3, 0.65, 1.4, 0.4, 1.6, 0.65, 0.8, 1.6, 1.4, 0.55, 1.4, 0.7, 1.7, 0.55, 1.3, 0.7, 1.3, 1.2, 1.2, 0.9, 0.6, 1.2, 1.2, 0.65, 1.3, 1.2, 0.85, 0.6, 0.3, 0.45, 0.3, 0.9, 1.2, 0.3, 0.6, 0.3, 1.2, 0.65, 0.8, 0.3, 1.2, 0.45, 0.9, 1.2, 0.3, 0.3, 0.45, 0.45, 0.3, 1.2, 0.45, 1.0, 1.2, 0.3, 1.2, 1.2, 0.9, 0.3, 0.45, 0.55, 0.9, 1.3]
+IMP_FLAT = 0.8806
+
 FLAGS = ["marshall", "warsaw", "nato", "de_gaulle", "willy_brandt", "us_japan", "formosan", "camp_david", "jp2", "flower_power",
          "evil_empire", "iron_lady", "north_sea_oil", "reformer", "tear_down", "awacs", "norad", "iranian_hostage", "shuttle",
          "quagmire", "bear_trap", "containment", "brezhnev", "vietnam_revolts", "nuclear_subs", "salt", "yuri", "iran_contra",
@@ -998,6 +1004,31 @@ def trap_for(holder, k):
     if o == USSR: return holder == US and k in (50, 62, 91)
     return False
 
+def ops_to_control(st, c, a, ctrl):
+    """Ops side `a` still needs to Control country c (0 if it does): breaking the other side's Control costs extra,
+    +1 with no own Influence there or next door (or next to the own superpower)."""
+    if ctrl[c] == a: return 0
+    stb = C[c]["stab"]; m, o = st.inf[c][a], st.inf[c][opp(a)]
+    need = max(stb - m, stb + o - m, 0)
+    if ctrl[c] >= 0:
+        brk = o - stb - m + 1
+        if brk > 0: need += min(brk, need)
+    if m == 0 and not st.adj_sp(a, c) and not any(st.inf[x][a] > 0 for x in C[c]["adj"]): need += 1
+    return need
+
+def dist_term(w, st, me, ctrl):
+    """Distance to Control: sum of attack importance x d^(Ops I need) - defend importance x 0.5^(Ops they need)."""
+    o = opp(me); table = w["nt"] >= 0.5; t = 0.0
+    for c in range(NC):
+        eu = C[c]["region"] == EUROPE
+        ia, idf = (IMP_ATT[c], IMP_DEF[c]) if table else (IMP_FLAT, IMP_FLAT)
+        da = 0.4 if (table and eu) else 0.5
+        if ctrl[c] != me: t += ia * da ** min(ops_to_control(st, c, me, ctrl), 39)
+        elif w["nv"] >= 1.5: t += ia
+        if ctrl[c] != o: t -= idf * 0.5 ** min(ops_to_control(st, c, o, ctrl), 39)
+        elif w["nv"] >= 1.5: t -= idf
+    return t
+
 def evaluate(w, st, me, parts=None):
     def add(name, x):
         if parts is not None: parts[name] = parts.get(name, 0.0) + x
@@ -1034,6 +1065,8 @@ def evaluate(w, st, me, parts=None):
             def short(a): x, y = st.inf[c][a], st.inf[c][opp(a)]; return max(stb - x, stb + y - x)
             if ctrl[c] != me and st.inf[c][me] > 0 and short(me) == 1: v += add("near-Control", w["nc"] * w["bg"] * mult(c))
             if ctrl[c] != o and st.inf[c][o] > 0 and short(o) == 1: v += add("near-Control", -w["nc"] * w["bg"] * mult(c))
+    if w.get("ne", 0.0) != 0:
+        v += add("distance to Control", w["ne"] * dist_term(w, st, me, ctrl))
     if w["access"]:
         for r in range(6):
             if r >= AFRICA and st.turn < 3: continue

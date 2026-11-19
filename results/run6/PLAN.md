@@ -42,3 +42,10 @@ CONFIRM_NE ran as core vs core (no version passed): it serves as the clean self-
 - Prepared for the wrap-up: `scripts/region_record.py` (Region-by-side record; `--self` for self-play),
   `scripts/prep_payoff.py` (preparation-card payoffs, bot A vs bot B), and the distance-to-Control port in `skill/tsts.py`
   (`ops_to_control`, `dist_term`, IMP_ATT/IMP_DEF; off while `ne`=0). Cross-check with a test build (core ne=1, nv=2): 300 positions, 0 differences.
+
+## CONFIRM_V2 and adoption (19 Nov 2026, 05:45 Amman; 211/240 blocks)
+- V2 screening (500 deals each): V2_05 62.1 ± 2.7, V2_1 62.2 ± 2.7, V2_05R 26.2, V2_1R 27.4, V2_2R 25.1, V2F_1R 10.5. BEST -> core:ne=1,nv=2 (V2_1).
+- CONFIRM_V2 (1000 fresh deals): **59.3 ± 2.0** (as US 53.4, as USSR 65.2) -> 57.3 > 50: **adopted**. `Weights::core` now ne=1, nv=2;
+  helper BASE likewise; xcheck 300 positions, 0 differences. SS_02/SS_04 still run on the run-5 bot (BEST{NE...} = core of run 5);
+  if one passes it is adopted on top and needs a confirmation on the new bot in run 7.
+- Since 23:00 the Red Sea v8 run shares the PC: ne blocks ~16 min, core blocks ~4.3 min.

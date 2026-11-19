@@ -250,10 +250,10 @@ REGION_OF_SCORING = {1: ASIA, 2: EUROPE, 3: MIDEAST, 37: CENTAM, 79: AFRICA, 81:
 SPACE = [(0, 0, 0, 0), (2, 3, 2, 1), (2, 4, 0, 0), (2, 3, 2, 0), (2, 4, 0, 0), (3, 3, 3, 1), (3, 4, 0, 0), (3, 3, 4, 2), (4, 2, 2, 0)]
 SPACE_NAMES = ["Start", "Earth Satellite", "Animal in Space", "Man in Space", "Man in Earth Orbit", "Lunar Orbit",
                "Eagle/Bear has Landed", "Space Shuttle", "Space Station"]
-# Evaluation weights: identical to the simulator's default bot after Stage 2 run 5 (Weights::core).
+# Evaluation weights: identical to the simulator's default bot after Stage 2 run 6 (Weights::core; run 6 added distance to Control, ne=1, nv=2).
 BASE = dict(vp=1.0, held=0.9196, region_unseen=0.3182, final_=0.0, final_from=0.0, bg=1.1783, europe_mult=1.0, asia_mult=1.0,
             access=0.0, milops=1.0961, squeeze=0.0, trap=3.0, china=1.7139, bad=0.3, space_ab=0.5, inf=0.05, auto_eu=15.0,
-            trapped=3.0, h3=0.0, nc=1.0745, ne=0.0, nt=1.0, nv=1.0)
+            trapped=3.0, h3=0.0, nc=1.0745, ne=1.0, nt=1.0, nv=2.0)
 # Country importance for distance-to-Control (Alfy's table, 18 Nov 2026; same order as COUNTRY_TABLE; from engine/src/importance.rs).
 IMP_ATT = [0.75, 0.45, 0.3, 0.5, 0.6, 0.45, 1.5, 0.5, 1.6, 0.65, 0.3, 1.5, 0.3, 1.7, 0.5, 1.1, 0.3, 0.7, 0.45, 1.6, 0.45, 1.0, 0.3, 0.65, 1.4, 0.4, 1.6, 0.65, 0.8, 1.6, 1.4, 0.55, 1.4, 0.7, 1.7, 0.55, 1.3, 0.7, 1.3, 1.2, 1.2, 0.9, 0.6, 1.2, 1.2, 0.65, 1.62, 1.5, 1.06, 0.75, 0.38, 0.56, 0.38, 1.12, 1.5, 0.38, 0.75, 0.38, 1.5, 0.81, 1.0, 0.38, 1.5, 0.56, 0.9, 1.2, 0.3, 0.3, 0.45, 0.45, 0.3, 1.2, 0.45, 1.0, 1.5, 0.38, 1.5, 1.5, 1.12, 0.38, 0.56, 0.69, 1.12, 1.62]
 IMP_DEF = [0.98, 0.58, 0.39, 0.65, 0.78, 0.58, 1.95, 0.65, 2.08, 0.84, 0.39, 1.95, 0.39, 2.21, 0.65, 1.43, 0.39, 0.91, 0.58, 2.08, 0.58, 1.0, 0.3, 0.65, 1.4, 0.4, 1.6, 0.65, 0.8, 1.6, 1.4, 0.55, 1.4, 0.7, 1.7, 0.55, 1.3, 0.7, 1.3, 1.2, 1.2, 0.9, 0.6, 1.2, 1.2, 0.65, 1.3, 1.2, 0.85, 0.6, 0.3, 0.45, 0.3, 0.9, 1.2, 0.3, 0.6, 0.3, 1.2, 0.65, 0.8, 0.3, 1.2, 0.45, 0.9, 1.2, 0.3, 0.3, 0.45, 0.45, 0.3, 1.2, 0.45, 1.0, 1.2, 0.3, 1.2, 1.2, 0.9, 0.3, 0.45, 0.55, 0.9, 1.3]
