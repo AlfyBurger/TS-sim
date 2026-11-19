@@ -1,3 +1,4 @@
 engine/target/
 *.pyc
 bin/
+results/run6/blocks/

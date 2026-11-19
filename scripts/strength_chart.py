@@ -2,7 +2,8 @@
 import math, sys, matplotlib
 matplotlib.use('Agg'); import matplotlib.pyplot as plt
 steps = [("First bot", None), ("Run 1", (0.568, 0.031)), ("Run 2", (0.599, 0.020)), ("Run 3", (0.510, 0.0185)),
-         ("Run 4", (0.948, 0.009)), ("Run 5", (0.525, 0.019))]
+         ("Run 4", (0.948, 0.009)), ("Run 5", (0.525, 0.019)),
+         ("Run 6", (0.593, 0.020))]
 elo = lambda p: 400 * math.log10(p / (1 - p))
 xs, ys, es, gains = [], [], [], []; tot, var = 0.0, 0.0
 for i, (name, s) in enumerate(steps):

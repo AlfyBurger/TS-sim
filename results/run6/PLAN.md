@@ -49,3 +49,9 @@ CONFIRM_NE ran as core vs core (no version passed): it serves as the clean self-
   helper BASE likewise; xcheck 300 positions, 0 differences. SS_02/SS_04 still run on the run-5 bot (BEST{NE...} = core of run 5);
   if one passes it is adopted on top and needs a confirmation on the new bot in run 7.
 - Since 23:00 the Red Sea v8 run shares the PC: ne blocks ~16 min, core blocks ~4.3 min.
+
+## Final (19 Nov 2026, 07:46; all 240 blocks; results.jsonl, region_core.json/.txt, run6_results_0756.zip)
+- SS_02 48.8 ± 1.9, SS_04 48.2 ± 1.9: not adopted. Preparation payoff (realised gain of own preparation Events per game):
+  SS_02 17.30 vs core 17.03 (+0.27 ± 0.55), SS_04 17.18 vs 17.22: no effect (Red Sea v5: +8-14%).
+- Adopted: distance to Control (ne=1, nv=2). Report: reports/stage2_run6_report.pdf. Watchdog task disabled 07:56.
+- Blocks are not committed for run 6 (5.8 MB with the Region record): unzip run6_results_0756.zip into blocks/ to re-merge.
